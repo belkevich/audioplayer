@@ -1,4 +1,4 @@
-Extensible iOS/OS X audio player with delegate
+Audio Player
 =======
 
 ## About
