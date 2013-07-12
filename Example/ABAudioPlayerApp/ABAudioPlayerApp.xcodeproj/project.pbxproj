@@ -18,6 +18,18 @@
 		FA05995E178F040100374DD5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA05995D178F040100374DD5 /* Default-568h@2x.png */; };
 		FA059969178F04C500374DD5 /* ABMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA059967178F04C500374DD5 /* ABMainViewController.m */; };
 		FA05996A178F04C500374DD5 /* ABMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA059968178F04C500374DD5 /* ABMainViewController.xib */; };
+		FAFAE1E1178FF7A5009B48E3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */; };
+		FAFAE1EB178FF7A5009B48E3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAFAE1E9178FF7A5009B48E3 /* InfoPlist.strings */; };
+		FAFAE1ED178FF7A5009B48E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAE1EC178FF7A5009B48E3 /* main.m */; };
+		FAFAE1F1178FF7A5009B48E3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = FAFAE1EF178FF7A5009B48E3 /* Credits.rtf */; };
+		FAFAE1F4178FF7A5009B48E3 /* ABAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAE1F3178FF7A5009B48E3 /* ABAppDelegate.m */; };
+		FAFAE1F7178FF7A5009B48E3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAFAE1F5178FF7A5009B48E3 /* MainMenu.xib */; };
+		FAFAE206179010C1009B48E3 /* ABWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAE204179010C1009B48E3 /* ABWindowController.m */; };
+		FAFAE207179010C1009B48E3 /* ABWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAFAE205179010C1009B48E3 /* ABWindowController.xib */; };
+		FAFAE20C17901155009B48E3 /* ABPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAE20A17901155009B48E3 /* ABPlayerViewController.m */; };
+		FAFAE20D17901155009B48E3 /* ABPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAFAE20B17901155009B48E3 /* ABPlayerViewController.xib */; };
+		FAFAE211179017D9009B48E3 /* NSWindowController+Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAE210179017D9009B48E3 /* NSWindowController+Controller.m */; };
+		FAFAE21417901857009B48E3 /* NSViewController+Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAE21317901857009B48E3 /* NSViewController+Controller.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +49,29 @@
 		FA059966178F04C500374DD5 /* ABMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABMainViewController.h; sourceTree = "<group>"; };
 		FA059967178F04C500374DD5 /* ABMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABMainViewController.m; sourceTree = "<group>"; };
 		FA059968178F04C500374DD5 /* ABMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ABMainViewController.xib; sourceTree = "<group>"; };
+		FAFAE1DF178FF7A5009B48E3 /* ABAudioPlayerMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABAudioPlayerMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		FAFAE1E3178FF7A5009B48E3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		FAFAE1E4178FF7A5009B48E3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		FAFAE1E5178FF7A5009B48E3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FAFAE1E8178FF7A5009B48E3 /* ABAudioPlayerMac-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ABAudioPlayerMac-Info.plist"; sourceTree = "<group>"; };
+		FAFAE1EA178FF7A5009B48E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FAFAE1EC178FF7A5009B48E3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FAFAE1EE178FF7A5009B48E3 /* ABAudioPlayerMac-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ABAudioPlayerMac-Prefix.pch"; sourceTree = "<group>"; };
+		FAFAE1F0178FF7A5009B48E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		FAFAE1F2178FF7A5009B48E3 /* ABAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAppDelegate.h; sourceTree = "<group>"; };
+		FAFAE1F3178FF7A5009B48E3 /* ABAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ABAppDelegate.m; sourceTree = "<group>"; };
+		FAFAE1F6178FF7A5009B48E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		FAFAE203179010C1009B48E3 /* ABWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABWindowController.h; sourceTree = "<group>"; };
+		FAFAE204179010C1009B48E3 /* ABWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABWindowController.m; sourceTree = "<group>"; };
+		FAFAE205179010C1009B48E3 /* ABWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ABWindowController.xib; sourceTree = "<group>"; };
+		FAFAE20917901155009B48E3 /* ABPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABPlayerViewController.h; sourceTree = "<group>"; };
+		FAFAE20A17901155009B48E3 /* ABPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABPlayerViewController.m; sourceTree = "<group>"; };
+		FAFAE20B17901155009B48E3 /* ABPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ABPlayerViewController.xib; sourceTree = "<group>"; };
+		FAFAE20F179017D9009B48E3 /* NSWindowController+Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindowController+Controller.h"; sourceTree = "<group>"; };
+		FAFAE210179017D9009B48E3 /* NSWindowController+Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindowController+Controller.m"; sourceTree = "<group>"; };
+		FAFAE21217901856009B48E3 /* NSViewController+Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSViewController+Controller.h"; sourceTree = "<group>"; };
+		FAFAE21317901857009B48E3 /* NSViewController+Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSViewController+Controller.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +85,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FAFAE1DC178FF7A5009B48E3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAFAE1E1178FF7A5009B48E3 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -57,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				FA05994D178F040100374DD5 /* ABAudioPlayerApp */,
+				FAFAE1E6178FF7A5009B48E3 /* ABAudioPlayerMac */,
 				FA059946178F040100374DD5 /* Frameworks */,
 				FA059945178F040100374DD5 /* Products */,
 			);
@@ -66,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				FA059944178F040100374DD5 /* ABAudioPlayerApp.app */,
+				FAFAE1DF178FF7A5009B48E3 /* ABAudioPlayerMac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,6 +121,8 @@
 				FA059947178F040100374DD5 /* UIKit.framework */,
 				FA059949178F040100374DD5 /* Foundation.framework */,
 				FA05994B178F040100374DD5 /* CoreGraphics.framework */,
+				FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */,
+				FAFAE1E2178FF7A5009B48E3 /* Other Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -84,7 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				FA059965178F048200374DD5 /* Controllers */,
-				FA059964178F046700374DD5 /* AppDelegate */,
+				FA059964178F046700374DD5 /* App Delegate */,
 				FA05994E178F040100374DD5 /* Supporting Files */,
 			);
 			path = ABAudioPlayerApp;
@@ -104,13 +151,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		FA059964178F046700374DD5 /* AppDelegate */ = {
+		FA059964178F046700374DD5 /* App Delegate */ = {
 			isa = PBXGroup;
 			children = (
 				FA059956178F040100374DD5 /* ABAppDelegate.h */,
 				FA059957178F040100374DD5 /* ABAppDelegate.m */,
 			);
-			name = AppDelegate;
+			name = "App Delegate";
 			sourceTree = "<group>";
 		};
 		FA059965178F048200374DD5 /* Controllers */ = {
@@ -121,6 +168,105 @@
 				FA059968178F04C500374DD5 /* ABMainViewController.xib */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		FAFAE1E2178FF7A5009B48E3 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE1E3178FF7A5009B48E3 /* AppKit.framework */,
+				FAFAE1E4178FF7A5009B48E3 /* CoreData.framework */,
+				FAFAE1E5178FF7A5009B48E3 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		FAFAE1E6178FF7A5009B48E3 /* ABAudioPlayerMac */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE1FE178FF85A009B48E3 /* Controllers */,
+				FAFAE1FB178FF7C7009B48E3 /* App Delegate */,
+				FAFAE1FC178FF7D0009B48E3 /* Resources */,
+				FAFAE1E7178FF7A5009B48E3 /* Supporting Files */,
+			);
+			path = ABAudioPlayerMac;
+			sourceTree = "<group>";
+		};
+		FAFAE1E7178FF7A5009B48E3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE1E8178FF7A5009B48E3 /* ABAudioPlayerMac-Info.plist */,
+				FAFAE1E9178FF7A5009B48E3 /* InfoPlist.strings */,
+				FAFAE1EC178FF7A5009B48E3 /* main.m */,
+				FAFAE1EE178FF7A5009B48E3 /* ABAudioPlayerMac-Prefix.pch */,
+				FAFAE1EF178FF7A5009B48E3 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FAFAE1FB178FF7C7009B48E3 /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE1F2178FF7A5009B48E3 /* ABAppDelegate.h */,
+				FAFAE1F3178FF7A5009B48E3 /* ABAppDelegate.m */,
+			);
+			name = "App Delegate";
+			sourceTree = "<group>";
+		};
+		FAFAE1FC178FF7D0009B48E3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE1FD178FF7DD009B48E3 /* Menu */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		FAFAE1FD178FF7DD009B48E3 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE1F5178FF7A5009B48E3 /* MainMenu.xib */,
+			);
+			name = Menu;
+			sourceTree = "<group>";
+		};
+		FAFAE1FE178FF85A009B48E3 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE1FF17901070009B48E3 /* Window */,
+				FAFAE20817901119009B48E3 /* Main */,
+				FAFAE20E17901714009B48E3 /* Categories */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		FAFAE1FF17901070009B48E3 /* Window */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE203179010C1009B48E3 /* ABWindowController.h */,
+				FAFAE204179010C1009B48E3 /* ABWindowController.m */,
+				FAFAE205179010C1009B48E3 /* ABWindowController.xib */,
+			);
+			name = Window;
+			sourceTree = "<group>";
+		};
+		FAFAE20817901119009B48E3 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE20917901155009B48E3 /* ABPlayerViewController.h */,
+				FAFAE20A17901155009B48E3 /* ABPlayerViewController.m */,
+				FAFAE20B17901155009B48E3 /* ABPlayerViewController.xib */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
+		FAFAE20E17901714009B48E3 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				FAFAE20F179017D9009B48E3 /* NSWindowController+Controller.h */,
+				FAFAE210179017D9009B48E3 /* NSWindowController+Controller.m */,
+				FAFAE21217901856009B48E3 /* NSViewController+Controller.h */,
+				FAFAE21317901857009B48E3 /* NSViewController+Controller.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,6 +287,23 @@
 			name = ABAudioPlayerApp;
 			productName = ABAudioPlayerApp;
 			productReference = FA059944178F040100374DD5 /* ABAudioPlayerApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FAFAE1DE178FF7A5009B48E3 /* ABAudioPlayerMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAFAE1FA178FF7A5009B48E3 /* Build configuration list for PBXNativeTarget "ABAudioPlayerMac" */;
+			buildPhases = (
+				FAFAE1DB178FF7A5009B48E3 /* Sources */,
+				FAFAE1DC178FF7A5009B48E3 /* Frameworks */,
+				FAFAE1DD178FF7A5009B48E3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ABAudioPlayerMac;
+			productName = ABAudioPlayerMac;
+			productReference = FAFAE1DF178FF7A5009B48E3 /* ABAudioPlayerMac.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -166,6 +329,7 @@
 			projectRoot = "";
 			targets = (
 				FA059943178F040100374DD5 /* ABAudioPlayerApp */,
+				FAFAE1DE178FF7A5009B48E3 /* ABAudioPlayerMac */,
 			);
 		};
 /* End PBXProject section */
@@ -183,6 +347,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FAFAE1DD178FF7A5009B48E3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAFAE1EB178FF7A5009B48E3 /* InfoPlist.strings in Resources */,
+				FAFAE1F1178FF7A5009B48E3 /* Credits.rtf in Resources */,
+				FAFAE1F7178FF7A5009B48E3 /* MainMenu.xib in Resources */,
+				FAFAE207179010C1009B48E3 /* ABWindowController.xib in Resources */,
+				FAFAE20D17901155009B48E3 /* ABPlayerViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -196,6 +372,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FAFAE1DB178FF7A5009B48E3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAFAE1ED178FF7A5009B48E3 /* main.m in Sources */,
+				FAFAE1F4178FF7A5009B48E3 /* ABAppDelegate.m in Sources */,
+				FAFAE206179010C1009B48E3 /* ABWindowController.m in Sources */,
+				FAFAE20C17901155009B48E3 /* ABPlayerViewController.m in Sources */,
+				FAFAE211179017D9009B48E3 /* NSWindowController+Controller.m in Sources */,
+				FAFAE21417901857009B48E3 /* NSViewController+Controller.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
@@ -205,6 +394,30 @@
 				FA059951178F040100374DD5 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		FAFAE1E9178FF7A5009B48E3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FAFAE1EA178FF7A5009B48E3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		FAFAE1EF178FF7A5009B48E3 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FAFAE1F0178FF7A5009B48E3 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		FAFAE1F5178FF7A5009B48E3 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FAFAE1F6178FF7A5009B48E3 /* en */,
+			);
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -290,6 +503,49 @@
 			};
 			name = Release;
 		};
+		FAFAE1F8178FF7A5009B48E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ABAudioPlayerMac/ABAudioPlayerMac-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				INFOPLIST_FILE = "ABAudioPlayerMac/ABAudioPlayerMac-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		FAFAE1F9178FF7A5009B48E3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ABAudioPlayerMac/ABAudioPlayerMac-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				INFOPLIST_FILE = "ABAudioPlayerMac/ABAudioPlayerMac-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -309,6 +565,16 @@
 				FA059963178F040100374DD5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAFAE1FA178FF7A5009B48E3 /* Build configuration list for PBXNativeTarget "ABAudioPlayerMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAFAE1F8178FF7A5009B48E3 /* Debug */,
+				FAFAE1F9178FF7A5009B48E3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -1,0 +1,9 @@
+//
+// Prefix header for all source files of the 'ABAudioPlayerMac' target in the 'ABAudioPlayerMac' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+    #import "NSWindowController+Controller.h"
+    #import "NSViewController+Controller.h"
+#endif
