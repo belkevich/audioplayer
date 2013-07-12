@@ -27,36 +27,35 @@
 
 - (IBAction)playButtonPressed:(id)sender
 {
-    NSLog(@"%p", _cmd);
+    NSLog(@"%s", sel_getName(_cmd));
 }
 
 - (IBAction)pauseButtonPressed:(id)sender
 {
-    NSLog(@"%p", _cmd);
+    NSLog(@"%s", sel_getName(_cmd));
 }
 
 - (IBAction)stopButtonPressed:(id)sender
 {
-    NSLog(@"%p", _cmd);
+    NSLog(@"%s", sel_getName(_cmd));
 }
 
 - (IBAction)seekValueChanged:(id)sender
 {
     NSSlider *slider = sender;
-    NSLog(@"%p, value: %.3f", _cmd, slider.floatValue);
+    NSLog(@"%s, value: %.3f", sel_getName(_cmd), slider.floatValue);
 }
 
 - (IBAction)volumeValueChanged:(id)sender
 {
     NSSlider *slider = sender;
-    NSLog(@"%p, value: %.3f", _cmd, slider.floatValue);
+    NSLog(@"%s, value: %.3f", sel_getName(_cmd), slider.floatValue);
 }
 
 - (IBAction)panValueChanged:(id)sender
 {
     NSSlider *slider = sender;
-    NSLog(@"%p, value: %.3f", _cmd, slider.floatValue);
+    NSLog(@"%s, value: %.3f", sel_getName(_cmd), slider.floatValue);
 }
-
 
 @end
