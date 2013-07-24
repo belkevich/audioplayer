@@ -106,7 +106,7 @@
 
 - (BOOL)fillAudioQueueBuffer:(AudioQueueBufferRef)buffer
 {
-    [dataSource audioQueueFillBuffer:buffer];
+    [dataSource audioQueueUpdateBufferThreadSafely:buffer];
     if (buffer->mAudioDataByteSize > 0)
     {
         OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, 0, NULL);

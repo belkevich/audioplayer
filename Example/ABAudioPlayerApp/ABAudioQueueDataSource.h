@@ -12,6 +12,6 @@
 @protocol ABAudioQueueDataSource <NSObject>
 
 - (void)audioQueueSetupDataFormat:(AudioStreamBasicDescription *)dataFormat;
-- (void)audioQueueFillBuffer:(AudioQueueBufferRef)dataBuffer;
+- (void)audioQueueUpdateBufferThreadSafely:(AudioQueueBufferRef)buffer;
 
 @end
