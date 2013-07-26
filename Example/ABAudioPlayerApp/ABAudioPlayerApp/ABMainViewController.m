@@ -7,6 +7,7 @@
 //
 
 #import "ABMainViewController.h"
+#import "ABAudioPlayer.h"
 
 
 @implementation ABMainViewController
@@ -18,6 +19,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
+        player = [[ABAudioPlayer alloc] init];
     }
     return self;
 }
@@ -33,7 +35,7 @@
 
 - (IBAction)playButtonPressed:(id)sender
 {
-    NSLog(@"%p", _cmd);
+    [player huy];
 }
 
 - (IBAction)pauseButtonPressed:(id)sender

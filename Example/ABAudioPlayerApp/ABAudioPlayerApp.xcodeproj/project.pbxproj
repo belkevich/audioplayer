@@ -18,6 +18,7 @@
 		FA05995E178F040100374DD5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA05995D178F040100374DD5 /* Default-568h@2x.png */; };
 		FA059969178F04C500374DD5 /* ABMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA059967178F04C500374DD5 /* ABMainViewController.m */; };
 		FA05996A178F04C500374DD5 /* ABMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA059968178F04C500374DD5 /* ABMainViewController.xib */; };
+		FA3C219417A10C8C001DC496 /* ABAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA3C219317A10C8C001DC496 /* ABAudioPlayer.m */; };
 		FA5886431796893C004C6B9E /* ABAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5886421796893C004C6B9E /* ABAudioQueue.m */; };
 		FA5886441796893C004C6B9E /* ABAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5886421796893C004C6B9E /* ABAudioQueue.m */; };
 		FA58864B17968A15004C6B9E /* ABAudioFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FA58864A17968A15004C6B9E /* ABAudioFileReader.m */; };
@@ -55,6 +56,8 @@
 		FA059966178F04C500374DD5 /* ABMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABMainViewController.h; sourceTree = "<group>"; };
 		FA059967178F04C500374DD5 /* ABMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABMainViewController.m; sourceTree = "<group>"; };
 		FA059968178F04C500374DD5 /* ABMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ABMainViewController.xib; sourceTree = "<group>"; };
+		FA3C219217A10C8C001DC496 /* ABAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioPlayer.h; path = ../../Classes/Player/ABAudioPlayer.h; sourceTree = "<group>"; };
+		FA3C219317A10C8C001DC496 /* ABAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioPlayer.m; path = ../../Classes/Player/ABAudioPlayer.m; sourceTree = "<group>"; };
 		FA5886411796893C004C6B9E /* ABAudioQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioQueue.h; path = ../../Classes/Queue/ABAudioQueue.h; sourceTree = "<group>"; };
 		FA5886421796893C004C6B9E /* ABAudioQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioQueue.m; path = ../../Classes/Queue/ABAudioQueue.m; sourceTree = "<group>"; };
 		FA588646179689A0004C6B9E /* ABAudioQueueDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ABAudioQueueDelegate.h; path = ../../Classes/Queue/ABAudioQueueDelegate.h; sourceTree = "<group>"; };
@@ -192,10 +195,20 @@
 		FA05FE681794442500DEC717 /* ABAudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				FA3C219117A10C69001DC496 /* Player */,
 				FA588648179689C2004C6B9E /* Reader */,
 				FA58864517968941004C6B9E /* Queue */,
 			);
 			name = ABAudioPlayer;
+			sourceTree = "<group>";
+		};
+		FA3C219117A10C69001DC496 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				FA3C219217A10C8C001DC496 /* ABAudioPlayer.h */,
+				FA3C219317A10C8C001DC496 /* ABAudioPlayer.m */,
+			);
+			name = Player;
 			sourceTree = "<group>";
 		};
 		FA58864517968941004C6B9E /* Queue */ = {
@@ -419,6 +432,7 @@
 				FA059969178F04C500374DD5 /* ABMainViewController.m in Sources */,
 				FA5886431796893C004C6B9E /* ABAudioQueue.m in Sources */,
 				FA58864B17968A15004C6B9E /* ABAudioFileReader.m in Sources */,
+				FA3C219417A10C8C001DC496 /* ABAudioPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

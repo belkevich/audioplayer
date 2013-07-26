@@ -1,6 +1,6 @@
 //
 //  ABAudioQueueDataSource.h
-//  ABAudioPlayerApp
+//  ABAudioPlayer
 //
 //  Created by Alexey Belkevich on 7/17/13.
 //  Copyright (c) 2013 okolodev. All rights reserved.
@@ -11,7 +11,10 @@
 
 @protocol ABAudioQueueDataSource <NSObject>
 
-- (void)audioQueueSetupDataFormat:(AudioStreamBasicDescription *)dataFormat;
-- (void)audioQueueUpdateBufferThreadSafely:(AudioQueueBufferRef)buffer;
+- (void)audioQueueDataFormat:(AudioStreamBasicDescription *)dataFormat
+                  bufferSize:(UInt32 *)bufferSize packetsToRead:(UInt32 *)readPackets;
+- (void)audioQueueUpdateThreadSafelyBuffer:(AudioQueueBufferRef)buffer
+                         packetDescription:(AudioStreamPacketDescription *)packetDescription
+                               readPackets:(UInt32 *)readPackets;
 
 @end

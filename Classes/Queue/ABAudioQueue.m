@@ -1,6 +1,6 @@
 //
 //  ABAudioQueue.m
-//  ABAudioPlayerApp
+//  ABAudioPlayer
 //
 //  Created by Alexey Belkevich on 7/17/13.
 //  Copyright (c) 2013 okolodev. All rights reserved.
@@ -19,6 +19,7 @@
     if (self)
     {
         queue = NULL;
+        packetDescription = NULL;
         dataSource = aDataSource;
         delegate = aDelegate;
     }
@@ -27,45 +28,73 @@
 
 - (void)dealloc
 {
-    [self stopAudioQueue];
+    [self audioQueueStop];
 }
 
 #pragma mark - public
 
-- (BOOL)setupAudioQueue
+- (BOOL)audioQueueSetup
 {
-    [dataSource audioQueueSetupDataFormat:&dataFormat];
-    if ([self audioQueueNewOutput] && [self audioQueueAllocateBuffer] &&
-        [self audioQueuePrepareBuffer])
+    [self audioQueueStop];
+    [self audioQueueSetupDataFormatAndPacketDescription];
+    if ([self audioQueueNewOutput] && [self audioQueueAllocateBuffer] && [self audioQueuePrepareBuffer])
     {
         return YES;
     }
     else
     {
-        [self stopAudioQueue];
+        [self audioQueueStop];
         return NO;
     }
 }
 
-- (BOOL)playAudioQueue
+- (BOOL)audioQueuePlay
 {
-    OSStatus status = AudioQueueStart(queue, NULL);
-    return (status == noErr);
+    if (queue)
+    {
+        OSStatus status = AudioQueueStart(queue, NULL);
+        return (status == noErr);
+    }
+    return NO;
 }
 
-- (void)pauseAudioQueue
+- (void)audioQueuePause
 {
-    AudioQueuePause(queue);
+    if (queue)
+    {
+        AudioQueuePause(queue);
+    }
 }
 
-- (void)stopAudioQueue
+- (void)audioQueueStop
 {
-    AudioQueueStop(queue, false);
-    AudioQueueDispose(queue, true);
-    queue = NULL;
+    if (queue)
+    {
+        AudioQueueStop(queue, false);
+        AudioQueueDispose(queue, true);
+        queue = NULL;
+    }
+    if (packetDescription)
+    {
+        free(packetDescription);
+        packetDescription = NULL;
+    }
+    bufferSize = 0;
+    packetsToRead = 0;
 }
 
 #pragma mark - private
+
+- (void)audioQueueSetupDataFormatAndPacketDescription
+{
+    [dataSource audioQueueDataFormat:&dataFormat bufferSize:&bufferSize
+                       packetsToRead:&packetsToRead];
+    if (packetsToRead > 0 && (dataFormat.mBytesPerPacket == 0 || dataFormat.mFramesPerPacket == 0))
+    {
+        size_t size = packetsToRead * sizeof(AudioStreamPacketDescription);
+        packetDescription = (AudioStreamPacketDescription *)malloc(size);
+    }
+}
 
 - (BOOL)audioQueueNewOutput
 {
@@ -76,8 +105,6 @@
 
 - (BOOL)audioQueueAllocateBuffer
 {
-    Float64 packetsPerTime = dataFormat.mSampleRate / dataFormat.mFramesPerPacket;
-    UInt32 bufferSize = (UInt32)(packetsPerTime * dataFormat.mBytesPerPacket);
 #ifdef DEBUG
     NSLog(@"Audio queue buffer size %lu", (unsigned long)bufferSize);
 #endif
@@ -96,7 +123,7 @@
 {
     for (NSUInteger i = 0; i < kAudioQueueBufferCount; i++)
     {
-        if (![self fillAudioQueueBuffer:buffers[i]])
+        if (![self audioQueueEnqueueBuffer:buffers[i]])
         {
             return NO;
         }
@@ -104,12 +131,14 @@
     return YES;
 }
 
-- (BOOL)fillAudioQueueBuffer:(AudioQueueBufferRef)buffer
+- (BOOL)audioQueueEnqueueBuffer:(AudioQueueBufferRef)buffer
 {
-    [dataSource audioQueueUpdateBufferThreadSafely:buffer];
+    UInt32 readPackets = packetsToRead;
+    [dataSource audioQueueUpdateThreadSafelyBuffer:buffer packetDescription:packetDescription
+                                       readPackets:&readPackets];
     if (buffer->mAudioDataByteSize > 0)
     {
-        OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, 0, NULL);
+        OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, readPackets, packetDescription);
         return (status == noErr);
     }
     return NO;
@@ -118,7 +147,7 @@
 - (void)handleAudioQueueBuffer:(AudioQueueBufferRef)buffer
 {
     // running in a background thread
-    if (![self fillAudioQueueBuffer:buffer])
+    if (![self audioQueueEnqueueBuffer:buffer])
     {
         dispatch_async(dispatch_get_main_queue(), ^
         {

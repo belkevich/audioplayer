@@ -17,6 +17,9 @@ static const int kAudioQueueBufferCount = 3;
     AudioQueueRef queue;
     AudioQueueBufferRef buffers[kAudioQueueBufferCount];
     AudioStreamBasicDescription dataFormat;
+    AudioStreamPacketDescription *packetDescription;
+    UInt32 bufferSize;
+    UInt32 packetsToRead;
     __weak NSObject <ABAudioQueueDataSource> *dataSource;
     __weak NSObject <ABAudioQueueDelegate> *delegate;
 }
@@ -24,9 +27,9 @@ static const int kAudioQueueBufferCount = 3;
 - (id)initWithAudioQueueDataSource:(NSObject <ABAudioQueueDataSource> *)aDataSource
                           delegate:(NSObject <ABAudioQueueDelegate> *)aDelegate;
 
-- (BOOL)setupAudioQueue;
-- (BOOL)playAudioQueue;
-- (void)pauseAudioQueue;
-- (void)stopAudioQueue;
+- (BOOL)audioQueueSetup;
+- (BOOL)audioQueuePlay;
+- (void)audioQueuePause;
+- (void)audioQueueStop;
 
 @end

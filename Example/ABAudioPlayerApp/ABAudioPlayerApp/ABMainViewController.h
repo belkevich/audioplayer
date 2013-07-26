@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class ABAudioPlayer;
+
 @interface ABMainViewController : UIViewController
+{
+    ABAudioPlayer *player;
+}
 
 @property (nonatomic, weak) IBOutlet UITextField *timeField;
 @property (nonatomic, weak) IBOutlet UITextField *channelsField;
