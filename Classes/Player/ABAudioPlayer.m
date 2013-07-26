@@ -25,7 +25,7 @@
 
 #pragma mark - public
 
-- (void)huy
+- (void)play
 {
     audioFile = [[ABAudioFileReader alloc] init];
     [audioFile openAudio:@"/Users/alex/Music/01.mp3"];

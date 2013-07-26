@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 okolodev. All rights reserved.
 //
 
+#import <mm_malloc.h>
 #import "ABAudioQueue.h"
 
 @implementation ABAudioQueue
@@ -37,8 +38,10 @@
 {
     [self audioQueueStop];
     [self audioQueueSetupDataFormatAndPacketDescription];
-    if ([self audioQueueNewOutput] && [self audioQueueAllocateBuffer] && [self audioQueuePrepareBuffer])
+    if ([self audioQueueNewOutput] && [self audioQueueAllocateBuffer] &&
+        [self audioQueuePrepareBuffer])
     {
+        [self audioQueueSetupMagicCookie];
         return YES;
     }
     else
@@ -129,6 +132,21 @@
         }
     }
     return YES;
+}
+
+- (void)audioQueueSetupMagicCookie
+{
+    if ([dataSource respondsToSelector:@selector(audioQueueMagicCookieSize)])
+    {
+        UInt32 size = [dataSource audioQueueMagicCookieSize];
+        if ([dataSource respondsToSelector:@selector(audioQueueMagicCookie:)])
+        {
+            char *magicCookie = (char *)malloc(size);
+            [dataSource audioQueueMagicCookie:magicCookie];
+            AudioQueueSetProperty(queue, kAudioQueueProperty_MagicCookie, magicCookie, size);
+            free(magicCookie);
+        }
+    }
 }
 
 - (BOOL)audioQueueEnqueueBuffer:(AudioQueueBufferRef)buffer

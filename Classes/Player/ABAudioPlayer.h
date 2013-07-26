@@ -18,6 +18,6 @@
     ABAudioFileReader *audioFile;
 }
 
-- (void)huy;
+- (void)play;
 
 @end

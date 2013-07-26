@@ -17,4 +17,9 @@
                          packetDescription:(AudioStreamPacketDescription *)packetDescription
                                readPackets:(UInt32 *)readPackets;
 
+@optional
+
+- (UInt32)audioQueueMagicCookieSize;
+- (void)audioQueueMagicCookie:(char *)magicCookie;
+
 @end

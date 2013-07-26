@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 okolodev. All rights reserved.
 //
 
+#import <mm_malloc.h>
 #import "ABAudioFileReader.h"
 
 @implementation ABAudioFileReader
@@ -78,6 +79,18 @@ UInt32 const minBufferSize = 0x4000;
         packetCount += *readPackets;
         buffer->mAudioDataByteSize = readBytes;
     }
+}
+
+- (UInt32)audioQueueMagicCookieSize
+{
+    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData,
+                                               &cookieSize, NULL);
+    return status == noErr ? cookieSize : 0;
+}
+
+- (void)audioQueueMagicCookie:(char *)magicCookie
+{
+    AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize, magicCookie);
 }
 
 #pragma mark - private

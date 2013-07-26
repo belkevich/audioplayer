@@ -35,7 +35,7 @@
 
 - (IBAction)playButtonPressed:(id)sender
 {
-    [player huy];
+    [player play];
 }
 
 - (IBAction)pauseButtonPressed:(id)sender

@@ -13,6 +13,7 @@
 {
     AudioFileID audioFile;
     SInt64 packetCount;
+    UInt32 cookieSize;
 }
 
 - (BOOL)openAudio:(NSString *)path;
