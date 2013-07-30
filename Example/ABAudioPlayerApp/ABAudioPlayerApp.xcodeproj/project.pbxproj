@@ -64,6 +64,7 @@
 		FA588647179689B8004C6B9E /* ABAudioQueueDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAudioQueueDataSource.h; sourceTree = "<group>"; };
 		FA58864917968A15004C6B9E /* ABAudioFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioFileReader.h; path = ../../Classes/Reader/ABAudioFileReader.h; sourceTree = "<group>"; };
 		FA58864A17968A15004C6B9E /* ABAudioFileReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioFileReader.m; path = ../../Classes/Reader/ABAudioFileReader.m; sourceTree = "<group>"; };
+		FA79467917A7F2A900BB0DFB /* ABAudioReaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioReaderProtocol.h; path = ../../Classes/Protocol/ABAudioReaderProtocol.h; sourceTree = "<group>"; };
 		FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FAA58D9E179EC1480087A4CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FAFAE1DF178FF7A5009B48E3 /* ABAudioPlayerMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABAudioPlayerMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -195,6 +196,7 @@
 		FA05FE681794442500DEC717 /* ABAudioPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				FA79467817A7F26D00BB0DFB /* Protocol */,
 				FA3C219117A10C69001DC496 /* Player */,
 				FA588648179689C2004C6B9E /* Reader */,
 				FA58864517968941004C6B9E /* Queue */,
@@ -229,6 +231,14 @@
 				FA58864A17968A15004C6B9E /* ABAudioFileReader.m */,
 			);
 			name = Reader;
+			sourceTree = "<group>";
+		};
+		FA79467817A7F26D00BB0DFB /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				FA79467917A7F2A900BB0DFB /* ABAudioReaderProtocol.h */,
+			);
+			name = Protocol;
 			sourceTree = "<group>";
 		};
 		FAFAE1E2178FF7A5009B48E3 /* Other Frameworks */ = {

@@ -35,7 +35,10 @@
 - (BOOL)audioQueueSetup
 {
     [self audioQueueStop];
-    if ([self audioQueueNewOutput] && [self audioQueueAllocateBuffer] &&
+    AudioStreamBasicDescription dataFormat;
+    UInt32 bufferSize = 0;
+    [dataSource audioQueueDataFormat:&dataFormat bufferSize:&bufferSize];
+    if ([self audioQueueNewOutput:&dataFormat] && [self audioQueueAllocateBuffer:bufferSize] &&
         [self audioQueuePrepareBuffer])
     {
         [self audioQueueSetupMagicCookie];
@@ -78,9 +81,8 @@
 
 #pragma mark - private
 
-- (BOOL)audioQueueNewOutput
+- (BOOL)audioQueueNewOutput:(AudioStreamBasicDescription *)dataFormat
 {
-    AudioStreamBasicDescription *dataFormat = [dataSource audioQueueDataFormat];
     if (dataFormat)
     {
         OSStatus status = AudioQueueNewOutput(dataFormat, handleBufferCallback,
@@ -90,12 +92,8 @@
     return NO;
 }
 
-- (BOOL)audioQueueAllocateBuffer
+- (BOOL)audioQueueAllocateBuffer:(UInt32)bufferSize
 {
-    UInt32 bufferSize = [dataSource audioQueueBufferSize];
-#ifdef DEBUG
-    NSLog(@"Audio queue buffer size %lu", (unsigned long)bufferSize);
-#endif
     for (int i = 0; i < kAudioQueueBufferCount; i++)
     {
         OSStatus status = AudioQueueAllocateBuffer(queue, bufferSize, &buffers[i]);
@@ -121,12 +119,12 @@
 
 - (void)audioQueueSetupMagicCookie
 {
-    char **pMagicCookie = NULL;
+    char *magicCookie = NULL;
     UInt32 magicCookieSize = 0;
-    [dataSource audioQueueMagicCookie:pMagicCookie size:&magicCookieSize];
-    if (pMagicCookie && magicCookieSize > 0)
+    [dataSource audioQueueMagicCookie:&magicCookie size:&magicCookieSize];
+    if (magicCookie && magicCookieSize > 0)
     {
-        AudioQueueSetProperty(queue, kAudioQueueProperty_MagicCookie, *pMagicCookie, magicCookieSize);
+        AudioQueueSetProperty(queue, kAudioQueueProperty_MagicCookie, magicCookie, magicCookieSize);
     }
 }
 

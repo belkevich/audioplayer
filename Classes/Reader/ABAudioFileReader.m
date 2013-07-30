@@ -22,6 +22,7 @@ UInt32 const minBufferSize = 0x4000;
     {
         audioFile = NULL;
         packetDescription = NULL;
+        magicCookie = NULL;
     }
     return self;
 }
@@ -54,36 +55,21 @@ UInt32 const minBufferSize = 0x4000;
     [self audioFileCleanMagicCookie];
 }
 
-#pragma mark - audio queue data source implementation
+#pragma mark - audio reader protocol implementation
 
-- (AudioStreamBasicDescription *)audioQueueDataFormat
+- (AudioStreamBasicDescription)audioReaderDataFormat
 {
-    return &dataFormat;
+    return dataFormat;
 }
 
-- (UInt32)audioQueueBufferSize
+- (UInt32)audioReaderBufferSize
 {
     return bufferSize;
 }
 
-- (void)audioQueueMagicCookie:(char **)pMagicCookie size:(UInt32 *)size
-{
-    [self audioFileCleanMagicCookie];
-    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData,
-                                               &cookieSize, NULL);
-    if (status == noErr)
-    {
-        magicCookie = malloc(cookieSize);
-        AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize,
-                             magicCookie);
-        *pMagicCookie = magicCookie;
-        *size = cookieSize;
-    }
-}
-
-- (void)audioQueueUpdateThreadSafelyBuffer:(AudioQueueBufferRef)buffer
-                         packetDescription:(AudioStreamPacketDescription **)pPacketDescription
-                               readPackets:(UInt32 *)readPackets
+- (void)audioReaderFillBuffer:(AudioQueueBufferRef)buffer
+            packetDescription:(AudioStreamPacketDescription **)pPacketDescription
+                  readPackets:(UInt32 *)readPackets
 {
     UInt32 readBytes = 0;
     *readPackets = packetsToRead;
@@ -95,6 +81,27 @@ UInt32 const minBufferSize = 0x4000;
         buffer->mAudioDataByteSize = readBytes;
         *pPacketDescription = packetDescription;
     }
+}
+
+- (UInt32)audioReaderMagicCookieSize
+{
+    UInt32 cookieSize = 0;
+    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData,
+                                               &cookieSize, NULL);
+    return status == noErr ? cookieSize : 0;
+}
+
+- (char *)audioReaderMagicCookie
+{
+    [self audioFileCleanMagicCookie];
+    UInt32 cookieSize = [self audioReaderMagicCookieSize];
+    if (cookieSize > 0)
+    {
+        magicCookie = malloc(cookieSize);
+        AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize,
+                             magicCookie);
+    }
+    return magicCookie;
 }
 
 #pragma mark - private
@@ -174,7 +181,6 @@ UInt32 const minBufferSize = 0x4000;
         free(magicCookie);
         magicCookie = NULL;
     }
-    cookieSize = 0;
 }
 
 @end

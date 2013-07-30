@@ -11,8 +11,8 @@
 
 @protocol ABAudioQueueDataSource <NSObject>
 
-- (AudioStreamBasicDescription *)audioQueueDataFormat;
-- (UInt32)audioQueueBufferSize;
+- (void)audioQueueDataFormat:(AudioStreamBasicDescription *)dataFormat
+                  bufferSize:(UInt32 *)bufferSize;
 - (void)audioQueueMagicCookie:(char **)pMagicCookie size:(UInt32 *)size;
 - (void)audioQueueUpdateThreadSafelyBuffer:(AudioQueueBufferRef)buffer
                          packetDescription:(AudioStreamPacketDescription **)pPacketDescription
