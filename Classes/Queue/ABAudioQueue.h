@@ -10,16 +10,13 @@
 #import "ABAudioQueueDataSource.h"
 #import "ABAudioQueueDelegate.h"
 
-static const int kAudioQueueBufferCount = 3;
+
+static const UInt32 kAudioQueueBufferCount = 3;
 
 @interface ABAudioQueue : NSObject
 {
     AudioQueueRef queue;
     AudioQueueBufferRef buffers[kAudioQueueBufferCount];
-    AudioStreamBasicDescription dataFormat;
-    AudioStreamPacketDescription *packetDescription;
-    UInt32 bufferSize;
-    UInt32 packetsToRead;
     __weak NSObject <ABAudioQueueDataSource> *dataSource;
     __weak NSObject <ABAudioQueueDelegate> *delegate;
 }

@@ -11,10 +11,10 @@
 
 @protocol ABAudioQueueDataSource <NSObject>
 
-- (void)audioQueueDataFormat:(AudioStreamBasicDescription *)dataFormat
-                  bufferSize:(UInt32 *)bufferSize packetsToRead:(UInt32 *)readPackets;
+- (AudioStreamBasicDescription *)audioQueueDataFormat;
+- (UInt32)audioQueueBufferSize;
 - (void)audioQueueUpdateThreadSafelyBuffer:(AudioQueueBufferRef)buffer
-                         packetDescription:(AudioStreamPacketDescription *)packetDescription
+                         packetDescription:(AudioStreamPacketDescription **)pPacketDescription
                                readPackets:(UInt32 *)readPackets;
 
 @optional

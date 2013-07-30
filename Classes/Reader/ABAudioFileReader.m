@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 okolodev. All rights reserved.
 //
 
-#import <mm_malloc.h>
 #import "ABAudioFileReader.h"
 
 @implementation ABAudioFileReader
@@ -36,12 +35,13 @@ UInt32 const minBufferSize = 0x4000;
 - (BOOL)openAudio:(NSString *)path
 {
     [self closeAudio];
-    NSURL *fileURL = [NSURL URLWithString:path];
-    if (fileURL)
+    BOOL status = [self audioFileOpen:path];
+    if (status)
     {
-        OSStatus status = AudioFileOpenURL((__bridge CFURLRef)fileURL, kAudioFileReadPermission, 0,
-                                           &audioFile);
-        return (status == noErr);
+        [self audioFileGetDataFormat];
+        [self audioFileCalculateBufferSize];
+        [self audioFileAllocatePacketDescription];
+        return YES;
     }
     return NO;
 }
@@ -53,31 +53,42 @@ UInt32 const minBufferSize = 0x4000;
         AudioFileClose(audioFile);
         audioFile = NULL;
     }
+    if (packetDescription)
+    {
+        free(packetDescription);
+        packetDescription = NULL;
+    }
+    bufferSize = 0;
+    packetsToRead = 0;
     packetCount = 0;
+    cookieSize = 0;
 }
 
 #pragma mark - audio queue data source implementation
 
-- (void)audioQueueDataFormat:(AudioStreamBasicDescription *)dataFormat
-                  bufferSize:(UInt32 *)bufferSize packetsToRead:(UInt32 *)packetsToRead
+- (AudioStreamBasicDescription *)audioQueueDataFormat
 {
-    [self audioFileSetupDataFormat:dataFormat];
-    UInt32 maxPacketSize = [self audioFileMaxPacketSize];
-    *bufferSize = [self audioFileBufferSizeForAudioDataFormat:dataFormat maxPacketSize:0];
-    *packetsToRead = *bufferSize / maxPacketSize;
+    return &dataFormat;
+}
+
+- (UInt32)audioQueueBufferSize
+{
+    return bufferSize;
 }
 
 - (void)audioQueueUpdateThreadSafelyBuffer:(AudioQueueBufferRef)buffer
-                         packetDescription:(AudioStreamPacketDescription *)packetDescription
+                         packetDescription:(AudioStreamPacketDescription **)pPacketDescription
                                readPackets:(UInt32 *)readPackets
 {
     UInt32 readBytes = 0;
+    *readPackets = packetsToRead;
     OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, packetDescription,
                                            packetCount, readPackets, buffer->mAudioData);
     if (status == noErr)
     {
         packetCount += *readPackets;
         buffer->mAudioDataByteSize = readBytes;
+        *pPacketDescription = packetDescription;
     }
 }
 
@@ -95,6 +106,50 @@ UInt32 const minBufferSize = 0x4000;
 
 #pragma mark - private
 
+- (BOOL)audioFileOpen:(NSString *)path
+{
+    NSURL *fileURL = [NSURL URLWithString:path];
+    if (fileURL)
+    {
+        OSStatus status = AudioFileOpenURL((__bridge CFURLRef)fileURL, kAudioFileReadPermission, 0,
+                                           &audioFile);
+        return (status == noErr);
+    }
+    return NO;
+}
+
+- (void)audioFileGetDataFormat
+{
+    UInt32 dataFormatSize = sizeof(AudioStreamBasicDescription);
+    AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize, &dataFormat);
+}
+
+- (void)audioFileAllocatePacketDescription
+{
+    if (packetsToRead > 0 && (dataFormat.mBytesPerPacket == 0 || dataFormat.mFramesPerPacket == 0))
+    {
+        size_t size = packetsToRead * sizeof(AudioStreamPacketDescription);
+        packetDescription = (AudioStreamPacketDescription *)malloc(size);
+    }
+}
+
+- (void)audioFileCalculateBufferSize
+{
+    UInt32 maxPacketSize = [self audioFileMaxPacketSize];
+    if (dataFormat.mFramesPerPacket != 0)
+    {
+        Float64 numPacketsForTime = dataFormat.mSampleRate / dataFormat.mFramesPerPacket * 0.5;
+        bufferSize = (UInt32)(numPacketsForTime * maxPacketSize);
+        bufferSize = (UInt32)MIN(maxBufferSize, bufferSize);
+        bufferSize = (UInt32)MAX(minBufferSize, bufferSize);
+    }
+    else
+    {
+        bufferSize = (UInt32)MAX(maxBufferSize, maxPacketSize);
+    }
+    packetsToRead = bufferSize / maxPacketSize;
+}
+
 - (UInt32)audioFileMaxPacketSize
 {
     UInt32 maxPacketSize = 0;
@@ -102,30 +157,6 @@ UInt32 const minBufferSize = 0x4000;
     AudioFileGetProperty(audioFile, kAudioFilePropertyPacketSizeUpperBound, &propertySize,
                          &maxPacketSize);
     return maxPacketSize;
-}
-
-- (void)audioFileSetupDataFormat:(AudioStreamBasicDescription *)dataFormat
-{
-    UInt32 dataFormatSize = sizeof(AudioStreamBasicDescription);
-    AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize, dataFormat);
-}
-
-- (UInt32)audioFileBufferSizeForAudioDataFormat:(AudioStreamBasicDescription *)dataFormat
-                                  maxPacketSize:(UInt32)maxPacketSize
-{
-    UInt32 bufferByteSize = 0;
-    if (dataFormat->mFramesPerPacket != 0)
-    {
-        Float64 numPacketsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
-        bufferByteSize = (UInt32)(numPacketsForTime * maxPacketSize);
-        bufferByteSize = (UInt32)MIN(maxBufferSize, bufferByteSize);
-        bufferByteSize = (UInt32)MAX(minBufferSize, bufferByteSize);
-    }
-    else
-    {
-        bufferByteSize = (UInt32)MAX(maxBufferSize, maxPacketSize);
-    }
-    return bufferByteSize;
 }
 
 @end

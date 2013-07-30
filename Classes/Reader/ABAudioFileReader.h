@@ -9,9 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "ABAudioQueueDataSource.h"
 
+
 @interface ABAudioFileReader : NSObject <ABAudioQueueDataSource>
 {
     AudioFileID audioFile;
+    AudioStreamBasicDescription dataFormat;
+    AudioStreamPacketDescription *packetDescription;
+    UInt32 bufferSize;
+    UInt32 packetsToRead;
     SInt64 packetCount;
     UInt32 cookieSize;
 }

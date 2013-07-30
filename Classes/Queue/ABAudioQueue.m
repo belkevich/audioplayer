@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 okolodev. All rights reserved.
 //
 
-#import <mm_malloc.h>
 #import "ABAudioQueue.h"
 
 @implementation ABAudioQueue
@@ -20,7 +19,6 @@
     if (self)
     {
         queue = NULL;
-        packetDescription = NULL;
         dataSource = aDataSource;
         delegate = aDelegate;
     }
@@ -37,7 +35,6 @@
 - (BOOL)audioQueueSetup
 {
     [self audioQueueStop];
-    [self audioQueueSetupDataFormatAndPacketDescription];
     if ([self audioQueueNewOutput] && [self audioQueueAllocateBuffer] &&
         [self audioQueuePrepareBuffer])
     {
@@ -77,37 +74,25 @@
         AudioQueueDispose(queue, true);
         queue = NULL;
     }
-    if (packetDescription)
-    {
-        free(packetDescription);
-        packetDescription = NULL;
-    }
-    bufferSize = 0;
-    packetsToRead = 0;
 }
 
 #pragma mark - private
 
-- (void)audioQueueSetupDataFormatAndPacketDescription
-{
-    [dataSource audioQueueDataFormat:&dataFormat bufferSize:&bufferSize
-                       packetsToRead:&packetsToRead];
-    if (packetsToRead > 0 && (dataFormat.mBytesPerPacket == 0 || dataFormat.mFramesPerPacket == 0))
-    {
-        size_t size = packetsToRead * sizeof(AudioStreamPacketDescription);
-        packetDescription = (AudioStreamPacketDescription *)malloc(size);
-    }
-}
-
 - (BOOL)audioQueueNewOutput
 {
-    OSStatus status = AudioQueueNewOutput(&dataFormat, handleBufferCallback,
-                                          (__bridge void *)(self), NULL, NULL, 0, &queue);
-    return (status == noErr);
+    AudioStreamBasicDescription *dataFormat = [dataSource audioQueueDataFormat];
+    if (dataFormat)
+    {
+        OSStatus status = AudioQueueNewOutput(dataFormat, handleBufferCallback,
+                                              (__bridge void *)(self), NULL, NULL, 0, &queue);
+        return (status == noErr);
+    }
+    return NO;
 }
 
 - (BOOL)audioQueueAllocateBuffer
 {
+    UInt32 bufferSize = [dataSource audioQueueBufferSize];
 #ifdef DEBUG
     NSLog(@"Audio queue buffer size %lu", (unsigned long)bufferSize);
 #endif
@@ -124,7 +109,7 @@
 
 - (BOOL)audioQueuePrepareBuffer
 {
-    for (NSUInteger i = 0; i < kAudioQueueBufferCount; i++)
+    for (int i = 0; i < kAudioQueueBufferCount; i++)
     {
         if (![self audioQueueEnqueueBuffer:buffers[i]])
         {
@@ -151,8 +136,9 @@
 
 - (BOOL)audioQueueEnqueueBuffer:(AudioQueueBufferRef)buffer
 {
-    UInt32 readPackets = packetsToRead;
-    [dataSource audioQueueUpdateThreadSafelyBuffer:buffer packetDescription:packetDescription
+    UInt32 readPackets = 0;
+    AudioStreamPacketDescription *packetDescription = NULL;
+    [dataSource audioQueueUpdateThreadSafelyBuffer:buffer packetDescription:&packetDescription
                                        readPackets:&readPackets];
     if (buffer->mAudioDataByteSize > 0)
     {
