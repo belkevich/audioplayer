@@ -13,13 +13,9 @@
 
 - (AudioStreamBasicDescription *)audioQueueDataFormat;
 - (UInt32)audioQueueBufferSize;
+- (void)audioQueueMagicCookie:(char **)pMagicCookie size:(UInt32 *)size;
 - (void)audioQueueUpdateThreadSafelyBuffer:(AudioQueueBufferRef)buffer
                          packetDescription:(AudioStreamPacketDescription **)pPacketDescription
                                readPackets:(UInt32 *)readPackets;
-
-@optional
-
-- (UInt32)audioQueueMagicCookieSize;
-- (void)audioQueueMagicCookie:(char *)magicCookie;
 
 @end

@@ -21,6 +21,7 @@ UInt32 const minBufferSize = 0x4000;
     if (self)
     {
         audioFile = NULL;
+        packetDescription = NULL;
     }
     return self;
 }
@@ -48,20 +49,9 @@ UInt32 const minBufferSize = 0x4000;
 
 - (void)closeAudio
 {
-    if (audioFile)
-    {
-        AudioFileClose(audioFile);
-        audioFile = NULL;
-    }
-    if (packetDescription)
-    {
-        free(packetDescription);
-        packetDescription = NULL;
-    }
-    bufferSize = 0;
-    packetsToRead = 0;
-    packetCount = 0;
-    cookieSize = 0;
+    [self audioFileClose];
+    [self audioFileCleanPacketDescription];
+    [self audioFileCleanMagicCookie];
 }
 
 #pragma mark - audio queue data source implementation
@@ -74,6 +64,21 @@ UInt32 const minBufferSize = 0x4000;
 - (UInt32)audioQueueBufferSize
 {
     return bufferSize;
+}
+
+- (void)audioQueueMagicCookie:(char **)pMagicCookie size:(UInt32 *)size
+{
+    [self audioFileCleanMagicCookie];
+    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData,
+                                               &cookieSize, NULL);
+    if (status == noErr)
+    {
+        magicCookie = malloc(cookieSize);
+        AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize,
+                             magicCookie);
+        *pMagicCookie = magicCookie;
+        *size = cookieSize;
+    }
 }
 
 - (void)audioQueueUpdateThreadSafelyBuffer:(AudioQueueBufferRef)buffer
@@ -90,18 +95,6 @@ UInt32 const minBufferSize = 0x4000;
         buffer->mAudioDataByteSize = readBytes;
         *pPacketDescription = packetDescription;
     }
-}
-
-- (UInt32)audioQueueMagicCookieSize
-{
-    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData,
-                                               &cookieSize, NULL);
-    return status == noErr ? cookieSize : 0;
-}
-
-- (void)audioQueueMagicCookie:(char *)magicCookie
-{
-    AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize, magicCookie);
 }
 
 #pragma mark - private
@@ -135,7 +128,10 @@ UInt32 const minBufferSize = 0x4000;
 
 - (void)audioFileCalculateBufferSize
 {
-    UInt32 maxPacketSize = [self audioFileMaxPacketSize];
+    UInt32 maxPacketSize = 0;
+    UInt32 propertySize = sizeof(maxPacketSize);
+    AudioFileGetProperty(audioFile, kAudioFilePropertyPacketSizeUpperBound, &propertySize,
+                         &maxPacketSize);
     if (dataFormat.mFramesPerPacket != 0)
     {
         Float64 numPacketsForTime = dataFormat.mSampleRate / dataFormat.mFramesPerPacket * 0.5;
@@ -150,13 +146,35 @@ UInt32 const minBufferSize = 0x4000;
     packetsToRead = bufferSize / maxPacketSize;
 }
 
-- (UInt32)audioFileMaxPacketSize
+- (void)audioFileClose
 {
-    UInt32 maxPacketSize = 0;
-    UInt32 propertySize = sizeof(maxPacketSize);
-    AudioFileGetProperty(audioFile, kAudioFilePropertyPacketSizeUpperBound, &propertySize,
-                         &maxPacketSize);
-    return maxPacketSize;
+    if (audioFile)
+    {
+        AudioFileClose(audioFile);
+        audioFile = NULL;
+    }
+    bufferSize = 0;
+}
+
+- (void)audioFileCleanPacketDescription
+{
+    if (packetDescription)
+    {
+        free(packetDescription);
+        packetDescription = NULL;
+    }
+    packetsToRead = 0;
+    packetCount = 0;
+}
+
+- (void)audioFileCleanMagicCookie
+{
+    if (magicCookie)
+    {
+        free(magicCookie);
+        magicCookie = NULL;
+    }
+    cookieSize = 0;
 }
 
 @end

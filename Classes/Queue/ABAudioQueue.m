@@ -121,16 +121,12 @@
 
 - (void)audioQueueSetupMagicCookie
 {
-    if ([dataSource respondsToSelector:@selector(audioQueueMagicCookieSize)])
+    char **pMagicCookie = NULL;
+    UInt32 magicCookieSize = 0;
+    [dataSource audioQueueMagicCookie:pMagicCookie size:&magicCookieSize];
+    if (pMagicCookie && magicCookieSize > 0)
     {
-        UInt32 size = [dataSource audioQueueMagicCookieSize];
-        if ([dataSource respondsToSelector:@selector(audioQueueMagicCookie:)])
-        {
-            char *magicCookie = (char *)malloc(size);
-            [dataSource audioQueueMagicCookie:magicCookie];
-            AudioQueueSetProperty(queue, kAudioQueueProperty_MagicCookie, magicCookie, size);
-            free(magicCookie);
-        }
+        AudioQueueSetProperty(queue, kAudioQueueProperty_MagicCookie, *pMagicCookie, magicCookieSize);
     }
 }
 
