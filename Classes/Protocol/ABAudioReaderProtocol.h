@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
+@class ABAudioBuffer;
+
 @protocol ABAudioReaderProtocol <NSObject>
 
 @property (nonatomic, readonly) AudioStreamBasicDescription audioReaderDataFormat;
 @property (nonatomic, readonly) UInt32 audioReaderBufferSize;
 
-- (void)audioReaderFillBuffer:(AudioQueueBufferRef)buffer
-            packetDescription:(AudioStreamPacketDescription **)pPacketDescription
-                  readPackets:(UInt32 *)readPackets;
+- (void)audioReaderFillAudioBuffer:(ABAudioBuffer *)buffer;
 
 @optional
 

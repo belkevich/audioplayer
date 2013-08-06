@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2DBA1D6AF90FF72B029F79D0 /* ABAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA1FD9282879CD4C9572E4 /* ABAudioBuffer.m */; };
+		2DBA1E173D2FE034303A73FE /* ABAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA1FD9282879CD4C9572E4 /* ABAudioBuffer.m */; };
 		FA059948178F040100374DD5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA059947178F040100374DD5 /* UIKit.framework */; };
 		FA05994A178F040100374DD5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA059949178F040100374DD5 /* Foundation.framework */; };
 		FA05994C178F040100374DD5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA05994B178F040100374DD5 /* CoreGraphics.framework */; };
@@ -23,6 +25,8 @@
 		FA5886441796893C004C6B9E /* ABAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5886421796893C004C6B9E /* ABAudioQueue.m */; };
 		FA58864B17968A15004C6B9E /* ABAudioFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FA58864A17968A15004C6B9E /* ABAudioFileReader.m */; };
 		FA58864C17968A15004C6B9E /* ABAudioFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FA58864A17968A15004C6B9E /* ABAudioFileReader.m */; };
+		FA79468617A8040B00BB0DFB /* ABAudioData.m in Sources */ = {isa = PBXBuildFile; fileRef = FA79468517A8040B00BB0DFB /* ABAudioData.m */; };
+		FA79468717A8040B00BB0DFB /* ABAudioData.m in Sources */ = {isa = PBXBuildFile; fileRef = FA79468517A8040B00BB0DFB /* ABAudioData.m */; };
 		FAA58D9D179EC10E0087A4CE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */; };
 		FAA58D9F179EC1480087A4CE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA58D9E179EC1480087A4CE /* AVFoundation.framework */; };
 		FAFAE1E1178FF7A5009B48E3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */; };
@@ -40,6 +44,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2DBA14D08AB1CCD32589BB6B /* ABAudioBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioBuffer.h; path = ../../Classes/Buffer/ABAudioBuffer.h; sourceTree = "<group>"; };
+		2DBA1FD9282879CD4C9572E4 /* ABAudioBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioBuffer.m; path = ../../Classes/Buffer/ABAudioBuffer.m; sourceTree = "<group>"; };
 		FA059944178F040100374DD5 /* ABAudioPlayerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABAudioPlayerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA059947178F040100374DD5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FA059949178F040100374DD5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -65,6 +71,8 @@
 		FA58864917968A15004C6B9E /* ABAudioFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioFileReader.h; path = ../../Classes/Reader/ABAudioFileReader.h; sourceTree = "<group>"; };
 		FA58864A17968A15004C6B9E /* ABAudioFileReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioFileReader.m; path = ../../Classes/Reader/ABAudioFileReader.m; sourceTree = "<group>"; };
 		FA79467917A7F2A900BB0DFB /* ABAudioReaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioReaderProtocol.h; path = ../../Classes/Protocol/ABAudioReaderProtocol.h; sourceTree = "<group>"; };
+		FA79468417A8040B00BB0DFB /* ABAudioData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioData.h; path = ../../Classes/Data/ABAudioData.h; sourceTree = "<group>"; };
+		FA79468517A8040B00BB0DFB /* ABAudioData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioData.m; path = ../../Classes/Data/ABAudioData.m; sourceTree = "<group>"; };
 		FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FAA58D9E179EC1480087A4CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FAFAE1DF178FF7A5009B48E3 /* ABAudioPlayerMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABAudioPlayerMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,6 +208,8 @@
 				FA3C219117A10C69001DC496 /* Player */,
 				FA588648179689C2004C6B9E /* Reader */,
 				FA58864517968941004C6B9E /* Queue */,
+				FA79467E17A8008A00BB0DFB /* Data */,
+				FA79468317A803BE00BB0DFB /* Buffer */,
 			);
 			name = ABAudioPlayer;
 			sourceTree = "<group>";
@@ -239,6 +249,24 @@
 				FA79467917A7F2A900BB0DFB /* ABAudioReaderProtocol.h */,
 			);
 			name = Protocol;
+			sourceTree = "<group>";
+		};
+		FA79467E17A8008A00BB0DFB /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				FA79468417A8040B00BB0DFB /* ABAudioData.h */,
+				FA79468517A8040B00BB0DFB /* ABAudioData.m */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		FA79468317A803BE00BB0DFB /* Buffer */ = {
+			isa = PBXGroup;
+			children = (
+				2DBA1FD9282879CD4C9572E4 /* ABAudioBuffer.m */,
+				2DBA14D08AB1CCD32589BB6B /* ABAudioBuffer.h */,
+			);
+			name = Buffer;
 			sourceTree = "<group>";
 		};
 		FAFAE1E2178FF7A5009B48E3 /* Other Frameworks */ = {
@@ -443,6 +471,8 @@
 				FA5886431796893C004C6B9E /* ABAudioQueue.m in Sources */,
 				FA58864B17968A15004C6B9E /* ABAudioFileReader.m in Sources */,
 				FA3C219417A10C8C001DC496 /* ABAudioPlayer.m in Sources */,
+				FA79468617A8040B00BB0DFB /* ABAudioData.m in Sources */,
+				2DBA1D6AF90FF72B029F79D0 /* ABAudioBuffer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +488,8 @@
 				FAFAE21417901857009B48E3 /* NSViewController+Controller.m in Sources */,
 				FA5886441796893C004C6B9E /* ABAudioQueue.m in Sources */,
 				FA58864C17968A15004C6B9E /* ABAudioFileReader.m in Sources */,
+				FA79468717A8040B00BB0DFB /* ABAudioData.m in Sources */,
+				2DBA1E173D2FE034303A73FE /* ABAudioBuffer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

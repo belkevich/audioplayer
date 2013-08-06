@@ -9,6 +9,14 @@
 #import "ABAudioPlayer.h"
 #import "ABAudioQueue.h"
 #import "ABAudioFileReader.h"
+#import "ABAudioData.h"
+#import "ABAudioBuffer.h"
+
+@interface ABAudioPlayer ()
+
+@property (nonatomic, strong) ABAudioBuffer *currentBuffer;
+
+@end
 
 @implementation ABAudioPlayer
 
@@ -19,6 +27,7 @@
     self = [super init];
     if (self)
     {
+        audioData = [[ABAudioData alloc] init];
     }
     return self;
 }
@@ -53,8 +62,12 @@
                          packetDescription:(AudioStreamPacketDescription **)pPacketDescription
                                readPackets:(UInt32 *)readPackets
 {
-    [audioFile audioReaderFillBuffer:buffer packetDescription:pPacketDescription
-                         readPackets:readPackets];
+    self.currentBuffer = [[ABAudioBuffer alloc] init];
+    [audioFile audioReaderFillAudioBuffer:self.currentBuffer];
+    memcpy(buffer->mAudioData, self.currentBuffer.data.bytes, self.currentBuffer.data.length);
+    buffer->mAudioDataByteSize = self.currentBuffer.data.length;
+    *pPacketDescription = self.currentBuffer.packetsDescription;
+    *readPackets = self.currentBuffer.packetCount;
 }
 
 #pragma mark - audio queue delegate implementation

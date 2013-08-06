@@ -12,11 +12,13 @@
 
 @class ABAudioQueue;
 @class ABAudioFileReader;
+@class ABAudioData;
 
 @interface ABAudioPlayer : NSObject <ABAudioQueueDataSource, ABAudioQueueDelegate>
 {
     ABAudioQueue *audioQueue;
     ABAudioFileReader *audioFile;
+    ABAudioData *audioData;
 }
 
 - (void)play;

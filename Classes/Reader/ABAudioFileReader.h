@@ -14,7 +14,6 @@
 {
     AudioFileID audioFile;
     AudioStreamBasicDescription dataFormat;
-    AudioStreamPacketDescription *packetDescription;
     char *magicCookie;
     UInt32 bufferSize;
     UInt32 packetsToRead;

@@ -7,6 +7,7 @@
 //
 
 #import "ABAudioFileReader.h"
+#import "ABAudioBuffer.h"
 
 @implementation ABAudioFileReader
 
@@ -21,7 +22,6 @@ UInt32 const minBufferSize = 0x4000;
     if (self)
     {
         audioFile = NULL;
-        packetDescription = NULL;
         magicCookie = NULL;
     }
     return self;
@@ -42,7 +42,6 @@ UInt32 const minBufferSize = 0x4000;
     {
         [self audioFileGetDataFormat];
         [self audioFileCalculateBufferSize];
-        [self audioFileAllocatePacketDescription];
         return YES;
     }
     return NO;
@@ -51,7 +50,6 @@ UInt32 const minBufferSize = 0x4000;
 - (void)closeAudio
 {
     [self audioFileClose];
-    [self audioFileCleanPacketDescription];
     [self audioFileCleanMagicCookie];
 }
 
@@ -67,19 +65,17 @@ UInt32 const minBufferSize = 0x4000;
     return bufferSize;
 }
 
-- (void)audioReaderFillBuffer:(AudioQueueBufferRef)buffer
-            packetDescription:(AudioStreamPacketDescription **)pPacketDescription
-                  readPackets:(UInt32 *)readPackets
+- (void)audioReaderFillAudioBuffer:(ABAudioBuffer *)buffer
 {
     UInt32 readBytes = 0;
-    *readPackets = packetsToRead;
-    OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, packetDescription,
-                                           packetCount, readPackets, buffer->mAudioData);
+    UInt32 readPackets= packetsToRead;
+    [buffer setDataSize:bufferSize packetCount:packetsToRead];
+    OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, buffer.packetsDescription,
+                                           packetCount, &readPackets, buffer.data.mutableBytes);
     if (status == noErr)
     {
-        packetCount += *readPackets;
-        buffer->mAudioDataByteSize = readBytes;
-        *pPacketDescription = packetDescription;
+        packetCount += readPackets;
+        buffer.data.length = readBytes;
     }
 }
 
@@ -124,15 +120,6 @@ UInt32 const minBufferSize = 0x4000;
     AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize, &dataFormat);
 }
 
-- (void)audioFileAllocatePacketDescription
-{
-    if (packetsToRead > 0 && (dataFormat.mBytesPerPacket == 0 || dataFormat.mFramesPerPacket == 0))
-    {
-        size_t size = packetsToRead * sizeof(AudioStreamPacketDescription);
-        packetDescription = (AudioStreamPacketDescription *)malloc(size);
-    }
-}
-
 - (void)audioFileCalculateBufferSize
 {
     UInt32 maxPacketSize = 0;
@@ -161,15 +148,6 @@ UInt32 const minBufferSize = 0x4000;
         audioFile = NULL;
     }
     bufferSize = 0;
-}
-
-- (void)audioFileCleanPacketDescription
-{
-    if (packetDescription)
-    {
-        free(packetDescription);
-        packetDescription = NULL;
-    }
     packetsToRead = 0;
     packetCount = 0;
 }
