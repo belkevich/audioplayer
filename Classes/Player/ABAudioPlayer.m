@@ -12,12 +12,6 @@
 #import "ABAudioData.h"
 #import "ABAudioBuffer.h"
 
-@interface ABAudioPlayer ()
-
-@property (nonatomic, strong) ABAudioBuffer *currentBuffer;
-
-@end
-
 @implementation ABAudioPlayer
 
 #pragma mark - main routine
@@ -46,28 +40,34 @@
 #pragma mark - audio queue data source implementation
 
 - (void)audioQueueDataFormat:(AudioStreamBasicDescription *)dataFormat
-                  bufferSize:(UInt32 *)bufferSize
+                  bufferSize:(UInt32 *)bufferSize packetsToRead:(UInt32 *)packetsToRead
 {
     *dataFormat = audioFile.audioReaderDataFormat;
     *bufferSize = audioFile.audioReaderBufferSize;
+    *packetsToRead = [audioFile respondsToSelector:@selector(audioReaderPacketsToRead)] ?
+    audioFile.audioReaderPacketsToRead : 0;
 }
 
 - (void)audioQueueMagicCookie:(char **)pMagicCookie size:(UInt32 *)size
 {
-    *size = audioFile.audioReaderMagicCookieSize;
-    *pMagicCookie = audioFile.audioReaderMagicCookie;
+    if ([audioFile respondsToSelector:@selector(audioReaderMagicCookieSize)] &&
+        [audioFile respondsToSelector:@selector(audioReaderMagicCookie)])
+    {
+        *size = audioFile.audioReaderMagicCookieSize;
+        *pMagicCookie = audioFile.audioReaderMagicCookie;
+    }
 }
 
 - (void)audioQueueUpdateThreadSafelyBuffer:(AudioQueueBufferRef)buffer
-                         packetDescription:(AudioStreamPacketDescription **)pPacketDescription
+                         packetDescription:(AudioStreamPacketDescription *)packetDescription
                                readPackets:(UInt32 *)readPackets
 {
-    self.currentBuffer = [[ABAudioBuffer alloc] init];
-    [audioFile audioReaderFillAudioBuffer:self.currentBuffer];
-    memcpy(buffer->mAudioData, self.currentBuffer.data.bytes, self.currentBuffer.data.length);
-    buffer->mAudioDataByteSize = self.currentBuffer.data.length;
-    *pPacketDescription = self.currentBuffer.packetsDescription;
-    *readPackets = self.currentBuffer.packetCount;
+    ABAudioBuffer *currentBuffer = [[ABAudioBuffer alloc] init];
+    [audioFile audioReaderFillAudioBuffer:currentBuffer];
+    memcpy(buffer->mAudioData, currentBuffer.audioData, currentBuffer.actualDataSize);
+    buffer->mAudioDataByteSize = currentBuffer.actualDataSize;
+    memcpy(packetDescription, currentBuffer.packetsDescription, currentBuffer.actualPacketsSize);
+    *readPackets = currentBuffer.actualPacketCount;
 }
 
 #pragma mark - audio queue delegate implementation

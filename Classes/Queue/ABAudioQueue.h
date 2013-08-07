@@ -17,6 +17,7 @@ static const UInt32 kAudioQueueBufferCount = 3;
 {
     AudioQueueRef queue;
     AudioQueueBufferRef buffers[kAudioQueueBufferCount];
+    AudioStreamPacketDescription *packetsDescriptions;
     __weak NSObject <ABAudioQueueDataSource> *dataSource;
     __weak NSObject <ABAudioQueueDelegate> *delegate;
 }

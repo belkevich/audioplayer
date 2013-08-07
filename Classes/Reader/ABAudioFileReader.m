@@ -68,15 +68,20 @@ UInt32 const minBufferSize = 0x4000;
 - (void)audioReaderFillAudioBuffer:(ABAudioBuffer *)buffer
 {
     UInt32 readBytes = 0;
-    UInt32 readPackets= packetsToRead;
-    [buffer setDataSize:bufferSize packetCount:packetsToRead];
+    UInt32 readPackets = packetsToRead;
+    [buffer setExpectedDataSize:bufferSize packetCount:packetsToRead];
     OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, buffer.packetsDescription,
-                                           packetCount, &readPackets, buffer.data.mutableBytes);
+                                           packetCount, &readPackets, buffer.audioData);
     if (status == noErr)
     {
         packetCount += readPackets;
-        buffer.data.length = readBytes;
+        [buffer setActualDataSize:readBytes packetCount:readPackets];
     }
+}
+
+- (UInt32)audioReaderPacketsToRead
+{
+    return packetsToRead;
 }
 
 - (UInt32)audioReaderMagicCookieSize

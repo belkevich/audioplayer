@@ -11,10 +11,13 @@
 
 @interface ABAudioBuffer : NSObject
 
-@property (nonatomic, readonly) NSMutableData *data;
+@property (nonatomic, readonly) void *audioData;
 @property (nonatomic, readonly) AudioStreamPacketDescription *packetsDescription;
-@property (nonatomic, readonly) UInt32 packetCount;
+@property (nonatomic, readonly) UInt32 actualDataSize;
+@property (nonatomic, readonly) UInt32 actualPacketCount;
+@property (nonatomic, readonly) UInt32 actualPacketsSize;
 
-- (void)setDataSize:(UInt32)size packetCount:(UInt32)count;
+- (void)setExpectedDataSize:(UInt32)size packetCount:(UInt32)count;
+- (void)setActualDataSize:(UInt32)size packetCount:(UInt32)count;
 
 @end

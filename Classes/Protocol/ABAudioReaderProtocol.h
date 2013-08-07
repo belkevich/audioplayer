@@ -20,6 +20,7 @@
 
 @optional
 
+@property (nonatomic, readonly) UInt32 audioReaderPacketsToRead;
 @property (nonatomic, readonly) char *audioReaderMagicCookie;
 @property (nonatomic, readonly) UInt32 audioReaderMagicCookieSize;
 

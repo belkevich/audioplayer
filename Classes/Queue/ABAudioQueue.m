@@ -19,6 +19,7 @@
     if (self)
     {
         queue = NULL;
+        packetsDescriptions = NULL;
         dataSource = aDataSource;
         delegate = aDelegate;
     }
@@ -36,8 +37,10 @@
 {
     [self audioQueueStop];
     AudioStreamBasicDescription dataFormat;
-    UInt32 bufferSize = 0;
-    [dataSource audioQueueDataFormat:&dataFormat bufferSize:&bufferSize];
+    UInt32 bufferSize = 0, packetsToRead = 0;
+    [dataSource audioQueueDataFormat:&dataFormat bufferSize:&bufferSize
+                       packetsToRead:&packetsToRead];
+    [self audioQueueAllocatePacketDescriptions:packetsToRead];
     if ([self audioQueueNewOutput:&dataFormat] && [self audioQueueAllocateBuffer:bufferSize] &&
         [self audioQueuePrepareBuffer])
     {
@@ -77,6 +80,7 @@
         AudioQueueDispose(queue, true);
         queue = NULL;
     }
+    [self audioQueueCleanPacketDescription];
 }
 
 #pragma mark - private
@@ -128,15 +132,32 @@
     }
 }
 
+- (void)audioQueueAllocatePacketDescriptions:(UInt32)packetCount
+{
+    [self audioQueueCleanPacketDescription];
+    if (packetCount > 0)
+    {
+        packetsDescriptions = malloc(packetCount * sizeof(AudioStreamPacketDescription));
+    }
+}
+
+- (void)audioQueueCleanPacketDescription
+{
+    if (packetsDescriptions)
+    {
+        free(packetsDescriptions);
+        packetsDescriptions = NULL;
+    }
+}
+
 - (BOOL)audioQueueEnqueueBuffer:(AudioQueueBufferRef)buffer
 {
     UInt32 readPackets = 0;
-    AudioStreamPacketDescription *packetDescription = NULL;
-    [dataSource audioQueueUpdateThreadSafelyBuffer:buffer packetDescription:&packetDescription
+    [dataSource audioQueueUpdateThreadSafelyBuffer:buffer packetDescription:packetsDescriptions
                                        readPackets:&readPackets];
     if (buffer->mAudioDataByteSize > 0)
     {
-        OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, readPackets, packetDescription);
+        OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, readPackets, packetsDescriptions);
         return (status == noErr);
     }
     return NO;
@@ -148,9 +169,9 @@
     if (![self audioQueueEnqueueBuffer:buffer])
     {
         dispatch_async(dispatch_get_main_queue(), ^
-        {
-            [delegate audioQueueBufferEmpty];
-        });
+                                                  {
+                                                      [delegate audioQueueBufferEmpty];
+                                                  });
     }
 }
 

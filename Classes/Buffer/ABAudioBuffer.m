@@ -10,9 +10,12 @@
 
 @interface ABAudioBuffer ()
 
-@property (nonatomic, strong) NSMutableData *data;
+@property (nonatomic, assign) void *audioData;
 @property (nonatomic, assign) AudioStreamPacketDescription *packetsDescription;
-@property (nonatomic, assign) UInt32 packetCount;
+@property (nonatomic, assign) UInt32 actualDataSize;
+@property (nonatomic, assign) UInt32 actualPacketCount;
+@property (nonatomic, assign) UInt32 expectedDataSize;
+@property (nonatomic, assign) UInt32 expectedPacketCount;
 
 @end
 
@@ -25,41 +28,73 @@
     self = [super init];
     if (self)
     {
-        self.data = [[NSMutableData alloc] init];
+        self.audioData = NULL;
         self.packetsDescription = NULL;
-        self.packetCount = 0;
+        self.expectedDataSize = 0;
+        self.expectedPacketCount = 0;
     }
     return self;
 }
 
 - (void)dealloc
 {
+    [self cleanAudioData];
     [self cleanAudioPacketsDescription];
 }
 
 #pragma mark - public
 
-- (void)setDataSize:(UInt32)size packetCount:(UInt32)count
+- (void)setExpectedDataSize:(UInt32)size packetCount:(UInt32)count
 {
-    self.data.length = size;
-    if (self.packetCount != count)
+    if (self.expectedDataSize != size)
+    {
+        [self cleanAudioData];
+        self.audioData = malloc(size);
+        self.expectedDataSize = size;
+    }
+    if (self.expectedPacketCount != count)
     {
         [self cleanAudioPacketsDescription];
-        self.packetCount = count;
-        size_t packetsSize = count * sizeof(AudioStreamPacketDescription);
-        self.packetsDescription = malloc(packetsSize);
+        self.packetsDescription = malloc(count * sizeof(AudioStreamPacketDescription));
+        self.expectedPacketCount = count;
     }
 }
 
+- (void)setActualDataSize:(UInt32)size packetCount:(UInt32)count
+{
+    self.actualDataSize = size;
+    self.actualPacketCount = count;
+}
+
+#pragma mark - properties
+
+- (UInt32)actualPacketsSize
+{
+    return self.actualPacketCount * sizeof(AudioStreamPacketDescription);
+}
+
 #pragma mark - private
+
+- (void)cleanAudioData
+{
+    if (self.audioData)
+    {
+        free(self.audioData);
+        self.audioData = NULL;
+    }
+    self.expectedDataSize = 0;
+    self.actualDataSize = 0;
+}
 
 - (void)cleanAudioPacketsDescription
 {
     if (self.packetsDescription)
     {
         free(self.packetsDescription);
+        self.packetsDescription = NULL;
     }
-    self.packetCount = 0;
+    self.expectedPacketCount = 0;
+    self.actualPacketCount = 0;
 }
 
 @end
