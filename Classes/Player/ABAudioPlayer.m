@@ -45,7 +45,7 @@
     *dataFormat = audioFile.audioReaderDataFormat;
     *bufferSize = audioFile.audioReaderBufferSize;
     *packetsToRead = [audioFile respondsToSelector:@selector(audioReaderPacketsToRead)] ?
-    audioFile.audioReaderPacketsToRead : 0;
+                     audioFile.audioReaderPacketsToRead : 0;
 }
 
 - (void)audioQueueMagicCookie:(char **)pMagicCookie size:(UInt32 *)size
@@ -59,16 +59,19 @@
 }
 
 - (void)audioQueueUpdateThreadSafelyBuffer:(AudioQueueBufferRef)buffer
-                         packetDescription:(AudioStreamPacketDescription *)packetDescription
+                        packetsDescription:(AudioStreamPacketDescription *)packetsDescription
                                readPackets:(UInt32 *)readPackets
 {
-    ABAudioBuffer *currentBuffer = [audioData reusableAudioBuffer];
-    [audioFile audioReaderFillAudioBuffer:currentBuffer];
-    memcpy(buffer->mAudioData, currentBuffer.audioData, currentBuffer.actualDataSize);
-    buffer->mAudioDataByteSize = currentBuffer.actualDataSize;
-    memcpy(packetDescription, currentBuffer.packetsDescription, currentBuffer.actualPacketsSize);
-    *readPackets = currentBuffer.actualPacketCount;
-    [audioData reuseAudioBuffer:currentBuffer];
+    ABAudioBuffer *audioBuffer = [audioData reusableAudioBuffer];
+    [audioFile audioReaderFillAudioBuffer:audioBuffer];
+    memcpy(buffer->mAudioData, audioBuffer.audioData, audioBuffer.actualDataSize);
+    buffer->mAudioDataByteSize = audioBuffer.actualDataSize;
+    if (packetsDescription && audioBuffer.packetsDescription && audioBuffer.actualPacketCount > 0)
+    {
+        memcpy(packetsDescription, audioBuffer.packetsDescription, audioBuffer.actualPacketsSize);
+        *readPackets = audioBuffer.actualPacketCount;
+    }
+    [audioData reuseAudioBuffer:audioBuffer];
 }
 
 #pragma mark - audio queue delegate implementation

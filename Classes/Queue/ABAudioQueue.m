@@ -19,7 +19,7 @@
     if (self)
     {
         queue = NULL;
-        packetsDescriptions = NULL;
+        packetsDescription = NULL;
         dataSource = aDataSource;
         delegate = aDelegate;
     }
@@ -137,27 +137,27 @@
     [self audioQueueCleanPacketDescription];
     if (packetCount > 0)
     {
-        packetsDescriptions = malloc(packetCount * sizeof(AudioStreamPacketDescription));
+        packetsDescription = malloc(packetCount * sizeof(AudioStreamPacketDescription));
     }
 }
 
 - (void)audioQueueCleanPacketDescription
 {
-    if (packetsDescriptions)
+    if (packetsDescription)
     {
-        free(packetsDescriptions);
-        packetsDescriptions = NULL;
+        free(packetsDescription);
+        packetsDescription = NULL;
     }
 }
 
 - (BOOL)audioQueueEnqueueBuffer:(AudioQueueBufferRef)buffer
 {
     UInt32 readPackets = 0;
-    [dataSource audioQueueUpdateThreadSafelyBuffer:buffer packetDescription:packetsDescriptions
+    [dataSource audioQueueUpdateThreadSafelyBuffer:buffer packetsDescription:packetsDescription
                                        readPackets:&readPackets];
     if (buffer->mAudioDataByteSize > 0)
     {
-        OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, readPackets, packetsDescriptions);
+        OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, readPackets, packetsDescription);
         return (status == noErr);
     }
     return NO;
@@ -169,9 +169,9 @@
     if (![self audioQueueEnqueueBuffer:buffer])
     {
         dispatch_async(dispatch_get_main_queue(), ^
-                                                  {
-                                                      [delegate audioQueueBufferEmpty];
-                                                  });
+        {
+            [delegate audioQueueBufferEmpty];
+        });
     }
 }
 
@@ -181,7 +181,10 @@ static void handleBufferCallback(void *instance, AudioQueueRef __unused queue,
                                  AudioQueueBufferRef buffer)
 {
     ABAudioQueue *audioQueue = (__bridge ABAudioQueue *)instance;
-    [audioQueue handleAudioQueueBuffer:buffer];
+    @autoreleasepool
+    {
+        [audioQueue handleAudioQueueBuffer:buffer];
+    }
 }
 
 @end
