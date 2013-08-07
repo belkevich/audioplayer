@@ -44,7 +44,11 @@
     __weak NSMutableArray *queue = dataQueue;
     dispatch_sync(lockQueue, ^
     {
-        buffer = queue.count > 0 ? [queue objectAtIndex:0] : nil;
+        if (queue.count > 0)
+        {
+            buffer = [queue objectAtIndex:0];
+            [queue removeObjectAtIndex:0];
+        }
     });
     return buffer;
 }
@@ -64,7 +68,15 @@
     __weak NSMutableArray *queue = reuseQueue;
     dispatch_sync(lockQueue, ^
     {
-        buffer = queue.count > 1 ? [queue objectAtIndex:0] : [[ABAudioBuffer alloc] init];
+        if (queue.count > 1)
+        {
+            buffer = [queue objectAtIndex:0];
+            [queue removeObjectAtIndex:0];
+        }
+        else
+        {
+            buffer = [[ABAudioBuffer alloc] init];
+        }
     });
     return buffer;
 }

@@ -62,12 +62,13 @@
                          packetDescription:(AudioStreamPacketDescription *)packetDescription
                                readPackets:(UInt32 *)readPackets
 {
-    ABAudioBuffer *currentBuffer = [[ABAudioBuffer alloc] init];
+    ABAudioBuffer *currentBuffer = [audioData reusableAudioBuffer];
     [audioFile audioReaderFillAudioBuffer:currentBuffer];
     memcpy(buffer->mAudioData, currentBuffer.audioData, currentBuffer.actualDataSize);
     buffer->mAudioDataByteSize = currentBuffer.actualDataSize;
     memcpy(packetDescription, currentBuffer.packetsDescription, currentBuffer.actualPacketsSize);
     *readPackets = currentBuffer.actualPacketCount;
+    [audioData reuseAudioBuffer:currentBuffer];
 }
 
 #pragma mark - audio queue delegate implementation
