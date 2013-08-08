@@ -20,12 +20,14 @@ typedef enum
     ABAudioReaderStatusError = 3
 } ABAudioReaderStatus;
 
+typedef void (^ABAudioReaderOpenSuccessBlock)();
+
 @protocol ABAudioReaderProtocol <NSObject>
 
 @property (nonatomic, readonly) ABAudioReaderStatus audioReaderStatus;
 @property (nonatomic, readonly) ABAudioFormat *audioReaderFormat;
 
-- (BOOL)audioReaderOpen:(NSString *)path;
+- (BOOL)audioReaderOpen:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock;
 - (void)audioReaderClose;
 - (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely;
 

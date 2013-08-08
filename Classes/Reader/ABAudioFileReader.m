@@ -38,7 +38,7 @@ UInt32 const minBufferSize = 0x4000;
 
 #pragma mark - audio reader protocol implementation
 
-- (BOOL)audioReaderOpen:(NSString *)path
+- (BOOL)audioReaderOpen:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
 {
     [self audioReaderClose];
     BOOL status = [self audioFileOpen:path];
@@ -47,6 +47,10 @@ UInt32 const minBufferSize = 0x4000;
         [self audioFileGetDataFormat];
         [self audioFileGetMagicCookie];
         [self audioFileCalculateBufferSize];
+        if (successBlock)
+        {
+            successBlock();
+        }
         return YES;
     }
     return NO;

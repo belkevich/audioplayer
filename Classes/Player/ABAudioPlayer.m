@@ -18,11 +18,13 @@
 
 - (void)play
 {
-    audioFile = [[ABAudioFileReader alloc] init];
-    [audioFile audioReaderOpen:@"/Users/alex/Music/01.mp3"];
     audioQueue = [[ABAudioQueue alloc] initWithAudioQueueDataSource:self];
-    [audioQueue audioQueueSetupFormat:audioFile.audioReaderFormat];
-    [audioQueue audioQueuePlay];
+    audioFile = [[ABAudioFileReader alloc] init];
+    [audioFile audioReaderOpen:@"/Users/alex/Music/01.mp3" success:^
+    {
+        [audioQueue audioQueueSetupFormat:audioFile.audioReaderFormat];
+        [audioQueue audioQueuePlay];
+    }];
 }
 
 #pragma mark - audio queue data source implementation
