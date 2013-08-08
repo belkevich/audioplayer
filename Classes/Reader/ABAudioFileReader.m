@@ -63,7 +63,7 @@ UInt32 const minBufferSize = 0x4000;
     packetCount = 0;
 }
 
-- (ABAudioBuffer *)audioReaderCurrentBuffer
+- (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely
 {
     UInt32 readBytes = 0;
     UInt32 readPackets = self.audioReaderFormat.packetsToRead;

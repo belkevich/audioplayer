@@ -135,7 +135,7 @@
 
 - (BOOL)audioQueueEnqueueBuffer:(AudioQueueBufferRef)buffer
 {
-    ABAudioBuffer *currentBuffer = [dataSource audioQueueCurrentBuffer];
+    ABAudioBuffer *currentBuffer = [dataSource audioQueueCurrentBufferThreadSafely];
     [currentBuffer copyAudioDataToBuffer:buffer];
     if (currentBuffer && buffer->mAudioDataByteSize > 0)
     {

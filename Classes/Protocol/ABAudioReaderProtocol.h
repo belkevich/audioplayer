@@ -27,6 +27,6 @@ typedef enum
 
 - (BOOL)audioReaderOpen:(NSString *)path;
 - (void)audioReaderClose;
-- (ABAudioBuffer *)audioReaderCurrentBuffer;
+- (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely;
 
 @end

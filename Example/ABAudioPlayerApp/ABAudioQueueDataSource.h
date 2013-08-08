@@ -12,6 +12,6 @@
 
 @protocol ABAudioQueueDataSource <NSObject>
 
-- (ABAudioBuffer *)audioQueueCurrentBuffer;
+- (ABAudioBuffer *)audioQueueCurrentBufferThreadSafely;
 
 @end

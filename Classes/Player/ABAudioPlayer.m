@@ -27,9 +27,9 @@
 
 #pragma mark - audio queue data source implementation
 
-- (ABAudioBuffer *)audioQueueCurrentBuffer
+- (ABAudioBuffer *)audioQueueCurrentBufferThreadSafely
 {
-    ABAudioBuffer *buffer = [audioFile audioReaderCurrentBuffer];
+    ABAudioBuffer *buffer = [audioFile audioReaderCurrentBufferThreadSafely];
     if (!buffer)
     {
         dispatch_async(dispatch_get_main_queue(), ^
@@ -39,6 +39,7 @@
                 case ABAudioReaderStatusEmpty:
                     [audioQueue audioQueuePause];
                     break;
+
                 case ABAudioReaderStatusError:
                 case ABAudioReaderStatusEnd:
                     [audioQueue audioQueueStop];
