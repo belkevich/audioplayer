@@ -7,6 +7,15 @@
 //
 
 #import "ABAudioQueue.h"
+#import "ABAudioFormat.h"
+#import "ABAudioBuffer.h"
+
+@interface ABAudioQueue ()
+
+@property (nonatomic, strong) ABAudioFormat *audioFormat;
+
+@end
+
 
 @implementation ABAudioQueue
 
@@ -19,7 +28,6 @@
     if (self)
     {
         queue = NULL;
-        packetsDescription = NULL;
         dataSource = aDataSource;
         delegate = aDelegate;
     }
@@ -33,18 +41,14 @@
 
 #pragma mark - public
 
-- (BOOL)audioQueueSetup
+- (BOOL)audioQueueSetupFormat:(ABAudioFormat *)audioFormat
 {
     [self audioQueueStop];
-    AudioStreamBasicDescription dataFormat;
-    UInt32 bufferSize = 0, packetsToRead = 0;
-    [dataSource audioQueueDataFormat:&dataFormat bufferSize:&bufferSize
-                       packetsToRead:&packetsToRead];
-    [self audioQueueAllocatePacketDescriptions:packetsToRead];
-    if ([self audioQueueNewOutput:&dataFormat] && [self audioQueueAllocateBuffer:bufferSize] &&
+    self.audioFormat = audioFormat;
+    if ([self audioQueueNewOutput] && [self audioQueueAllocateBuffer] &&
         [self audioQueuePrepareBuffer])
     {
-        [self audioQueueSetupMagicCookie];
+        [self audioQueueSetupMagicCookies];
         return YES;
     }
     else
@@ -80,24 +84,25 @@
         AudioQueueDispose(queue, true);
         queue = NULL;
     }
-    [self audioQueueCleanPacketDescription];
+    self.audioFormat = nil;
 }
 
 #pragma mark - private
 
-- (BOOL)audioQueueNewOutput:(AudioStreamBasicDescription *)dataFormat
+- (BOOL)audioQueueNewOutput
 {
-    if (dataFormat)
+    if (self.audioFormat)
     {
-        OSStatus status = AudioQueueNewOutput(dataFormat, handleBufferCallback,
+        OSStatus status = AudioQueueNewOutput(self.audioFormat.dataFormat, handleBufferCallback,
                                               (__bridge void *)(self), NULL, NULL, 0, &queue);
         return (status == noErr);
     }
     return NO;
 }
 
-- (BOOL)audioQueueAllocateBuffer:(UInt32)bufferSize
+- (BOOL)audioQueueAllocateBuffer
 {
+    UInt32 bufferSize = self.audioFormat.bufferSize;
     for (int i = 0; i < kAudioQueueBufferCount; i++)
     {
         OSStatus status = AudioQueueAllocateBuffer(queue, bufferSize, &buffers[i]);
@@ -121,43 +126,23 @@
     return YES;
 }
 
-- (void)audioQueueSetupMagicCookie
+- (void)audioQueueSetupMagicCookies
 {
-    char *magicCookie = NULL;
-    UInt32 magicCookieSize = 0;
-    [dataSource audioQueueMagicCookie:&magicCookie size:&magicCookieSize];
-    if (magicCookie && magicCookieSize > 0)
+    if (self.audioFormat.magicCookie)
     {
-        AudioQueueSetProperty(queue, kAudioQueueProperty_MagicCookie, magicCookie, magicCookieSize);
-    }
-}
-
-- (void)audioQueueAllocatePacketDescriptions:(UInt32)packetCount
-{
-    [self audioQueueCleanPacketDescription];
-    if (packetCount > 0)
-    {
-        packetsDescription = malloc(packetCount * sizeof(AudioStreamPacketDescription));
-    }
-}
-
-- (void)audioQueueCleanPacketDescription
-{
-    if (packetsDescription)
-    {
-        free(packetsDescription);
-        packetsDescription = NULL;
+        AudioQueueSetProperty(queue, kAudioQueueProperty_MagicCookie, self.audioFormat.magicCookie,
+                              self.audioFormat.magicCookieSize);
     }
 }
 
 - (BOOL)audioQueueEnqueueBuffer:(AudioQueueBufferRef)buffer
 {
-    UInt32 readPackets = 0;
-    [dataSource audioQueueUpdateThreadSafelyBuffer:buffer packetsDescription:packetsDescription
-                                       readPackets:&readPackets];
+    ABAudioBuffer *currentBuffer = [dataSource audioQueueCurrentBuffer];
+    [currentBuffer copyAudioDataToBuffer:buffer];
     if (buffer->mAudioDataByteSize > 0)
     {
-        OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, readPackets, packetsDescription);
+        OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, currentBuffer.actualPacketCount,
+                                                  currentBuffer.packetsDescription);
         return (status == noErr);
     }
     return NO;

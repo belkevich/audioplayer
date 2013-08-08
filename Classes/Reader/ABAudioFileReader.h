@@ -8,19 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "ABAudioReaderProtocol.h"
-
+#import "ABAudioReaderDelegate.h"
 
 @interface ABAudioFileReader : NSObject <ABAudioReaderProtocol>
 {
     AudioFileID audioFile;
-    AudioStreamBasicDescription dataFormat;
-    char *magicCookie;
-    UInt32 bufferSize;
-    UInt32 packetsToRead;
     SInt64 packetCount;
 }
-
-- (BOOL)openAudio:(NSString *)path;
-- (void)closeAudio;
 
 @end

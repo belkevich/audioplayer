@@ -8,11 +8,14 @@
 
 #import "ABAudioFileReader.h"
 #import "ABAudioBuffer.h"
-
-@implementation ABAudioFileReader
+#import "ABAudioFormat.h"
 
 UInt32 const maxBufferSize = 0x50000;
 UInt32 const minBufferSize = 0x4000;
+
+@implementation ABAudioFileReader
+
+@synthesize audioReaderDelegate = _delegate, audioReaderFormat = _dataFormat;
 
 #pragma mark - life cycle
 
@@ -22,87 +25,62 @@ UInt32 const minBufferSize = 0x4000;
     if (self)
     {
         audioFile = NULL;
-        magicCookie = NULL;
+        _dataFormat = [[ABAudioFormat alloc] init];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self closeAudio];
-}
-
-#pragma mark - public
-
-- (BOOL)openAudio:(NSString *)path
-{
-    [self closeAudio];
-    BOOL status = [self audioFileOpen:path];
-    if (status)
-    {
-        [self audioFileGetDataFormat];
-        [self audioFileCalculateBufferSize];
-        return YES;
-    }
-    return NO;
-}
-
-- (void)closeAudio
-{
-    [self audioFileClose];
-    [self audioFileCleanMagicCookie];
+    [self audioReaderClose];
 }
 
 #pragma mark - audio reader protocol implementation
 
-- (AudioStreamBasicDescription)audioReaderDataFormat
+- (BOOL)audioReaderOpen:(NSString *)path
 {
-    return dataFormat;
+    [self audioReaderClose];
+    BOOL status = [self audioFileOpen:path];
+    if (status)
+    {
+        [self audioFileGetDataFormat];
+        [self audioFileGetMagicCookie];
+        [self audioFileCalculateBufferSize];
+        return YES;
+    }
+    return NO;
+
 }
 
-- (UInt32)audioReaderBufferSize
+- (void)audioReaderClose
 {
-    return bufferSize;
+    if (audioFile)
+    {
+        AudioFileClose(audioFile);
+        audioFile = NULL;
+    }
+    packetCount = 0;
 }
 
-- (void)audioReaderFillAudioBuffer:(ABAudioBuffer *)buffer
+- (ABAudioBuffer *)audioReaderCurrentBuffer
 {
     UInt32 readBytes = 0;
-    UInt32 readPackets = packetsToRead;
-    [buffer setExpectedDataSize:bufferSize packetCount:packetsToRead];
+    UInt32 readPackets = self.audioReaderFormat.packetsToRead;
+    ABAudioBuffer *buffer = [[ABAudioBuffer alloc] init];
+    [buffer setExpectedDataSize:self.audioReaderFormat.bufferSize packetCount:readPackets];
     OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, buffer.packetsDescription,
                                            packetCount, &readPackets, buffer.audioData);
     if (status == noErr)
     {
         packetCount += readPackets;
         [buffer setActualDataSize:readBytes packetCount:readPackets];
+        return buffer;
     }
-}
-
-- (UInt32)audioReaderPacketsToRead
-{
-    return packetsToRead;
-}
-
-- (UInt32)audioReaderMagicCookieSize
-{
-    UInt32 cookieSize = 0;
-    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData,
-                                               &cookieSize, NULL);
-    return status == noErr ? cookieSize : 0;
-}
-
-- (char *)audioReaderMagicCookie
-{
-    [self audioFileCleanMagicCookie];
-    UInt32 cookieSize = [self audioReaderMagicCookieSize];
-    if (cookieSize > 0)
+    else if (status == kAudioFileEndOfFileError)
     {
-        magicCookie = malloc(cookieSize);
-        AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize,
-                             magicCookie);
+        [self.audioReaderDelegate audioReaderDidReachEnd];
     }
-    return magicCookie;
+    return nil;
 }
 
 #pragma mark - private
@@ -122,7 +100,21 @@ UInt32 const minBufferSize = 0x4000;
 - (void)audioFileGetDataFormat
 {
     UInt32 dataFormatSize = sizeof(AudioStreamBasicDescription);
-    AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize, &dataFormat);
+    AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize,
+                         self.audioReaderFormat.dataFormat);
+}
+
+- (void)audioFileGetMagicCookie
+{
+    UInt32 cookieSize = 0;
+    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData,
+                                               &cookieSize, NULL);
+    if (status == noErr && cookieSize > 0)
+    {
+        [self.audioReaderFormat createMagicCookieWithSize:cookieSize];
+        AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize,
+                             self.audioReaderFormat.magicCookie);
+    }
 }
 
 - (void)audioFileCalculateBufferSize
@@ -131,39 +123,19 @@ UInt32 const minBufferSize = 0x4000;
     UInt32 propertySize = sizeof(maxPacketSize);
     AudioFileGetProperty(audioFile, kAudioFilePropertyPacketSizeUpperBound, &propertySize,
                          &maxPacketSize);
-    if (dataFormat.mFramesPerPacket != 0)
+    AudioStreamBasicDescription *dataFormat = self.audioReaderFormat.dataFormat;
+    if (dataFormat->mFramesPerPacket != 0)
     {
-        Float64 numPacketsForTime = dataFormat.mSampleRate / dataFormat.mFramesPerPacket * 0.5;
-        bufferSize = (UInt32)(numPacketsForTime * maxPacketSize);
-        bufferSize = (UInt32)MIN(maxBufferSize, bufferSize);
-        bufferSize = (UInt32)MAX(minBufferSize, bufferSize);
+        Float64 numPacketsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
+        self.audioReaderFormat.bufferSize = (UInt32)(numPacketsForTime * maxPacketSize);
+        self.audioReaderFormat.bufferSize = MIN(maxBufferSize, self.audioReaderFormat.bufferSize);
+        self.audioReaderFormat.bufferSize = MAX(minBufferSize, self.audioReaderFormat.bufferSize);
     }
     else
     {
-        bufferSize = (UInt32)MAX(maxBufferSize, maxPacketSize);
+        self.audioReaderFormat.bufferSize = (UInt32)MAX(maxBufferSize, maxPacketSize);
     }
-    packetsToRead = bufferSize / maxPacketSize;
-}
-
-- (void)audioFileClose
-{
-    if (audioFile)
-    {
-        AudioFileClose(audioFile);
-        audioFile = NULL;
-    }
-    bufferSize = 0;
-    packetsToRead = 0;
-    packetCount = 0;
-}
-
-- (void)audioFileCleanMagicCookie
-{
-    if (magicCookie)
-    {
-        free(magicCookie);
-        magicCookie = NULL;
-    }
+    self.audioReaderFormat.packetsToRead = self.audioReaderFormat.bufferSize / maxPacketSize;
 }
 
 @end

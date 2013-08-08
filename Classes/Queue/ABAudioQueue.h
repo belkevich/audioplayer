@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import "ABAudioQueueDataSource.h"
 #import "ABAudioQueueDelegate.h"
 
+@class ABAudioFormat;
+@class ABMagicCookie;
 
 static const UInt32 kAudioQueueBufferCount = 3;
 
@@ -17,7 +20,6 @@ static const UInt32 kAudioQueueBufferCount = 3;
 {
     AudioQueueRef queue;
     AudioQueueBufferRef buffers[kAudioQueueBufferCount];
-    AudioStreamPacketDescription *packetsDescription;
     __weak NSObject <ABAudioQueueDataSource> *dataSource;
     __weak NSObject <ABAudioQueueDelegate> *delegate;
 }
@@ -25,7 +27,7 @@ static const UInt32 kAudioQueueBufferCount = 3;
 - (id)initWithAudioQueueDataSource:(NSObject <ABAudioQueueDataSource> *)aDataSource
                           delegate:(NSObject <ABAudioQueueDelegate> *)aDelegate;
 
-- (BOOL)audioQueueSetup;
+- (BOOL)audioQueueSetupFormat:(ABAudioFormat *)audioFormat;
 - (BOOL)audioQueuePlay;
 - (void)audioQueuePause;
 - (void)audioQueueStop;

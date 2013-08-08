@@ -8,20 +8,18 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "ABAudioReaderDelegate.h"
 
+@class ABAudioFormat;
 @class ABAudioBuffer;
 
 @protocol ABAudioReaderProtocol <NSObject>
 
-@property (nonatomic, readonly) AudioStreamBasicDescription audioReaderDataFormat;
-@property (nonatomic, readonly) UInt32 audioReaderBufferSize;
+@property (nonatomic, weak) NSObject <ABAudioReaderDelegate> *audioReaderDelegate;
+@property (nonatomic, readonly) ABAudioFormat *audioReaderFormat;
 
-- (void)audioReaderFillAudioBuffer:(ABAudioBuffer *)buffer;
-
-@optional
-
-@property (nonatomic, readonly) UInt32 audioReaderPacketsToRead;
-@property (nonatomic, readonly) char *audioReaderMagicCookie;
-@property (nonatomic, readonly) UInt32 audioReaderMagicCookieSize;
+- (BOOL)audioReaderOpen:(NSString *)path;
+- (void)audioReaderClose;
+- (ABAudioBuffer *)audioReaderCurrentBuffer;
 
 @end

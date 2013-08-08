@@ -19,5 +19,6 @@
 
 - (void)setExpectedDataSize:(UInt32)size packetCount:(UInt32)count;
 - (void)setActualDataSize:(UInt32)size packetCount:(UInt32)count;
+- (void)copyAudioDataToBuffer:(AudioQueueBufferRef)buffer;
 
 @end

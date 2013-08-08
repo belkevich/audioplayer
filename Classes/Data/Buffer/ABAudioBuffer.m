@@ -66,6 +66,15 @@
     self.actualPacketCount = count;
 }
 
+- (void)copyAudioDataToBuffer:(AudioQueueBufferRef)buffer
+{
+    if (self.audioData)
+    {
+        memcpy(buffer->mAudioData, self.audioData, self.actualDataSize);
+        buffer->mAudioDataByteSize = self.actualDataSize;
+    }
+}
+
 #pragma mark - properties
 
 - (UInt32)actualPacketsSize
