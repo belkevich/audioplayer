@@ -22,14 +22,12 @@
 #pragma mark - life cycle
 
 - (id)initWithAudioQueueDataSource:(NSObject <ABAudioQueueDataSource> *)aDataSource
-                          delegate:(NSObject <ABAudioQueueDelegate> *)aDelegate
 {
     self = [super init];
     if (self)
     {
         queue = NULL;
         dataSource = aDataSource;
-        delegate = aDelegate;
     }
     return self;
 }
@@ -143,21 +141,18 @@
     {
         OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, currentBuffer.actualPacketCount,
                                                   currentBuffer.packetsDescription);
+        if (status != noErr)
+        {
+            NSLog(@"Audio Queue failed to enqueue buffer with status %li", status);
+#if DEBUG
+            @throw [NSException exceptionWithName:@"Audio Queue failed"
+                                           reason:@"Audio Queue failed to enqueue buffer"
+                                         userInfo:nil];
+#endif
+        }
         return (status == noErr);
     }
     return NO;
-}
-
-- (void)handleAudioQueueBuffer:(AudioQueueBufferRef)buffer
-{
-    // running in a background thread
-    if (![self audioQueueEnqueueBuffer:buffer])
-    {
-        dispatch_async(dispatch_get_main_queue(), ^
-        {
-            [delegate audioQueueBufferEmpty];
-        });
-    }
 }
 
 #pragma mark - callback
@@ -168,7 +163,7 @@ static void handleBufferCallback(void *instance, AudioQueueRef __unused queue,
     ABAudioQueue *audioQueue = (__bridge ABAudioQueue *)instance;
     @autoreleasepool
     {
-        [audioQueue handleAudioQueueBuffer:buffer];
+        [audioQueue audioQueueEnqueueBuffer:buffer];
     }
 }
 

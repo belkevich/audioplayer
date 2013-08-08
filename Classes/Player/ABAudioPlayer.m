@@ -20,7 +20,7 @@
 {
     audioFile = [[ABAudioFileReader alloc] init];
     [audioFile audioReaderOpen:@"/Users/alex/Music/01.mp3"];
-    audioQueue = [[ABAudioQueue alloc] initWithAudioQueueDataSource:self delegate:self];
+    audioQueue = [[ABAudioQueue alloc] initWithAudioQueueDataSource:self];
     [audioQueue audioQueueSetupFormat:audioFile.audioReaderFormat];
     [audioQueue audioQueuePlay];
 }
@@ -39,7 +39,7 @@
                 case ABAudioReaderStatusEmpty:
                     [audioQueue audioQueuePause];
                     break;
-
+                case ABAudioReaderStatusError:
                 case ABAudioReaderStatusEnd:
                     [audioQueue audioQueueStop];
                     break;
@@ -50,13 +50,6 @@
         });
     }
     return buffer;
-}
-
-#pragma mark - audio queue delegate implementation
-
-- (void)audioQueueBufferEmpty
-{
-    NSLog(@"buffer empty");
 }
 
 @end

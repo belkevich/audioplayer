@@ -7,7 +7,6 @@
 //
 
 #import "ABAudioFormat.h"
-#import "ABAudioBuffer.h"
 
 @interface ABAudioFormat ()
 

@@ -68,7 +68,6 @@
 		FA3C219317A10C8C001DC496 /* ABAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioPlayer.m; path = ../../Classes/Player/ABAudioPlayer.m; sourceTree = "<group>"; };
 		FA5886411796893C004C6B9E /* ABAudioQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioQueue.h; path = ../../Classes/Queue/ABAudioQueue.h; sourceTree = "<group>"; };
 		FA5886421796893C004C6B9E /* ABAudioQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioQueue.m; path = ../../Classes/Queue/ABAudioQueue.m; sourceTree = "<group>"; };
-		FA588646179689A0004C6B9E /* ABAudioQueueDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ABAudioQueueDelegate.h; path = ../../Classes/Queue/ABAudioQueueDelegate.h; sourceTree = "<group>"; };
 		FA588647179689B8004C6B9E /* ABAudioQueueDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAudioQueueDataSource.h; sourceTree = "<group>"; };
 		FA58864917968A15004C6B9E /* ABAudioFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioFileReader.h; path = ../../Classes/Reader/ABAudioFileReader.h; sourceTree = "<group>"; };
 		FA58864A17968A15004C6B9E /* ABAudioFileReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioFileReader.m; path = ../../Classes/Reader/ABAudioFileReader.m; sourceTree = "<group>"; };
@@ -255,7 +254,6 @@
 			children = (
 				FA5886411796893C004C6B9E /* ABAudioQueue.h */,
 				FA5886421796893C004C6B9E /* ABAudioQueue.m */,
-				FA588646179689A0004C6B9E /* ABAudioQueueDelegate.h */,
 				FA588647179689B8004C6B9E /* ABAudioQueueDataSource.h */,
 			);
 			name = Queue;
