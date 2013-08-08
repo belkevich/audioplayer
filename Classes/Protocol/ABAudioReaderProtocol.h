@@ -8,14 +8,21 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "ABAudioReaderDelegate.h"
 
 @class ABAudioFormat;
 @class ABAudioBuffer;
 
+typedef enum
+{
+    ABAudioReaderStatusOK = 0,
+    ABAudioReaderStatusEmpty = 1,
+    ABAudioReaderStatusEnd = 2,
+    ABAudioReaderStatusError = 3
+} ABAudioReaderStatus;
+
 @protocol ABAudioReaderProtocol <NSObject>
 
-@property (nonatomic, weak) NSObject <ABAudioReaderDelegate> *audioReaderDelegate;
+@property (nonatomic, readonly) ABAudioReaderStatus audioReaderStatus;
 @property (nonatomic, readonly) ABAudioFormat *audioReaderFormat;
 
 - (BOOL)audioReaderOpen:(NSString *)path;

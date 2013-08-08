@@ -139,7 +139,7 @@
 {
     ABAudioBuffer *currentBuffer = [dataSource audioQueueCurrentBuffer];
     [currentBuffer copyAudioDataToBuffer:buffer];
-    if (buffer->mAudioDataByteSize > 0)
+    if (currentBuffer && buffer->mAudioDataByteSize > 0)
     {
         OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, currentBuffer.actualPacketCount,
                                                   currentBuffer.packetsDescription);

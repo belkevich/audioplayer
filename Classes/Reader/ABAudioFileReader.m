@@ -15,7 +15,7 @@ UInt32 const minBufferSize = 0x4000;
 
 @implementation ABAudioFileReader
 
-@synthesize audioReaderDelegate = _delegate, audioReaderFormat = _dataFormat;
+@synthesize audioReaderStatus = _status, audioReaderFormat = _dataFormat;
 
 #pragma mark - life cycle
 
@@ -26,6 +26,7 @@ UInt32 const minBufferSize = 0x4000;
     {
         audioFile = NULL;
         _dataFormat = [[ABAudioFormat alloc] init];
+        _status = ABAudioReaderStatusEmpty;
     }
     return self;
 }
@@ -70,15 +71,21 @@ UInt32 const minBufferSize = 0x4000;
     [buffer setExpectedDataSize:self.audioReaderFormat.bufferSize packetCount:readPackets];
     OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, buffer.packetsDescription,
                                            packetCount, &readPackets, buffer.audioData);
-    if (status == noErr)
+    switch (status)
     {
-        packetCount += readPackets;
-        [buffer setActualDataSize:readBytes packetCount:readPackets];
-        return buffer;
-    }
-    else if (status == kAudioFileEndOfFileError)
-    {
-        [self.audioReaderDelegate audioReaderDidReachEnd];
+        case noErr:
+            packetCount += readPackets;
+            [buffer setActualDataSize:readBytes packetCount:readPackets];
+            _status = ABAudioReaderStatusOK;
+            return buffer;
+
+        case kAudioFileEndOfFileError:
+            _status = ABAudioReaderStatusEnd;
+            break;
+
+        default:
+            _status = ABAudioReaderStatusError;
+            break;
     }
     return nil;
 }

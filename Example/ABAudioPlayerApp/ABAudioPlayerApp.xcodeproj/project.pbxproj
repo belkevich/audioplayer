@@ -60,7 +60,6 @@
 		FA059966178F04C500374DD5 /* ABMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABMainViewController.h; sourceTree = "<group>"; };
 		FA059967178F04C500374DD5 /* ABMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABMainViewController.m; sourceTree = "<group>"; };
 		FA059968178F04C500374DD5 /* ABMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ABMainViewController.xib; sourceTree = "<group>"; };
-		FA11707C17B2912600624CDE /* ABAudioReaderDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ABAudioReaderDelegate.h; path = ../../Classes/Protocol/ABAudioReaderDelegate.h; sourceTree = "<group>"; };
 		FA11708917B38FE500624CDE /* ABAudioBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABAudioBuffer.h; sourceTree = "<group>"; };
 		FA11708A17B38FE500624CDE /* ABAudioBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABAudioBuffer.m; sourceTree = "<group>"; };
 		FA11708C17B38FE500624CDE /* ABAudioFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABAudioFormat.h; sourceTree = "<group>"; };
@@ -275,7 +274,6 @@
 			isa = PBXGroup;
 			children = (
 				FA79467917A7F2A900BB0DFB /* ABAudioReaderProtocol.h */,
-				FA11707C17B2912600624CDE /* ABAudioReaderDelegate.h */,
 			);
 			name = Protocol;
 			sourceTree = "<group>";

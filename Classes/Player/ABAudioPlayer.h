@@ -9,13 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "ABAudioQueueDataSource.h"
 #import "ABAudioQueueDelegate.h"
-#import "ABAudioReaderDelegate.h"
 
 @class ABAudioQueue;
 @class ABAudioFileReader;
 
 @interface ABAudioPlayer : NSObject
-<ABAudioQueueDataSource, ABAudioQueueDelegate, ABAudioReaderDelegate>
+<ABAudioQueueDataSource, ABAudioQueueDelegate>
 {
     ABAudioQueue *audioQueue;
     ABAudioFileReader *audioFile;

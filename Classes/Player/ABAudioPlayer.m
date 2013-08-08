@@ -19,7 +19,6 @@
 - (void)play
 {
     audioFile = [[ABAudioFileReader alloc] init];
-    audioFile.audioReaderDelegate = self;
     [audioFile audioReaderOpen:@"/Users/alex/Music/01.mp3"];
     audioQueue = [[ABAudioQueue alloc] initWithAudioQueueDataSource:self delegate:self];
     [audioQueue audioQueueSetupFormat:audioFile.audioReaderFormat];
@@ -30,7 +29,27 @@
 
 - (ABAudioBuffer *)audioQueueCurrentBuffer
 {
-    return [audioFile audioReaderCurrentBuffer];
+    ABAudioBuffer *buffer = [audioFile audioReaderCurrentBuffer];
+    if (!buffer)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^
+        {
+            switch (audioFile.audioReaderStatus)
+            {
+                case ABAudioReaderStatusEmpty:
+                    [audioQueue audioQueuePause];
+                    break;
+
+                case ABAudioReaderStatusEnd:
+                    [audioQueue audioQueueStop];
+                    break;
+
+                default:
+                    break;
+            }
+        });
+    }
+    return buffer;
 }
 
 #pragma mark - audio queue delegate implementation
@@ -38,13 +57,6 @@
 - (void)audioQueueBufferEmpty
 {
     NSLog(@"buffer empty");
-}
-
-#pragma mark - audio reader delegate implementation
-
-- (void)audioReaderDidReachEnd
-{
-    [audioQueue audioQueueStop];
 }
 
 @end
