@@ -7,6 +7,7 @@
 //
 
 #import "ABAudioQueue.h"
+#import "ABAudioQueueBuilder.h"
 #import "ABAudioFormat.h"
 #import "ABAudioBuffer.h"
 
@@ -43,10 +44,10 @@
 {
     [self audioQueueStop];
     self.audioFormat = audioFormat;
-    if ([self audioQueueNewOutput] && [self audioQueueAllocateBuffer] &&
-        [self audioQueuePrepareBuffer])
+    queue = [ABAudioQueueBuilder audioQueueWithFormat:self.audioFormat callback:handleBufferCallback
+                                                owner:self];
+    if (queue && [self audioQueueAllocateBuffer])
     {
-        [self audioQueueSetupMagicCookies];
         return YES;
     }
     else
@@ -87,50 +88,18 @@
 
 #pragma mark - private
 
-- (BOOL)audioQueueNewOutput
-{
-    if (self.audioFormat)
-    {
-        OSStatus status = AudioQueueNewOutput(self.audioFormat.dataFormat, handleBufferCallback,
-                                              (__bridge void *)(self), NULL, NULL, 0, &queue);
-        return (status == noErr);
-    }
-    return NO;
-}
-
 - (BOOL)audioQueueAllocateBuffer
 {
     UInt32 bufferSize = self.audioFormat.bufferSize;
     for (int i = 0; i < kAudioQueueBufferCount; i++)
     {
         OSStatus status = AudioQueueAllocateBuffer(queue, bufferSize, &buffers[i]);
-        if (status != noErr)
+        if (status != noErr || ![self audioQueueEnqueueBuffer:buffers[i]])
         {
             return NO;
         }
     }
     return YES;
-}
-
-- (BOOL)audioQueuePrepareBuffer
-{
-    for (int i = 0; i < kAudioQueueBufferCount; i++)
-    {
-        if (![self audioQueueEnqueueBuffer:buffers[i]])
-        {
-            return NO;
-        }
-    }
-    return YES;
-}
-
-- (void)audioQueueSetupMagicCookies
-{
-    if (self.audioFormat.magicCookie)
-    {
-        AudioQueueSetProperty(queue, kAudioQueueProperty_MagicCookie, self.audioFormat.magicCookie,
-                              self.audioFormat.magicCookieSize);
-    }
 }
 
 - (BOOL)audioQueueEnqueueBuffer:(AudioQueueBufferRef)buffer

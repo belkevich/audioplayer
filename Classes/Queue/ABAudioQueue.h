@@ -10,9 +10,9 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "ABAudioQueueDataSource.h"
 
-@class ABAudioFormat;
-
 static const UInt32 kAudioQueueBufferCount = 3;
+
+@class ABAudioFormat;
 
 @interface ABAudioQueue : NSObject
 {
