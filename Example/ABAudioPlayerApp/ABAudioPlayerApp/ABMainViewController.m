@@ -57,13 +57,13 @@
 - (IBAction)volumeValueChanged:(id)sender
 {
     UISlider *slider = sender;
-    NSLog(@"%p, value: %.1f", _cmd, slider.value);
+    player.volume = slider.value;
 }
 
 - (IBAction)panValueChanged:(id)sender
 {
     UISlider *slider = sender;
-    NSLog(@"%p, value: %.1f", _cmd, slider.value);
+    player.pan = slider.value;
 }
 
 @end

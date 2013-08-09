@@ -75,6 +75,7 @@
 		FA58864A17968A15004C6B9E /* ABAudioFileReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioFileReader.m; path = ../../Classes/Reader/ABAudioFileReader.m; sourceTree = "<group>"; };
 		FA6CBF3717B4E30D00F78964 /* ABAudioQueueBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioQueueBuilder.h; path = ../../Classes/Queue/Builder/ABAudioQueueBuilder.h; sourceTree = "<group>"; };
 		FA6CBF3817B4E30D00F78964 /* ABAudioQueueBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioQueueBuilder.m; path = ../../Classes/Queue/Builder/ABAudioQueueBuilder.m; sourceTree = "<group>"; };
+		FA6CBF3C17B511CB00F78964 /* Trim.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Trim.h; path = ../../Classes/Common/Trim.h; sourceTree = "<group>"; };
 		FA79467917A7F2A900BB0DFB /* ABAudioReaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioReaderProtocol.h; path = ../../Classes/Protocol/ABAudioReaderProtocol.h; sourceTree = "<group>"; };
 		FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FAA58D9E179EC1480087A4CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -212,6 +213,7 @@
 				FA3C219117A10C69001DC496 /* Player */,
 				FA588648179689C2004C6B9E /* Reader */,
 				FA58864517968941004C6B9E /* Queue */,
+				FA6CBF3D17B512FD00F78964 /* Common */,
 			);
 			name = ABAudioPlayer;
 			sourceTree = "<group>";
@@ -280,6 +282,14 @@
 				FA6CBF3817B4E30D00F78964 /* ABAudioQueueBuilder.m */,
 			);
 			name = Builder;
+			sourceTree = "<group>";
+		};
+		FA6CBF3D17B512FD00F78964 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				FA6CBF3C17B511CB00F78964 /* Trim.h */,
+			);
+			name = Common;
 			sourceTree = "<group>";
 		};
 		FA79467817A7F26D00BB0DFB /* Protocol */ = {

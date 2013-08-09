@@ -86,6 +86,16 @@
     self.audioFormat = nil;
 }
 
+- (void)audioQueueVolume:(float)volume
+{
+    [self audioQueueSetParam:kAudioQueueParam_Volume value:volume];
+}
+
+- (void)audioQueuePan:(float)pan
+{
+    [self audioQueueSetParam:kAudioQueueParam_Pan value:pan];
+}
+
 #pragma mark - private
 
 - (BOOL)audioQueueAllocateBuffer
@@ -125,6 +135,14 @@
         return (status == noErr);
     }
     return NO;
+}
+
+- (void)audioQueueSetParam:(AudioQueueParameterID)param value:(AudioQueueParameterValue)value
+{
+    if (queue)
+    {
+        AudioQueueSetParameter(queue, param, value);
+    }
 }
 
 #pragma mark - callback

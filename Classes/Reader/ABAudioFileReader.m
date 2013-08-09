@@ -9,6 +9,7 @@
 #import "ABAudioFileReader.h"
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
+#import "Trim.h"
 
 UInt32 const maxBufferSize = 0x50000;
 UInt32 const minBufferSize = 0x4000;
@@ -138,9 +139,8 @@ UInt32 const minBufferSize = 0x4000;
     if (dataFormat->mFramesPerPacket != 0)
     {
         Float64 numPacketsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
-        self.audioReaderFormat.bufferSize = (UInt32)(numPacketsForTime * maxPacketSize);
-        self.audioReaderFormat.bufferSize = MIN(maxBufferSize, self.audioReaderFormat.bufferSize);
-        self.audioReaderFormat.bufferSize = MAX(minBufferSize, self.audioReaderFormat.bufferSize);
+        UInt32 bufferSize = (UInt32)(numPacketsForTime * maxPacketSize);
+        self.audioReaderFormat.bufferSize = TRIM(bufferSize, minBufferSize, maxBufferSize);
     }
     else
     {

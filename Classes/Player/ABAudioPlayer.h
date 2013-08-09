@@ -18,6 +18,9 @@
     ABAudioFileReader *audioFile;
 }
 
+@property (nonatomic, assign) float volume;
+@property (nonatomic, assign) float pan;
+
 - (void)play;
 
 @end

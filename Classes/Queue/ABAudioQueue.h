@@ -27,5 +27,7 @@ static const UInt32 kAudioQueueBufferCount = 3;
 - (BOOL)audioQueuePlay;
 - (void)audioQueuePause;
 - (void)audioQueueStop;
+- (void)audioQueueVolume:(float)volume;
+- (void)audioQueuePan:(float)pan;
 
 @end
