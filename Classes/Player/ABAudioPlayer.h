@@ -21,6 +21,7 @@
 @property (nonatomic, assign) float volume;
 @property (nonatomic, assign) float pan;
 @property (nonatomic, readonly) NSTimeInterval time;
+@property (nonatomic, readonly) NSTimeInterval duration;
 
 - (void)play;
 

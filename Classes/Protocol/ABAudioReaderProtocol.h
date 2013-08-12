@@ -30,5 +30,6 @@ typedef void (^ABAudioReaderOpenSuccessBlock)();
 - (BOOL)audioReaderOpen:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock;
 - (void)audioReaderClose;
 - (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely;
+- (NSTimeInterval)audioReaderDuration;
 
 @end

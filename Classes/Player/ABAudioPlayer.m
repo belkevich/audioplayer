@@ -62,6 +62,11 @@
     return [audioQueue currentTime];
 }
 
+- (NSTimeInterval)duration
+{
+    return [audioFile audioReaderDuration];
+}
+
 #pragma mark - audio queue data source implementation
 
 - (ABAudioBuffer *)audioQueueCurrentBufferThreadSafely

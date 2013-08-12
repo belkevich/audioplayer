@@ -8,6 +8,7 @@
 
 #import "ABMainViewController.h"
 #import "ABAudioPlayer.h"
+#import "NSString+TimeInterval.h"
 
 @interface ABMainViewController ()
 
@@ -78,11 +79,9 @@
 
 - (void)updatePlayedTime:(id)sender
 {
-    NSUInteger time = (NSUInteger)player.time;
-    NSUInteger hours = time / 3600;
-    NSUInteger minutes = (time % 3600) / 60;
-    NSUInteger seconds  = time % 60;
-    self.timeField.text = [NSString stringWithFormat:@"%u:%.2u:%.2u", hours, minutes, seconds];
+    NSString *time = [NSString stringWithTimeInterval:player.time];
+    NSString *duration = [NSString stringWithTimeInterval:player.duration];
+    self.timeField.text = [NSString stringWithFormat:@"%@ / %@", time, duration];
 }
 
 @end

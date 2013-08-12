@@ -95,6 +95,23 @@ UInt32 const minBufferSize = 0x4000;
     return nil;
 }
 
+- (NSTimeInterval)audioReaderDuration
+{
+    if (audioFile)
+    {
+        UInt64 totalPackets;
+        UInt32 size = sizeof(UInt64);
+        OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyAudioDataPacketCount,
+                                               &size, &totalPackets);
+        if (status == noErr)
+        {
+            AudioStreamBasicDescription *dataFormat = self.audioReaderFormat.dataFormat;
+            return (totalPackets * dataFormat->mFramesPerPacket) / dataFormat->mSampleRate;
+        }
+    }
+    return 0;
+}
+
 #pragma mark - private
 
 - (BOOL)audioFileOpen:(NSString *)path
