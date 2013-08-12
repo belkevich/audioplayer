@@ -29,5 +29,6 @@ static const UInt32 kAudioQueueBufferCount = 3;
 - (void)audioQueueStop;
 - (void)audioQueueVolume:(float)volume;
 - (void)audioQueuePan:(float)pan;
+- (NSTimeInterval)currentTime;
 
 @end

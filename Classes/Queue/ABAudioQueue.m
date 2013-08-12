@@ -10,10 +10,12 @@
 #import "ABAudioQueueBuilder.h"
 #import "ABAudioFormat.h"
 #import "ABAudioBuffer.h"
+#import "ABAudioTimeHelper.h"
 
 @interface ABAudioQueue ()
 
 @property (nonatomic, strong) ABAudioFormat *audioFormat;
+@property (nonatomic, strong) ABAudioTimeHelper *audioTime;
 
 @end
 
@@ -48,6 +50,8 @@
                                                 owner:self];
     if (queue && [self audioQueueAllocateBuffer])
     {
+        AudioStreamBasicDescription *format = self.audioFormat.dataFormat;
+        self.audioTime = [[ABAudioTimeHelper alloc] initWithAudioQueue:queue format:format];
         return YES;
     }
     else
@@ -84,6 +88,7 @@
         queue = NULL;
     }
     self.audioFormat = nil;
+    self.audioTime = nil;
 }
 
 - (void)audioQueueVolume:(float)volume
@@ -94,6 +99,11 @@
 - (void)audioQueuePan:(float)pan
 {
     [self audioQueueSetParam:kAudioQueueParam_Pan value:pan];
+}
+
+- (NSTimeInterval)currentTime
+{
+    return [self.audioTime currentTime];
 }
 
 #pragma mark - private

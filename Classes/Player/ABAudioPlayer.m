@@ -57,6 +57,11 @@
     [audioQueue audioQueuePan:_pan];
 }
 
+- (NSTimeInterval)time
+{
+    return [audioQueue currentTime];
+}
+
 #pragma mark - audio queue data source implementation
 
 - (ABAudioBuffer *)audioQueueCurrentBufferThreadSafely

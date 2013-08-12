@@ -9,6 +9,11 @@
 #import "ABMainViewController.h"
 #import "ABAudioPlayer.h"
 
+@interface ABMainViewController ()
+
+@property (nonatomic, weak) NSTimer *timer;
+
+@end
 
 @implementation ABMainViewController
 
@@ -20,6 +25,9 @@
     if (self)
     {
         player = [[ABAudioPlayer alloc] init];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:self
+                                                    selector:@selector(updatePlayedTime:)
+                                                    userInfo:nil repeats:YES];
     }
     return self;
 }
@@ -64,6 +72,17 @@
 {
     UISlider *slider = sender;
     player.pan = slider.value;
+}
+
+#pragma mark - private
+
+- (void)updatePlayedTime:(id)sender
+{
+    NSUInteger time = (NSUInteger)player.time;
+    NSUInteger hours = time / 3600;
+    NSUInteger minutes = (time % 3600) / 60;
+    NSUInteger seconds  = time % 60;
+    self.timeField.text = [NSString stringWithFormat:@"%u:%.2u:%.2u", hours, minutes, seconds];
 }
 
 @end
