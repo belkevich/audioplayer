@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 okolodev. All rights reserved.
 //
 
+#import <mm_malloc.h>
 #import "ABAudioFileReader.h"
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
@@ -99,14 +100,13 @@ UInt32 const minBufferSize = 0x4000;
 {
     if (audioFile)
     {
-        UInt64 totalPackets;
-        UInt32 size = sizeof(UInt64);
-        OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyAudioDataPacketCount,
-                                               &size, &totalPackets);
+        NSTimeInterval duration = 0.f;
+        UInt32 size = sizeof(NSTimeInterval);
+        OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyEstimatedDuration,
+                                               &size, &duration);
         if (status == noErr)
         {
-            AudioStreamBasicDescription *dataFormat = self.audioReaderFormat.dataFormat;
-            return (totalPackets * dataFormat->mFramesPerPacket) / dataFormat->mSampleRate;
+            return duration;
         }
     }
     return 0;
