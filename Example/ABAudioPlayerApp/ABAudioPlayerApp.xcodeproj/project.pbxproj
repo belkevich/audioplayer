@@ -33,8 +33,12 @@
 		FAA58D9F179EC1480087A4CE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA58D9E179EC1480087A4CE /* AVFoundation.framework */; };
 		FADA554117B8C0E8000736C3 /* ABAudioTimeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA554017B8C0E8000736C3 /* ABAudioTimeHelper.m */; };
 		FADA554217B8C0E8000736C3 /* ABAudioTimeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA554017B8C0E8000736C3 /* ABAudioTimeHelper.m */; };
-		FADA554A17B8F221000736C3 /* NSString+TimeInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA554917B8F221000736C3 /* NSString+TimeInterval.m */; };
-		FADA554B17B8F221000736C3 /* NSString+TimeInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA554917B8F221000736C3 /* NSString+TimeInterval.m */; };
+		FADA554E17B900F8000736C3 /* ABAudioMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA554D17B900F8000736C3 /* ABAudioMetadata.m */; };
+		FADA554F17B900F8000736C3 /* ABAudioMetadata.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA554D17B900F8000736C3 /* ABAudioMetadata.m */; };
+		FADA555317B91109000736C3 /* NSDictionary+UTF8Key.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA555217B91109000736C3 /* NSDictionary+UTF8Key.m */; };
+		FADA555417B91109000736C3 /* NSDictionary+UTF8Key.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA555217B91109000736C3 /* NSDictionary+UTF8Key.m */; };
+		FADA555817B9114E000736C3 /* NSString+TimeInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA555717B9114E000736C3 /* NSString+TimeInterval.m */; };
+		FADA555917B9114E000736C3 /* NSString+TimeInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = FADA555717B9114E000736C3 /* NSString+TimeInterval.m */; };
 		FAFAE1E1178FF7A5009B48E3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */; };
 		FAFAE1EB178FF7A5009B48E3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAFAE1E9178FF7A5009B48E3 /* InfoPlist.strings */; };
 		FAFAE1ED178FF7A5009B48E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAE1EC178FF7A5009B48E3 /* main.m */; };
@@ -85,8 +89,12 @@
 		FAA58D9E179EC1480087A4CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FADA553F17B8C0E8000736C3 /* ABAudioTimeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioTimeHelper.h; path = ../../Classes/Queue/Time/ABAudioTimeHelper.h; sourceTree = "<group>"; };
 		FADA554017B8C0E8000736C3 /* ABAudioTimeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioTimeHelper.m; path = ../../Classes/Queue/Time/ABAudioTimeHelper.m; sourceTree = "<group>"; };
-		FADA554817B8F221000736C3 /* NSString+TimeInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+TimeInterval.h"; path = "../../Classes/Common/NSString+TimeInterval.h"; sourceTree = "<group>"; };
-		FADA554917B8F221000736C3 /* NSString+TimeInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+TimeInterval.m"; path = "../../Classes/Common/NSString+TimeInterval.m"; sourceTree = "<group>"; };
+		FADA554C17B900F8000736C3 /* ABAudioMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioMetadata.h; path = Metadata/ABAudioMetadata.h; sourceTree = "<group>"; };
+		FADA554D17B900F8000736C3 /* ABAudioMetadata.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioMetadata.m; path = Metadata/ABAudioMetadata.m; sourceTree = "<group>"; };
+		FADA555117B91109000736C3 /* NSDictionary+UTF8Key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+UTF8Key.h"; path = "../../Classes/Common/Categories/NSDictionary+UTF8Key.h"; sourceTree = "<group>"; };
+		FADA555217B91109000736C3 /* NSDictionary+UTF8Key.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+UTF8Key.m"; path = "../../Classes/Common/Categories/NSDictionary+UTF8Key.m"; sourceTree = "<group>"; };
+		FADA555617B9114E000736C3 /* NSString+TimeInterval.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+TimeInterval.h"; path = "../../Classes/Common/Categories/NSString+TimeInterval.h"; sourceTree = "<group>"; };
+		FADA555717B9114E000736C3 /* NSString+TimeInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+TimeInterval.m"; path = "../../Classes/Common/Categories/NSString+TimeInterval.m"; sourceTree = "<group>"; };
 		FAFAE1DF178FF7A5009B48E3 /* ABAudioPlayerMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABAudioPlayerMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		FAFAE1E3178FF7A5009B48E3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -231,6 +239,7 @@
 			children = (
 				FA11708817B38FE500624CDE /* Buffer */,
 				FA11708B17B38FE500624CDE /* Format */,
+				FADA555017B900FE000736C3 /* Metadata */,
 			);
 			name = Data;
 			path = ../../Classes/Data;
@@ -296,9 +305,8 @@
 		FA6CBF3D17B512FD00F78964 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				FADA554817B8F221000736C3 /* NSString+TimeInterval.h */,
-				FADA554917B8F221000736C3 /* NSString+TimeInterval.m */,
 				FA6CBF3C17B511CB00F78964 /* Trim.h */,
+				FADA555517B91116000736C3 /* Categories */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -318,6 +326,26 @@
 				FADA554017B8C0E8000736C3 /* ABAudioTimeHelper.m */,
 			);
 			name = Time;
+			sourceTree = "<group>";
+		};
+		FADA555017B900FE000736C3 /* Metadata */ = {
+			isa = PBXGroup;
+			children = (
+				FADA554C17B900F8000736C3 /* ABAudioMetadata.h */,
+				FADA554D17B900F8000736C3 /* ABAudioMetadata.m */,
+			);
+			name = Metadata;
+			sourceTree = "<group>";
+		};
+		FADA555517B91116000736C3 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				FADA555617B9114E000736C3 /* NSString+TimeInterval.h */,
+				FADA555717B9114E000736C3 /* NSString+TimeInterval.m */,
+				FADA555117B91109000736C3 /* NSDictionary+UTF8Key.h */,
+				FADA555217B91109000736C3 /* NSDictionary+UTF8Key.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		FAFAE1E2178FF7A5009B48E3 /* Other Frameworks */ = {
@@ -526,7 +554,9 @@
 				FA11709317B38FE500624CDE /* ABAudioFormat.m in Sources */,
 				FA6CBF3917B4E30D00F78964 /* ABAudioQueueBuilder.m in Sources */,
 				FADA554117B8C0E8000736C3 /* ABAudioTimeHelper.m in Sources */,
-				FADA554A17B8F221000736C3 /* NSString+TimeInterval.m in Sources */,
+				FADA554E17B900F8000736C3 /* ABAudioMetadata.m in Sources */,
+				FADA555317B91109000736C3 /* NSDictionary+UTF8Key.m in Sources */,
+				FADA555817B9114E000736C3 /* NSString+TimeInterval.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -546,7 +576,9 @@
 				FA11709417B38FE500624CDE /* ABAudioFormat.m in Sources */,
 				FA6CBF3A17B4E30D00F78964 /* ABAudioQueueBuilder.m in Sources */,
 				FADA554217B8C0E8000736C3 /* ABAudioTimeHelper.m in Sources */,
-				FADA554B17B8F221000736C3 /* NSString+TimeInterval.m in Sources */,
+				FADA554F17B900F8000736C3 /* ABAudioMetadata.m in Sources */,
+				FADA555417B91109000736C3 /* NSDictionary+UTF8Key.m in Sources */,
+				FADA555917B9114E000736C3 /* NSString+TimeInterval.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

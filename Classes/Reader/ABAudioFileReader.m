@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 okolodev. All rights reserved.
 //
 
-#import <mm_malloc.h>
 #import "ABAudioFileReader.h"
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
 #import "Trim.h"
+#import "ABAudioMetadata.h"
 
 UInt32 const maxBufferSize = 0x50000;
 UInt32 const minBufferSize = 0x4000;
@@ -96,11 +96,30 @@ UInt32 const minBufferSize = 0x4000;
     return nil;
 }
 
+- (ABAudioMetadata *)audioReaderMetadata
+{
+    ABAudioMetadata *metadata = nil;
+    CFDictionaryRef metadataDictionary = [self audioFileGetProperty:kAudioFilePropertyInfoDictionary];
+    if (metadataDictionary)
+    {
+        NSDictionary *dictionary = (__bridge NSDictionary *)metadataDictionary;
+        metadata = [[ABAudioMetadata alloc] initWithAudioFileMetadataDictionary:dictionary];
+        CFRelease(metadataDictionary);
+        CFDataRef artworkData = [self audioFileGetProperty:kAudioFilePropertyAlbumArtwork];
+        if (artworkData)
+        {
+            [metadata artworkWithData:(__bridge NSData *)artworkData];
+            CFRelease(artworkData);
+        }
+    }
+    return metadata;
+}
+
 - (NSTimeInterval)audioReaderDuration
 {
     if (audioFile)
     {
-        NSTimeInterval duration = 0.f;
+        NSTimeInterval duration = 0;
         UInt32 size = sizeof(NSTimeInterval);
         OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyEstimatedDuration,
                                                &size, &duration);
@@ -109,7 +128,7 @@ UInt32 const minBufferSize = 0x4000;
             return duration;
         }
     }
-    return 0;
+    return 0.f;
 }
 
 #pragma mark - private
@@ -164,6 +183,22 @@ UInt32 const minBufferSize = 0x4000;
         self.audioReaderFormat.bufferSize = (UInt32)MAX(maxBufferSize, maxPacketSize);
     }
     self.audioReaderFormat.packetsToRead = self.audioReaderFormat.bufferSize / maxPacketSize;
+}
+
+- (void *)audioFileGetProperty:(AudioFilePropertyID)property
+{
+    if (audioFile)
+    {
+        UInt32 size, writable;
+        OSStatus status = AudioFileGetPropertyInfo(audioFile, property, &size, &writable);
+        if (status == noErr)
+        {
+            void *value = NULL;
+            status = AudioFileGetProperty(audioFile, property, &size, &value);
+            return status == noErr ? value : NULL;
+        }
+    }
+    return NULL;
 }
 
 @end

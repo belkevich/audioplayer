@@ -54,7 +54,7 @@
 
 - (IBAction)stopButtonPressed:(id)sender
 {
-    NSLog(@"%p", _cmd);
+    [player stop];
 }
 
 - (IBAction)seekValueChanged:(id)sender

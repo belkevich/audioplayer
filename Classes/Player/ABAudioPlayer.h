@@ -24,5 +24,6 @@
 @property (nonatomic, readonly) NSTimeInterval duration;
 
 - (void)play;
+- (void)stop;
 
 @end

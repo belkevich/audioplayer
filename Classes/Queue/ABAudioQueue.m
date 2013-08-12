@@ -128,9 +128,9 @@
     [currentBuffer copyAudioDataToBuffer:buffer];
     if (currentBuffer && buffer->mAudioDataByteSize > 0)
     {
-#if DEBUG
-        NSLog(@"%lu, %lu", currentBuffer.actualPacketCount, currentBuffer.actualDataSize);
-#endif
+//#if DEBUG
+//        NSLog(@"%lu, %lu", currentBuffer.actualPacketCount, currentBuffer.actualDataSize);
+//#endif
         OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, currentBuffer.actualPacketCount,
                                                   currentBuffer.packetsDescription);
         if (status != noErr)

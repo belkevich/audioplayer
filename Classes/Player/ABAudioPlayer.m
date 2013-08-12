@@ -12,6 +12,7 @@
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
 #import "Trim.h"
+#import "ABAudioMetadata.h"
 
 @implementation ABAudioPlayer
 
@@ -41,6 +42,10 @@
         [audioQueue audioQueueVolume:_volume];
         [audioQueue audioQueuePan:_pan];
     }];
+}
+
+- (void)stop
+{
 }
 
 #pragma mark - properties

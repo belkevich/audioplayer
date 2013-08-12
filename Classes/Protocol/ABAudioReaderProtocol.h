@@ -11,6 +11,7 @@
 
 @class ABAudioFormat;
 @class ABAudioBuffer;
+@class ABAudioMetadata;
 
 typedef enum
 {
@@ -30,6 +31,7 @@ typedef void (^ABAudioReaderOpenSuccessBlock)();
 - (BOOL)audioReaderOpen:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock;
 - (void)audioReaderClose;
 - (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely;
+- (ABAudioMetadata *)audioReaderMetadata;
 - (NSTimeInterval)audioReaderDuration;
 
 @end
