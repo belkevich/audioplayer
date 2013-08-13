@@ -26,7 +26,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        player = [[ABAudioPlayer alloc] init];
+        player = [[ABAudioPlayer alloc] initWithAudioPlayerDelegate:self];
         __weak ABMainViewController *weakSelf = self;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:weakSelf
                                                     selector:@selector(updatePlayedTime:)

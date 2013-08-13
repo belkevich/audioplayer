@@ -197,6 +197,7 @@ UInt32 const minBufferSize = 0x4000;
             [metadata artworkWithData:(__bridge NSData *)artworkData];
             CFRelease(artworkData);
         }
+        return metadata;
     }
     return metadata;
 }
