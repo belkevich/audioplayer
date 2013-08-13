@@ -9,6 +9,7 @@
 #import "ABMainViewController.h"
 #import "ABAudioPlayer.h"
 #import "NSString+TimeInterval.h"
+#import "ABAudioMetadata.h"
 
 @interface ABMainViewController ()
 
@@ -26,11 +27,17 @@
     if (self)
     {
         player = [[ABAudioPlayer alloc] init];
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:self
+        __weak ABMainViewController *weakSelf = self;
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:weakSelf
                                                     selector:@selector(updatePlayedTime:)
                                                     userInfo:nil repeats:YES];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [self.timer invalidate];
 }
 
 #pragma mark - appearance
@@ -44,17 +51,17 @@
 
 - (IBAction)playButtonPressed:(id)sender
 {
-    [player play];
+    [player playerStart];
 }
 
 - (IBAction)pauseButtonPressed:(id)sender
 {
-    NSLog(@"%p", _cmd);
+    [player playerPause];
 }
 
 - (IBAction)stopButtonPressed:(id)sender
 {
-    [player stop];
+    [player playerStop];
 }
 
 - (IBAction)seekValueChanged:(id)sender
@@ -73,6 +80,46 @@
 {
     UISlider *slider = sender;
     player.pan = slider.value;
+}
+
+#pragma mark - audio player delegate implementation
+
+- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didChangeStatus:(ABAudioPlayerStatus)status
+{
+    [self.activity stopAnimating];
+    switch (status)
+    {
+        case ABAudioPlayerStatusBuffering:
+            [self.activity startAnimating];
+            break;
+
+        case ABAudioPlayerStatusError:
+        case ABAudioPlayerStatusStopped:
+            self.timeField.text = nil;
+            self.metadataField.text = nil;
+            self.artworkImage.image = nil;
+            self.seekSlider.value = 0.f;
+            break;
+
+        default:
+            break;
+    }
+}
+
+- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didFail:(NSError *)error
+{
+    NSString *message = [NSString stringWithFormat:@"Player failed with error:\n%@",
+                                                   error.localizedDescription];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:message delegate:nil
+                                          cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didRecieveMetadata:(ABAudioMetadata *)metadata
+{
+    self.metadataField.text = [NSString stringWithFormat:@"%@ - %@", metadata.title,
+                                        metadata.artist];
+    self.artworkImage.image = metadata.artwork;
 }
 
 #pragma mark - private

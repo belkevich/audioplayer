@@ -9,11 +9,20 @@
 #import "ABAudioFileReader.h"
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
-#import "Trim.h"
 #import "ABAudioMetadata.h"
+#import "SafeBlock.h"
+#import "Trim.h"
+#import "NSError+ABAudioFileReader.h"
 
 UInt32 const maxBufferSize = 0x50000;
 UInt32 const minBufferSize = 0x4000;
+
+@interface ABAudioFileReader ()
+
+@property (nonatomic, assign) ABAudioReaderStatus audioReaderStatus;
+
+@end
+
 
 @implementation ABAudioFileReader
 
@@ -28,7 +37,7 @@ UInt32 const minBufferSize = 0x4000;
     {
         audioFile = NULL;
         _dataFormat = [[ABAudioFormat alloc] init];
-        _status = ABAudioReaderStatusEmpty;
+        self.audioReaderStatus = ABAudioReaderStatusEmpty;
     }
     return self;
 }
@@ -40,23 +49,28 @@ UInt32 const minBufferSize = 0x4000;
 
 #pragma mark - audio reader protocol implementation
 
-- (BOOL)audioReaderOpen:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
+- (void)audioReaderOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
+                    failure:(ABAudioReaderOpenFailureBlock)failureBlock
+           metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock
 {
     [self audioReaderClose];
-    BOOL status = [self audioFileOpen:path];
-    if (status)
+    if ([self audioFileOpen:path])
     {
         [self audioFileGetDataFormat];
         [self audioFileGetMagicCookie];
         [self audioFileCalculateBufferSize];
-        if (successBlock)
+        [self audioFileCalculateDuration];
+        SAFE_BLOCK(successBlock);
+        ABAudioMetadata *metadata = [self audioFileMetadata];
+        if (metadata)
         {
-            successBlock();
+            SAFE_BLOCK(metadataReceivedBlock, metadata);
         }
-        return YES;
     }
-    return NO;
-
+    else
+    {
+        SAFE_BLOCK(failureBlock, [NSError errorAudioFileOpenPath:path]);
+    }
 }
 
 - (void)audioReaderClose
@@ -67,6 +81,8 @@ UInt32 const minBufferSize = 0x4000;
         audioFile = NULL;
     }
     packetCount = 0;
+    duration = 0.f;
+    self.audioReaderStatus = ABAudioReaderStatusEmpty;
 }
 
 - (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely
@@ -82,53 +98,23 @@ UInt32 const minBufferSize = 0x4000;
         case noErr:
             packetCount += readPackets;
             [buffer setActualDataSize:readBytes packetCount:readPackets];
-            _status = ABAudioReaderStatusOK;
+            self.audioReaderStatus = ABAudioReaderStatusOK;
             return buffer;
 
         case kAudioFileEndOfFileError:
-            _status = ABAudioReaderStatusEnd;
+            self.audioReaderStatus = ABAudioReaderStatusEnd;
             break;
 
         default:
-            _status = ABAudioReaderStatusError;
+            self.audioReaderStatus = ABAudioReaderStatusError;
             break;
     }
     return nil;
 }
 
-- (ABAudioMetadata *)audioReaderMetadata
-{
-    ABAudioMetadata *metadata = nil;
-    CFDictionaryRef metadataDictionary = [self audioFileGetProperty:kAudioFilePropertyInfoDictionary];
-    if (metadataDictionary)
-    {
-        NSDictionary *dictionary = (__bridge NSDictionary *)metadataDictionary;
-        metadata = [[ABAudioMetadata alloc] initWithAudioFileMetadataDictionary:dictionary];
-        CFRelease(metadataDictionary);
-        CFDataRef artworkData = [self audioFileGetProperty:kAudioFilePropertyAlbumArtwork];
-        if (artworkData)
-        {
-            [metadata artworkWithData:(__bridge NSData *)artworkData];
-            CFRelease(artworkData);
-        }
-    }
-    return metadata;
-}
-
 - (NSTimeInterval)audioReaderDuration
 {
-    if (audioFile)
-    {
-        NSTimeInterval duration = 0;
-        UInt32 size = sizeof(NSTimeInterval);
-        OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyEstimatedDuration,
-                                               &size, &duration);
-        if (status == noErr)
-        {
-            return duration;
-        }
-    }
-    return 0.f;
+    return duration;
 }
 
 #pragma mark - private
@@ -180,9 +166,39 @@ UInt32 const minBufferSize = 0x4000;
     }
     else
     {
-        self.audioReaderFormat.bufferSize = (UInt32)MAX(maxBufferSize, maxPacketSize);
+        self.audioReaderFormat.bufferSize = MAX(maxBufferSize, maxPacketSize);
     }
     self.audioReaderFormat.packetsToRead = self.audioReaderFormat.bufferSize / maxPacketSize;
+}
+
+- (void)audioFileCalculateDuration
+{
+    UInt32 size = sizeof(NSTimeInterval);
+    OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyEstimatedDuration,
+                                           &size, &duration);
+    if (status != noErr)
+    {
+        duration = 0.f;
+    }
+}
+
+- (ABAudioMetadata *)audioFileMetadata
+{
+    ABAudioMetadata *metadata = nil;
+    CFDictionaryRef metadataDictionary = [self audioFileGetProperty:kAudioFilePropertyInfoDictionary];
+    if (metadataDictionary)
+    {
+        NSDictionary *dictionary = (__bridge NSDictionary *)metadataDictionary;
+        metadata = [[ABAudioMetadata alloc] initWithAudioFileMetadataDictionary:dictionary];
+        CFRelease(metadataDictionary);
+        CFDataRef artworkData = [self audioFileGetProperty:kAudioFilePropertyAlbumArtwork];
+        if (artworkData)
+        {
+            [metadata artworkWithData:(__bridge NSData *)artworkData];
+            CFRelease(artworkData);
+        }
+    }
+    return metadata;
 }
 
 - (void *)audioFileGetProperty:(AudioFilePropertyID)property

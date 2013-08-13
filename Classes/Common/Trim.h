@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 okolodev. All rights reserved.
 //
 
-#ifndef ABAudioPlayerApp_Trim_h
-#define ABAudioPlayerApp_Trim_h
+#ifndef ABAudioPlayer_Trim_h
+#define ABAudioPlayer_Trim_h
 
 #if !defined(TRIM)
-#define TRIM(A,B,C)	({ __typeof__(A) __x = MAX(A,B); __x = MIN(__x, C); __x; })
+#define TRIM(A,B,C)	({ __typeof__(A) __x = A > B ? A : B; __x < C ? __x : C; })
 #endif
 
 #endif

@@ -13,6 +13,7 @@
 {
     AudioFileID audioFile;
     SInt64 packetCount;
+    NSTimeInterval duration;
 }
 
 @end

@@ -7,23 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ABAudioPlayerDelegate.h"
 #import "ABAudioQueueDataSource.h"
 
-@class ABAudioQueue;
-@class ABAudioFileReader;
-
 @interface ABAudioPlayer : NSObject <ABAudioQueueDataSource>
-{
-    ABAudioQueue *audioQueue;
-    ABAudioFileReader *audioFile;
-}
 
+@property (nonatomic, weak) NSObject <ABAudioPlayerDelegate> *delegate;
+@property (nonatomic, readonly) ABAudioPlayerStatus status;
 @property (nonatomic, assign) float volume;
 @property (nonatomic, assign) float pan;
 @property (nonatomic, readonly) NSTimeInterval time;
 @property (nonatomic, readonly) NSTimeInterval duration;
 
-- (void)play;
-- (void)stop;
+- (id)initWithAudioPlayerDelegate:(NSObject <ABAudioPlayerDelegate> *)delegate;
+- (void)playerStart;
+- (void)playerStop;
+- (void)playerPause;
 
 @end

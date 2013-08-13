@@ -7,20 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ABAudioPlayerDelegate.h"
 
-@class ABAudioPlayer;
-
-@interface ABMainViewController : UIViewController
+@interface ABMainViewController : UIViewController <ABAudioPlayerDelegate>
 {
     ABAudioPlayer *player;
 }
 
 @property (nonatomic, weak) IBOutlet UITextField *timeField;
-@property (nonatomic, weak) IBOutlet UITextField *channelsField;
 @property (nonatomic, weak) IBOutlet UITextField *metadataField;
+@property (nonatomic, weak) IBOutlet UIImageView *artworkImage;
 @property (nonatomic, weak) IBOutlet UISlider *seekSlider;
 @property (nonatomic, weak) IBOutlet UISlider *volumeSlider;
 @property (nonatomic, weak) IBOutlet UISlider *panSlider;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *activity;
 
 - (IBAction)playButtonPressed:(id)sender;
 - (IBAction)pauseButtonPressed:(id)sender;

@@ -22,16 +22,19 @@ typedef enum
 } ABAudioReaderStatus;
 
 typedef void (^ABAudioReaderOpenSuccessBlock)();
+typedef void (^ABAudioReaderOpenFailureBlock)(NSError *error);
+typedef void (^ABAudioReaderMetadataReceivedBlock)(ABAudioMetadata *metadata);
 
 @protocol ABAudioReaderProtocol <NSObject>
 
 @property (nonatomic, readonly) ABAudioReaderStatus audioReaderStatus;
 @property (nonatomic, readonly) ABAudioFormat *audioReaderFormat;
 
-- (BOOL)audioReaderOpen:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock;
+- (void)audioReaderOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
+                    failure:(ABAudioReaderOpenFailureBlock)failureBlock
+           metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock;
 - (void)audioReaderClose;
 - (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely;
-- (ABAudioMetadata *)audioReaderMetadata;
 - (NSTimeInterval)audioReaderDuration;
 
 @end

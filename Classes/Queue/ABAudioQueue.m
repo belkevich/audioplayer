@@ -128,21 +128,27 @@
     [currentBuffer copyAudioDataToBuffer:buffer];
     if (currentBuffer && buffer->mAudioDataByteSize > 0)
     {
-//#if DEBUG
-//        NSLog(@"%lu, %lu", currentBuffer.actualPacketCount, currentBuffer.actualDataSize);
-//#endif
         OSStatus status = AudioQueueEnqueueBuffer(queue, buffer, currentBuffer.actualPacketCount,
                                                   currentBuffer.packetsDescription);
-        if (status != noErr)
+        switch (status)
         {
-            NSLog(@"Audio Queue failed to enqueue buffer with status %li", status);
+            case noErr:
+                return YES;
+
+            case kAudioQueueErr_EnqueueDuringReset:
+                break;
+
+            default:
+                NSLog(@"Audio Queue failed to enqueue buffer with status %li", status);
+                [self audioQueueStop];
 #if DEBUG
-            @throw [NSException exceptionWithName:@"Audio Queue failed"
-                                           reason:@"Audio Queue failed to enqueue buffer"
-                                         userInfo:nil];
+                @throw [NSException exceptionWithName:@"Audio Queue failed"
+                                               reason:@"Audio Queue failed to enqueue buffer"
+                                             userInfo:nil];
+#else
+                break;
 #endif
         }
-        return (status == noErr);
     }
     return NO;
 }
@@ -163,7 +169,13 @@ static void handleBufferCallback(void *instance, AudioQueueRef __unused queue,
     ABAudioQueue *audioQueue = (__bridge ABAudioQueue *)instance;
     @autoreleasepool
     {
-        [audioQueue audioQueueEnqueueBuffer:buffer];
+        if (![audioQueue audioQueueEnqueueBuffer:buffer])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^
+            {
+                [audioQueue audioQueuePause];
+            });
+        }
     }
 }
 
