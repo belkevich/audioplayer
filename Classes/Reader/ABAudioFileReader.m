@@ -176,8 +176,8 @@ UInt32 const minBufferSize = 0x4000;
     AudioStreamBasicDescription *dataFormat = self.audioReaderFormat.dataFormat;
     if (dataFormat->mFramesPerPacket != 0)
     {
-        Float64 numPacketsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
-        UInt32 bufferSize = (UInt32)(numPacketsForTime * maxPacketSize);
+        Float64 packetsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
+        UInt32 bufferSize = (UInt32)(packetsForTime * maxPacketSize);
         self.audioReaderFormat.bufferSize = TRIM(bufferSize, minBufferSize, maxBufferSize);
     }
     else
