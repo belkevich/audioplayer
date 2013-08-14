@@ -74,15 +74,6 @@ UInt32 const minBufferSize = 0x4000;
     }
 }
 
-- (void)audioReaderSeekToPosition:(float)position
-{
-    if (self.isSeekEnabled)
-    {
-        float packetNumber = (float)totalPackets * position;
-        currentPacket = (SInt64)roundf(packetNumber);
-    }
-}
-
 - (void)audioReaderClose
 {
     if (audioFile)
@@ -123,14 +114,23 @@ UInt32 const minBufferSize = 0x4000;
     return nil;
 }
 
+- (float)audioReaderSeek
+{
+    return (totalPackets != 0) ? (float)currentPacket / (float)totalPackets : -1.f;
+}
+
+- (void)setAudioReaderSeek:(float)audioReaderSeek
+{
+    if (totalPackets != 0)
+    {
+        float packetNumber = (float)totalPackets * audioReaderSeek;
+        currentPacket = (SInt64)roundf(packetNumber);
+    }
+}
+
 - (NSTimeInterval)audioReaderDuration
 {
     return duration;
-}
-
-- (BOOL)isSeekEnabled
-{
-    return (totalPackets != 0);
 }
 
 #pragma mark - private

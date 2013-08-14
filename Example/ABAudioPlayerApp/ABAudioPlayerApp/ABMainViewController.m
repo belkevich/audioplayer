@@ -67,7 +67,7 @@
 - (IBAction)seekValueChanged:(id)sender
 {
     UISlider *slider = sender;
-    [player playerSeekToPosition:slider.value];
+    player.seek = slider.value;
 }
 
 - (IBAction)volumeValueChanged:(id)sender
@@ -129,6 +129,7 @@
     NSString *time = [NSString stringWithTimeInterval:player.time];
     NSString *duration = [NSString stringWithTimeInterval:player.duration];
     self.timeField.text = [NSString stringWithFormat:@"%@ / %@", time, duration];
+    self.seekSlider.value = player.seek;
 }
 
 @end

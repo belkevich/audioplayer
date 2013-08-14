@@ -104,12 +104,6 @@
     self.status = ABAudioPlayerStatusPaused;
 }
 
-- (void)playerSeekToPosition:(float)position
-{
-    position = TRIM(position, 0.f, 1.f);
-    [self.audioFile audioReaderSeekToPosition:position];
-}
-
 #pragma mark - properties
 
 - (void)setStatus:(ABAudioPlayerStatus)status
@@ -136,6 +130,17 @@
     [self.audioQueue audioQueuePan:_pan];
 }
 
+- (float)seek
+{
+    return self.audioFile.audioReaderSeek;
+}
+
+- (void)setSeek:(float)seek
+{
+    seek = TRIM(seek, 0.f, 1.f);
+    self.audioFile.audioReaderSeek = seek;
+}
+
 - (NSTimeInterval)time
 {
     return [self.audioQueue currentTime];
@@ -148,7 +153,7 @@
 
 - (BOOL)isSeekEnabled
 {
-    return [self.audioFile isSeekEnabled];
+    return (self.audioFile.audioReaderSeek >= 0);
 }
 
 #pragma mark - audio queue data source implementation
