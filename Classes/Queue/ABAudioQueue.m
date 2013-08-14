@@ -66,7 +66,14 @@
     if (queue)
     {
         OSStatus status = AudioQueueStart(queue, NULL);
-        return (status == noErr);
+        if (status == noErr)
+        {
+            return YES;
+        }
+        else
+        {
+            [self audioQueueStop];
+        }
     }
     return NO;
 }

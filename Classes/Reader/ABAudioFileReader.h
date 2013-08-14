@@ -12,8 +12,9 @@
 @interface ABAudioFileReader : NSObject <ABAudioReaderProtocol>
 {
     AudioFileID audioFile;
-    SInt64 packetCount;
     NSTimeInterval duration;
+    SInt64 currentPacket;
+    SInt64 totalPackets;
 }
 
 @end

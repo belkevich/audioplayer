@@ -60,6 +60,7 @@ UInt32 const minBufferSize = 0x4000;
         [self audioFileGetMagicCookie];
         [self audioFileCalculateBufferSize];
         [self audioFileCalculateDuration];
+        [self audioFileCalculateTotalPackets];
         SAFE_BLOCK(successBlock);
         ABAudioMetadata *metadata = [self audioFileMetadata];
         if (metadata)
@@ -73,6 +74,15 @@ UInt32 const minBufferSize = 0x4000;
     }
 }
 
+- (void)audioReaderSeekToPosition:(float)position
+{
+    if (self.isSeekEnabled)
+    {
+        float packetNumber = (float)totalPackets * position;
+        currentPacket = (SInt64)roundf(packetNumber);
+    }
+}
+
 - (void)audioReaderClose
 {
     if (audioFile)
@@ -80,7 +90,8 @@ UInt32 const minBufferSize = 0x4000;
         AudioFileClose(audioFile);
         audioFile = NULL;
     }
-    packetCount = 0;
+    currentPacket = 0;
+    totalPackets = 0;
     duration = 0.f;
     self.audioReaderStatus = ABAudioReaderStatusEmpty;
 }
@@ -92,11 +103,11 @@ UInt32 const minBufferSize = 0x4000;
     ABAudioBuffer *buffer = [[ABAudioBuffer alloc] init];
     [buffer setExpectedDataSize:self.audioReaderFormat.bufferSize packetCount:readPackets];
     OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, buffer.packetsDescription,
-                                           packetCount, &readPackets, buffer.audioData);
+                                           currentPacket, &readPackets, buffer.audioData);
     switch (status)
     {
         case noErr:
-            packetCount += readPackets;
+            currentPacket += readPackets;
             [buffer setActualDataSize:readBytes packetCount:readPackets];
             self.audioReaderStatus = ABAudioReaderStatusOK;
             return buffer;
@@ -115,6 +126,11 @@ UInt32 const minBufferSize = 0x4000;
 - (NSTimeInterval)audioReaderDuration
 {
     return duration;
+}
+
+- (BOOL)isSeekEnabled
+{
+    return (totalPackets != 0);
 }
 
 #pragma mark - private
@@ -174,11 +190,22 @@ UInt32 const minBufferSize = 0x4000;
 - (void)audioFileCalculateDuration
 {
     UInt32 size = sizeof(NSTimeInterval);
-    OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyEstimatedDuration,
-                                           &size, &duration);
+    OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyEstimatedDuration, &size,
+                                           &duration);
     if (status != noErr)
     {
         duration = 0.f;
+    }
+}
+
+- (void)audioFileCalculateTotalPackets
+{
+    UInt32 size = sizeof(SInt64);
+    OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyAudioDataPacketCount, &size,
+                                           &totalPackets);
+    if (status != noErr)
+    {
+        totalPackets = 0;
     }
 }
 

@@ -67,7 +67,7 @@
 - (IBAction)seekValueChanged:(id)sender
 {
     UISlider *slider = sender;
-    NSLog(@"%p, value: %.1f", _cmd, slider.value);
+    [player playerSeekToPosition:slider.value];
 }
 
 - (IBAction)volumeValueChanged:(id)sender

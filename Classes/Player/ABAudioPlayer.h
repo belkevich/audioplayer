@@ -18,10 +18,12 @@
 @property (nonatomic, assign) float pan;
 @property (nonatomic, readonly) NSTimeInterval time;
 @property (nonatomic, readonly) NSTimeInterval duration;
+@property (nonatomic, readonly) BOOL isSeekEnabled;
 
 - (id)initWithAudioPlayerDelegate:(NSObject <ABAudioPlayerDelegate> *)delegate;
 - (void)playerStart;
 - (void)playerStop;
 - (void)playerPause;
+- (void)playerSeekToPosition:(float)position;
 
 @end

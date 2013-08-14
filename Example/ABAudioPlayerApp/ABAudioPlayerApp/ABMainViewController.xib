@@ -238,6 +238,7 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
+						<bool key="IBUIContinuous">NO</bool>
 					</object>
 					<object class="IBUISlider" id="913926555">
 						<reference key="NSNextResponder" ref="191373211"/>

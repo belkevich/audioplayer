@@ -14,6 +14,7 @@
 #import "ABAudioMetadata.h"
 #import "Trim.h"
 #import "NSError+ABAudioReader.h"
+#import "NSError+ABAudioQueue.h"
 
 @interface ABAudioPlayer ()
 
@@ -57,12 +58,24 @@
         self.status = ABAudioPlayerStatusBuffering;
         [self.audioFile audioReaderOpenPath:@"/Users/alex/Music/01.mp3" success:^
         {
-            [weakSelf.audioQueue audioQueueSetupFormat:weakSelf.audioFile.audioReaderFormat];
-            [weakSelf.audioQueue audioQueueVolume:weakSelf.volume];
-            [weakSelf.audioQueue audioQueuePan:weakSelf.pan];
+            if ([weakSelf.audioQueue audioQueueSetupFormat:weakSelf.audioFile.audioReaderFormat])
+            {
+                [weakSelf.audioQueue audioQueueVolume:weakSelf.volume];
+                [weakSelf.audioQueue audioQueuePan:weakSelf.pan];
 #warning extract to another block (need to think about it)
-            [self.audioQueue audioQueuePlay];
-            self.status = ABAudioPlayerStatusPlaying;
+                if ([weakSelf.audioQueue audioQueuePlay])
+                {
+                    weakSelf.status = ABAudioPlayerStatusPlaying;
+                }
+                else
+                {
+                    [weakSelf playerFailWithError:[NSError errorAudioQueuePlay]];
+                }
+            }
+            else
+            {
+                [weakSelf playerFailWithError:[NSError errorAudioQueueSetup]];
+            }
         }                           failure:^(NSError *error)
         {
             [weakSelf playerFailWithError:error];
@@ -89,6 +102,12 @@
 {
     [self.audioQueue audioQueuePause];
     self.status = ABAudioPlayerStatusPaused;
+}
+
+- (void)playerSeekToPosition:(float)position
+{
+    position = TRIM(position, 0.f, 1.f);
+    [self.audioFile audioReaderSeekToPosition:position];
 }
 
 #pragma mark - properties
@@ -125,6 +144,11 @@
 - (NSTimeInterval)duration
 {
     return [self.audioFile audioReaderDuration];
+}
+
+- (BOOL)isSeekEnabled
+{
+    return [self.audioFile isSeekEnabled];
 }
 
 #pragma mark - audio queue data source implementation
