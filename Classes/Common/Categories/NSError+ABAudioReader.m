@@ -7,13 +7,13 @@
 //
 
 #import "NSError+ABAudioReader.h"
+#import "NSError+Reason.h"
 
 @implementation NSError (ABAudioReader)
 
 + (NSError *)errorAudioReaderReadPackets
 {
-#warning add read packets error
-    return nil;
+    return [NSError errorWithDomain:@"ABAudioReader" code:1100 reason:@"Failed to read packets"];
 }
 
 

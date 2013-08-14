@@ -7,13 +7,14 @@
 //
 
 #import "NSError+ABAudioFileReader.h"
+#import "NSError+Reason.h"
 
 @implementation NSError (ABAudioFileReader)
 
 + (NSError *)errorAudioFileOpenPath:(NSString *)path
 {
-#warning add open path error
-    return nil;
+    NSString *reason = [NSString stringWithFormat:@"Can't open audio file at path:\n%@", path];
+    return [NSError errorWithDomain:@"ABAudioFileReader" code:1200 reason:reason];
 }
 
 @end

@@ -18,6 +18,8 @@
 		FA05995E178F040100374DD5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA05995D178F040100374DD5 /* Default-568h@2x.png */; };
 		FA059969178F04C500374DD5 /* ABMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA059967178F04C500374DD5 /* ABMainViewController.m */; };
 		FA05996A178F04C500374DD5 /* ABMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA059968178F04C500374DD5 /* ABMainViewController.xib */; };
+		FA112EF717BB66BE00061F92 /* NSError+Reason.m in Sources */ = {isa = PBXBuildFile; fileRef = FA112EF617BB66BE00061F92 /* NSError+Reason.m */; };
+		FA112EF817BB66BE00061F92 /* NSError+Reason.m in Sources */ = {isa = PBXBuildFile; fileRef = FA112EF617BB66BE00061F92 /* NSError+Reason.m */; };
 		FA11709117B38FE500624CDE /* ABAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA11708A17B38FE500624CDE /* ABAudioBuffer.m */; };
 		FA11709217B38FE500624CDE /* ABAudioBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA11708A17B38FE500624CDE /* ABAudioBuffer.m */; };
 		FA11709317B38FE500624CDE /* ABAudioFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = FA11708D17B38FE500624CDE /* ABAudioFormat.m */; };
@@ -74,6 +76,8 @@
 		FA059966178F04C500374DD5 /* ABMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABMainViewController.h; sourceTree = "<group>"; };
 		FA059967178F04C500374DD5 /* ABMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABMainViewController.m; sourceTree = "<group>"; };
 		FA059968178F04C500374DD5 /* ABMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ABMainViewController.xib; sourceTree = "<group>"; };
+		FA112EF517BB66BE00061F92 /* NSError+Reason.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Reason.h"; path = "../../Classes/Common/Categories/NSError+Reason.h"; sourceTree = "<group>"; };
+		FA112EF617BB66BE00061F92 /* NSError+Reason.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+Reason.m"; path = "../../Classes/Common/Categories/NSError+Reason.m"; sourceTree = "<group>"; };
 		FA11708917B38FE500624CDE /* ABAudioBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABAudioBuffer.h; sourceTree = "<group>"; };
 		FA11708A17B38FE500624CDE /* ABAudioBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABAudioBuffer.m; sourceTree = "<group>"; };
 		FA11708C17B38FE500624CDE /* ABAudioFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABAudioFormat.h; sourceTree = "<group>"; };
@@ -360,6 +364,8 @@
 				FA416C0F17BA5CF20089537F /* NSError+ABAudioFileReader.m */,
 				FA416C1617BA67EB0089537F /* NSError+ABAudioReader.h */,
 				FA416C1717BA67EB0089537F /* NSError+ABAudioReader.m */,
+				FA112EF517BB66BE00061F92 /* NSError+Reason.h */,
+				FA112EF617BB66BE00061F92 /* NSError+Reason.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -575,6 +581,7 @@
 				FADA555817B9114E000736C3 /* NSString+TimeInterval.m in Sources */,
 				FA416C1017BA5CF20089537F /* NSError+ABAudioFileReader.m in Sources */,
 				FA416C1817BA67EB0089537F /* NSError+ABAudioReader.m in Sources */,
+				FA112EF717BB66BE00061F92 /* NSError+Reason.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,6 +606,7 @@
 				FADA555917B9114E000736C3 /* NSString+TimeInterval.m in Sources */,
 				FA416C1117BA5CF20089537F /* NSError+ABAudioFileReader.m in Sources */,
 				FA416C1917BA67EB0089537F /* NSError+ABAudioReader.m in Sources */,
+				FA112EF817BB66BE00061F92 /* NSError+Reason.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
