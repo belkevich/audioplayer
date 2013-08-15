@@ -130,17 +130,6 @@
     [self.audioQueue audioQueuePan:_pan];
 }
 
-- (float)seek
-{
-    return self.audioFile.audioReaderSeek;
-}
-
-- (void)setSeek:(float)seek
-{
-    seek = TRIM(seek, 0.f, 1.f);
-    self.audioFile.audioReaderSeek = seek;
-}
-
 - (NSTimeInterval)time
 {
     return [self.audioQueue currentTime];
@@ -149,11 +138,6 @@
 - (NSTimeInterval)duration
 {
     return [self.audioFile audioReaderDuration];
-}
-
-- (BOOL)isSeekEnabled
-{
-    return (self.audioFile.audioReaderSeek >= 0);
 }
 
 #pragma mark - audio queue data source implementation

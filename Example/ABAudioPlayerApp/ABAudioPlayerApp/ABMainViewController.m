@@ -64,12 +64,6 @@
     [player playerStop];
 }
 
-- (IBAction)seekValueChanged:(id)sender
-{
-    UISlider *slider = sender;
-    player.seek = slider.value;
-}
-
 - (IBAction)volumeValueChanged:(id)sender
 {
     UISlider *slider = sender;
@@ -96,9 +90,8 @@
         case ABAudioPlayerStatusError:
         case ABAudioPlayerStatusStopped:
             self.timeField.text = nil;
-            self.metadataField.text = nil;
+            self.metadataText.text = nil;
             self.artworkImage.image = nil;
-            self.seekSlider.value = 0.f;
             break;
 
         default:
@@ -117,8 +110,11 @@
 
 - (void)audioPlayer:(ABAudioPlayer *)audioPlayer didRecieveMetadata:(ABAudioMetadata *)metadata
 {
-    self.metadataField.text = [NSString stringWithFormat:@"%@ - %@", metadata.title,
-                                        metadata.artist];
+    self.metadataText.text = [NSString stringWithFormat:@"%@\n%@\n(%@ / %@ - %@)\nGenre: %@\n"
+                                                        "(%@)", metadata.title, metadata.artist,
+                                                        metadata.track, metadata.album,
+                                                        metadata.year, metadata.genre,
+                                                        metadata.comments];
     self.artworkImage.image = metadata.artwork;
 }
 
@@ -129,7 +125,6 @@
     NSString *time = [NSString stringWithTimeInterval:player.time];
     NSString *duration = [NSString stringWithTimeInterval:player.duration];
     self.timeField.text = [NSString stringWithFormat:@"%@ / %@", time, duration];
-    self.seekSlider.value = player.seek;
 }
 
 @end

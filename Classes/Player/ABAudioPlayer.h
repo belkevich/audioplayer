@@ -16,10 +16,8 @@
 @property (nonatomic, readonly) ABAudioPlayerStatus status;
 @property (nonatomic, assign) float volume;
 @property (nonatomic, assign) float pan;
-@property (nonatomic, assign) float seek;
 @property (nonatomic, readonly) NSTimeInterval time;
 @property (nonatomic, readonly) NSTimeInterval duration;
-@property (nonatomic, readonly) BOOL isSeekEnabled;
 
 - (id)initWithAudioPlayerDelegate:(NSObject <ABAudioPlayerDelegate> *)delegate;
 - (void)playerStart;

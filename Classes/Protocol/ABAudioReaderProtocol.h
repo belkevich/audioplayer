@@ -30,7 +30,6 @@ typedef void (^ABAudioReaderMetadataReceivedBlock)(ABAudioMetadata *metadata);
 @property (nonatomic, readonly) ABAudioReaderStatus audioReaderStatus;
 @property (nonatomic, readonly) ABAudioFormat *audioReaderFormat;
 @property (nonatomic, readonly) NSTimeInterval audioReaderDuration;
-@property (nonatomic, assign) float audioReaderSeek;
 
 - (void)audioReaderOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
                     failure:(ABAudioReaderOpenFailureBlock)failureBlock

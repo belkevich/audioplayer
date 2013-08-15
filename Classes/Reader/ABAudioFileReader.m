@@ -60,7 +60,6 @@ UInt32 const minBufferSize = 0x4000;
         [self audioFileGetMagicCookie];
         [self audioFileCalculateBufferSize];
         [self audioFileCalculateDuration];
-        [self audioFileCalculateTotalPackets];
         SAFE_BLOCK(successBlock);
         ABAudioMetadata *metadata = [self audioFileMetadata];
         if (metadata)
@@ -82,7 +81,6 @@ UInt32 const minBufferSize = 0x4000;
         audioFile = NULL;
     }
     currentPacket = 0;
-    totalPackets = 0;
     duration = 0.f;
     self.audioReaderStatus = ABAudioReaderStatusEmpty;
 }
@@ -112,20 +110,6 @@ UInt32 const minBufferSize = 0x4000;
             break;
     }
     return nil;
-}
-
-- (float)audioReaderSeek
-{
-    return (totalPackets != 0) ? (float)currentPacket / (float)totalPackets : -1.f;
-}
-
-- (void)setAudioReaderSeek:(float)audioReaderSeek
-{
-    if (totalPackets != 0)
-    {
-        float packetNumber = (float)totalPackets * audioReaderSeek;
-        currentPacket = (SInt64)roundf(packetNumber);
-    }
 }
 
 - (NSTimeInterval)audioReaderDuration
@@ -195,17 +179,6 @@ UInt32 const minBufferSize = 0x4000;
     if (status != noErr)
     {
         duration = 0.f;
-    }
-}
-
-- (void)audioFileCalculateTotalPackets
-{
-    UInt32 size = sizeof(SInt64);
-    OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyAudioDataPacketCount, &size,
-                                           &totalPackets);
-    if (status != noErr)
-    {
-        totalPackets = 0;
     }
 }
 

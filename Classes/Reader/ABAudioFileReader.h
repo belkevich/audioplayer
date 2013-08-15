@@ -14,7 +14,6 @@
     AudioFileID audioFile;
     NSTimeInterval duration;
     SInt64 currentPacket;
-    SInt64 totalPackets;
 }
 
 @end
