@@ -185,13 +185,13 @@ UInt32 const minBufferSize = 0x4000;
 - (ABAudioMetadata *)audioFileMetadata
 {
     ABAudioMetadata *metadata = nil;
-    CFDictionaryRef metadataDictionary = [self audioFileGetProperty:kAudioFilePropertyInfoDictionary];
+    CFDictionaryRef metadataDictionary = [self audioFileProperty:kAudioFilePropertyInfoDictionary];
     if (metadataDictionary)
     {
         NSDictionary *dictionary = (__bridge NSDictionary *)metadataDictionary;
         metadata = [[ABAudioMetadata alloc] initWithAudioFileMetadataDictionary:dictionary];
         CFRelease(metadataDictionary);
-        CFDataRef artworkData = [self audioFileGetProperty:kAudioFilePropertyAlbumArtwork];
+        CFDataRef artworkData = [self audioFileProperty:kAudioFilePropertyAlbumArtwork];
         if (artworkData)
         {
             [metadata artworkWithData:(__bridge NSData *)artworkData];
@@ -202,7 +202,7 @@ UInt32 const minBufferSize = 0x4000;
     return metadata;
 }
 
-- (void *)audioFileGetProperty:(AudioFilePropertyID)property
+- (void *)audioFileProperty:(AudioFilePropertyID)property
 {
     if (audioFile)
     {
