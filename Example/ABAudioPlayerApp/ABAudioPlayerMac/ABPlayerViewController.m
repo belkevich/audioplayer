@@ -8,8 +8,9 @@
 
 #import "ABPlayerViewController.h"
 #import "ABAudioPlayer.h"
-#import "NSString+TimeInterval.h"
 #import "ABAudioMetadata.h"
+#import "ABMacAudioPath.h"
+#import "NSString+TimeInterval.h"
 
 @interface ABPlayerViewController ()
 
@@ -42,11 +43,7 @@
 
 - (IBAction)playButtonPressed:(id)sender
 {
-    if (!player.source)
-    {
-        [player playerPlaySource:@"/Users/alex/Music/01.mp3"];
-    }
-    [player playerStart];
+    !player.source ? [player playerPlaySource:kMacAudioPath] : [player playerStart];
 }
 
 - (IBAction)pauseButtonPressed:(id)sender

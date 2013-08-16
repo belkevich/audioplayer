@@ -112,6 +112,8 @@
 		FA6CBF3817B4E30D00F78964 /* ABAudioQueueBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioQueueBuilder.m; path = ../../Classes/Queue/Builder/ABAudioQueueBuilder.m; sourceTree = "<group>"; };
 		FA6CBF3C17B511CB00F78964 /* Trim.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Trim.h; path = ../../Classes/Common/Trim.h; sourceTree = "<group>"; };
 		FA79467917A7F2A900BB0DFB /* ABAudioReaderProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioReaderProtocol.h; path = ../../Classes/Protocol/ABAudioReaderProtocol.h; sourceTree = "<group>"; };
+		FAA0237317BE673900C33346 /* ABMacAudioPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABMacAudioPath.h; sourceTree = "<group>"; };
+		FAA0237517BE67E400C33346 /* ABIOSAudioPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABIOSAudioPath.h; sourceTree = "<group>"; };
 		FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FAA58D9E179EC1480087A4CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FADA553F17B8C0E8000736C3 /* ABAudioTimeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioTimeHelper.h; path = ../../Classes/Queue/Time/ABAudioTimeHelper.h; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 		FA05994D178F040100374DD5 /* ABAudioPlayerApp */ = {
 			isa = PBXGroup;
 			children = (
+				FAA0237617BE67EF00C33346 /* iOS Audio Path */,
 				FA059965178F048200374DD5 /* Controllers */,
 				FA059964178F046700374DD5 /* App Delegate */,
 				FA05994E178F040100374DD5 /* Supporting Files */,
@@ -352,6 +355,22 @@
 			name = Protocol;
 			sourceTree = "<group>";
 		};
+		FAA0237417BE674000C33346 /* Mac Audio Path */ = {
+			isa = PBXGroup;
+			children = (
+				FAA0237317BE673900C33346 /* ABMacAudioPath.h */,
+			);
+			name = "Mac Audio Path";
+			sourceTree = "<group>";
+		};
+		FAA0237617BE67EF00C33346 /* iOS Audio Path */ = {
+			isa = PBXGroup;
+			children = (
+				FAA0237517BE67E400C33346 /* ABIOSAudioPath.h */,
+			);
+			name = "iOS Audio Path";
+			sourceTree = "<group>";
+		};
 		FADA554317B8C0EC000736C3 /* Time */ = {
 			isa = PBXGroup;
 			children = (
@@ -404,6 +423,7 @@
 		FAFAE1E6178FF7A5009B48E3 /* ABAudioPlayerMac */ = {
 			isa = PBXGroup;
 			children = (
+				FAA0237417BE674000C33346 /* Mac Audio Path */,
 				FAFAE1FE178FF85A009B48E3 /* Controllers */,
 				FAFAE1FB178FF7C7009B48E3 /* App Delegate */,
 				FAFAE1FC178FF7D0009B48E3 /* Resources */,

@@ -10,6 +10,7 @@
 #import "ABAudioPlayer.h"
 #import "ABAudioMetadata.h"
 #import "NSString+TimeInterval.h"
+#import "ABIOSAudioPath.h"
 
 @interface ABMainViewController ()
 
@@ -27,7 +28,6 @@
     if (self)
     {
         player = [[ABAudioPlayer alloc] initWithAudioPlayerDelegate:self];
-        [player playerPlaySource:@"/Users/alex/Music/01.mp3"];
         __weak ABMainViewController *weakSelf = self;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:weakSelf
                                                     selector:@selector(updatePlayedTime:)
@@ -45,7 +45,16 @@
 
 - (IBAction)playButtonPressed:(id)sender
 {
-    [player playerStart];
+    if (!player.source)
+    {
+        NSString *path = [[NSBundle mainBundle] pathForResource:kIOSAudioPath ofType:nil];
+        NSLog(@"Audio file bundle path:\n%@", path);
+        [player playerPlaySource:path];
+    }
+    else
+    {
+        [player playerStart];
+    }
 }
 
 - (IBAction)pauseButtonPressed:(id)sender
