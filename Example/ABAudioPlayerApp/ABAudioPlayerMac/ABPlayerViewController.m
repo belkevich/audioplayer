@@ -7,8 +7,13 @@
 //
 
 #import "ABPlayerViewController.h"
+#import "ABAudioPlayer.h"
+#import "NSString+TimeInterval.h"
+#import "ABAudioMetadata.h"
 
 @interface ABPlayerViewController ()
+
+@property (nonatomic, weak) NSTimer *timer;
 
 @end
 
@@ -19,43 +24,101 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
+        player = [[ABAudioPlayer alloc] initWithAudioPlayerDelegate:self];
+        __weak ABPlayerViewController *weakSelf = self;
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:weakSelf
+                                                    selector:@selector(updatePlayedTime:)
+                                                    userInfo:nil repeats:YES];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [self.timer invalidate];
 }
 
 #pragma mark - actions
 
 - (IBAction)playButtonPressed:(id)sender
 {
-    NSLog(@"%s", sel_getName(_cmd));
+    if (!player.source)
+    {
+        [player playerPlaySource:@"/Users/alex/Music/01.mp3"];
+    }
+    [player playerStart];
 }
 
 - (IBAction)pauseButtonPressed:(id)sender
 {
-    NSLog(@"%s", sel_getName(_cmd));
+    [player playerPause];
 }
 
 - (IBAction)stopButtonPressed:(id)sender
 {
-    NSLog(@"%s", sel_getName(_cmd));
-}
-
-- (IBAction)seekValueChanged:(id)sender
-{
-    NSSlider *slider = sender;
-    NSLog(@"%s, value: %.3f", sel_getName(_cmd), slider.floatValue);
+    [player playerStop];
 }
 
 - (IBAction)volumeValueChanged:(id)sender
 {
     NSSlider *slider = sender;
-    NSLog(@"%s, value: %.3f", sel_getName(_cmd), slider.floatValue);
+    player.volume = slider.floatValue;
 }
 
 - (IBAction)panValueChanged:(id)sender
 {
     NSSlider *slider = sender;
-    NSLog(@"%s, value: %.3f", sel_getName(_cmd), slider.floatValue);
+    player.pan = slider.floatValue;
+}
+
+#pragma mark - audio player delegate implementation
+
+- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didChangeStatus:(ABAudioPlayerStatus)status
+{
+    [self.activity stopAnimation:self];
+    switch (status)
+    {
+        case ABAudioPlayerStatusBuffering:
+            [self.activity startAnimation:self];
+            break;
+
+        case ABAudioPlayerStatusError:
+        case ABAudioPlayerStatusStopped:
+            self.timeField.stringValue = @"";
+            self.metadataText.string = @"";
+            break;
+
+        default:
+            break;
+    }
+}
+
+- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didFail:(NSError *)error
+{
+    NSString *message = [NSString stringWithFormat:@"Player failed with error:\n%@",
+                                                   error.localizedDescription];
+    NSAlert *alert = [NSAlert alertWithMessageText:message defaultButton:nil alternateButton:nil
+                                       otherButton:nil informativeTextWithFormat:@""];
+    [alert runModal];
+    
+}
+
+- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didRecieveMetadata:(ABAudioMetadata *)metadata
+{
+    self.metadataText.string = [NSString stringWithFormat:@"%@\n%@\n(%@ / %@ - %@)\nGenre: %@\n"
+                                                        "(%@)", metadata.title, metadata.artist,
+                                                        metadata.track, metadata.album,
+                                                        metadata.year, metadata.genre,
+                                                        metadata.comments];
+}
+
+#pragma mark - private
+
+- (void)updatePlayedTime:(id)sender
+{
+    NSString *time = [NSString stringWithTimeInterval:player.time];
+    NSString *duration = [NSString stringWithTimeInterval:player.duration];
+    self.timeField.stringValue = [NSString stringWithFormat:@"%@ / %@", time, duration];
 }
 
 @end

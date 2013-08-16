@@ -146,7 +146,7 @@
                 break;
 
             default:
-                NSLog(@"Audio Queue failed to enqueue buffer with status %li", status);
+                NSLog(@"Audio Queue failed to enqueue buffer with status %li", (long)status);
                 [self audioQueueStop];
 #if DEBUG
                 @throw [NSException exceptionWithName:@"Audio Queue failed"

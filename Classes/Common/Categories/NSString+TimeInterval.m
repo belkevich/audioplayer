@@ -14,10 +14,10 @@
 {
     if (timeInterval > 0.f)
     {
-        NSUInteger time = (NSUInteger)round(timeInterval);
-        NSUInteger hours = time / 3600;
-        NSUInteger minutes = (time % 3600) / 60;
-        NSUInteger seconds = time % 60;
+        unsigned int time = (unsigned int)round(timeInterval);
+        unsigned int hours = time / 3600;
+        unsigned int minutes = (time % 3600) / 60;
+        unsigned int seconds = time % 60;
         return hours > 0 ? [NSString stringWithFormat:@"%u:%.2u:%.2u", hours, minutes, seconds] :
                [NSString stringWithFormat:@"%.2u:%.2u", minutes, seconds];
     }

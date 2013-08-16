@@ -8,8 +8,8 @@
 
 #import "ABMainViewController.h"
 #import "ABAudioPlayer.h"
-#import "NSString+TimeInterval.h"
 #import "ABAudioMetadata.h"
+#import "NSString+TimeInterval.h"
 
 @interface ABMainViewController ()
 
@@ -39,13 +39,6 @@
 - (void)dealloc
 {
     [self.timer invalidate];
-}
-
-#pragma mark - appearance
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
 }
 
 #pragma mark - actions
