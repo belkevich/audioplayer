@@ -14,12 +14,14 @@
 
 @property (nonatomic, weak) NSObject <ABAudioPlayerDelegate> *delegate;
 @property (nonatomic, readonly) ABAudioPlayerStatus status;
+@property (nonatomic, readonly) NSString *source;
 @property (nonatomic, assign) float volume;
 @property (nonatomic, assign) float pan;
 @property (nonatomic, readonly) NSTimeInterval time;
 @property (nonatomic, readonly) NSTimeInterval duration;
 
 - (id)initWithAudioPlayerDelegate:(NSObject <ABAudioPlayerDelegate> *)delegate;
+- (void)playerPlaySource:(NSString *)path;
 - (void)playerStart;
 - (void)playerStop;
 - (void)playerPause;

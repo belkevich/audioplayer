@@ -35,6 +35,8 @@
 		FA5886441796893C004C6B9E /* ABAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5886421796893C004C6B9E /* ABAudioQueue.m */; };
 		FA58864B17968A15004C6B9E /* ABAudioFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FA58864A17968A15004C6B9E /* ABAudioFileReader.m */; };
 		FA58864C17968A15004C6B9E /* ABAudioFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FA58864A17968A15004C6B9E /* ABAudioFileReader.m */; };
+		FA6194BD17BE1E11007923D4 /* NSError+ABAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6194BC17BE1E11007923D4 /* NSError+ABAudioPlayer.m */; };
+		FA6194BE17BE1E11007923D4 /* NSError+ABAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6194BC17BE1E11007923D4 /* NSError+ABAudioPlayer.m */; };
 		FA6CBF3917B4E30D00F78964 /* ABAudioQueueBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6CBF3817B4E30D00F78964 /* ABAudioQueueBuilder.m */; };
 		FA6CBF3A17B4E30D00F78964 /* ABAudioQueueBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6CBF3817B4E30D00F78964 /* ABAudioQueueBuilder.m */; };
 		FAA58D9D179EC10E0087A4CE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */; };
@@ -99,6 +101,8 @@
 		FA588647179689B8004C6B9E /* ABAudioQueueDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABAudioQueueDataSource.h; sourceTree = "<group>"; };
 		FA58864917968A15004C6B9E /* ABAudioFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioFileReader.h; path = ../../Classes/Reader/ABAudioFileReader.h; sourceTree = "<group>"; };
 		FA58864A17968A15004C6B9E /* ABAudioFileReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioFileReader.m; path = ../../Classes/Reader/ABAudioFileReader.m; sourceTree = "<group>"; };
+		FA6194BB17BE1E11007923D4 /* NSError+ABAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+ABAudioPlayer.h"; path = "../../Classes/Common/Categories/NSError+ABAudioPlayer.h"; sourceTree = "<group>"; };
+		FA6194BC17BE1E11007923D4 /* NSError+ABAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSError+ABAudioPlayer.m"; path = "../../Classes/Common/Categories/NSError+ABAudioPlayer.m"; sourceTree = "<group>"; };
 		FA6CBF3717B4E30D00F78964 /* ABAudioQueueBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioQueueBuilder.h; path = ../../Classes/Queue/Builder/ABAudioQueueBuilder.h; sourceTree = "<group>"; };
 		FA6CBF3817B4E30D00F78964 /* ABAudioQueueBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioQueueBuilder.m; path = ../../Classes/Queue/Builder/ABAudioQueueBuilder.m; sourceTree = "<group>"; };
 		FA6CBF3C17B511CB00F78964 /* Trim.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Trim.h; path = ../../Classes/Common/Trim.h; sourceTree = "<group>"; };
@@ -324,9 +328,9 @@
 		FA6CBF3D17B512FD00F78964 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				FADA555517B91116000736C3 /* Categories */,
 				FA416C0D17BA58230089537F /* SafeBlock.h */,
 				FA6CBF3C17B511CB00F78964 /* Trim.h */,
-				FADA555517B91116000736C3 /* Categories */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -364,6 +368,8 @@
 				FADA555717B9114E000736C3 /* NSString+TimeInterval.m */,
 				FADA555117B91109000736C3 /* NSDictionary+UTF8Key.h */,
 				FADA555217B91109000736C3 /* NSDictionary+UTF8Key.m */,
+				FA6194BB17BE1E11007923D4 /* NSError+ABAudioPlayer.h */,
+				FA6194BC17BE1E11007923D4 /* NSError+ABAudioPlayer.m */,
 				FA416C0E17BA5CF20089537F /* NSError+ABAudioFileReader.h */,
 				FA416C0F17BA5CF20089537F /* NSError+ABAudioFileReader.m */,
 				FA416C1617BA67EB0089537F /* NSError+ABAudioReader.h */,
@@ -589,6 +595,7 @@
 				FA416C1817BA67EB0089537F /* NSError+ABAudioReader.m in Sources */,
 				FA112EF717BB66BE00061F92 /* NSError+Reason.m in Sources */,
 				FA112EFB17BB7A6000061F92 /* NSError+ABAudioQueue.m in Sources */,
+				FA6194BD17BE1E11007923D4 /* NSError+ABAudioPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +622,7 @@
 				FA416C1917BA67EB0089537F /* NSError+ABAudioReader.m in Sources */,
 				FA112EF817BB66BE00061F92 /* NSError+Reason.m in Sources */,
 				FA112EFC17BB7A6000061F92 /* NSError+ABAudioQueue.m in Sources */,
+				FA6194BE17BE1E11007923D4 /* NSError+ABAudioPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

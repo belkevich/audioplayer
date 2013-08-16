@@ -15,12 +15,14 @@
 #import "Trim.h"
 #import "NSError+ABAudioReader.h"
 #import "NSError+ABAudioQueue.h"
+#import "NSError+ABAudioPlayer.h"
 
 @interface ABAudioPlayer ()
 
 @property (nonatomic, strong) ABAudioQueue *audioQueue;
 @property (nonatomic, strong) ABAudioFileReader *audioFile;
 @property (nonatomic, assign) ABAudioPlayerStatus status;
+@property (nonatomic, strong) NSString *source;
 
 @end
 
@@ -43,46 +45,32 @@
         _volume = 0.5f;
         _pan = 0.f;
         self.audioQueue = [[ABAudioQueue alloc] initWithAudioQueueDataSource:self];
+        self.audioFile = [[ABAudioFileReader alloc] init];
     }
     return self;
 }
 
 #pragma mark - public
 
+- (void)playerPlaySource:(NSString *)path
+{
+    if (![self.source isEqualToString:path])
+    {
+        self.source = path;
+        [self playerStop];
+        if (path)
+        {
+            [self playerStart];
+        }
+    }
+}
+
 - (void)playerStart
 {
     if (self.status == ABAudioPlayerStatusStopped || self.status == ABAudioPlayerStatusError)
     {
-        __weak ABAudioPlayer *weakSelf = self;
-        self.audioFile = [[ABAudioFileReader alloc] init];
-        self.status = ABAudioPlayerStatusBuffering;
-        [self.audioFile audioReaderOpenPath:@"/Users/alex/Music/01.mp3" success:^
-        {
-            if ([weakSelf.audioQueue audioQueueSetupFormat:weakSelf.audioFile.audioReaderFormat])
-            {
-                [weakSelf.audioQueue audioQueueVolume:weakSelf.volume];
-                [weakSelf.audioQueue audioQueuePan:weakSelf.pan];
-#warning extract to another block (need to think about it)
-                if ([weakSelf.audioQueue audioQueuePlay])
-                {
-                    weakSelf.status = ABAudioPlayerStatusPlaying;
-                }
-                else
-                {
-                    [weakSelf playerFailWithError:[NSError errorAudioQueuePlay]];
-                }
-            }
-            else
-            {
-                [weakSelf playerFailWithError:[NSError errorAudioQueueSetup]];
-            }
-        }                           failure:^(NSError *error)
-        {
-            [weakSelf playerFailWithError:error];
-        }                  metadataReceived:^(ABAudioMetadata *metadata)
-        {
-            [weakSelf.delegate audioPlayer:weakSelf didRecieveMetadata:metadata];
-        }];
+        !self.source ? [self playerFailWithError:[NSError errorAudioPlayerSourceEmpty]] :
+        [self playerOpenAudioSource];
     }
     else if (self.status == ABAudioPlayerStatusPaused)
     {
@@ -174,6 +162,38 @@
 }
 
 #pragma mark - private
+
+- (void)playerOpenAudioSource
+{
+    __weak ABAudioPlayer *weakSelf = self;
+    self.status = ABAudioPlayerStatusBuffering;
+    [self.audioFile audioReaderOpenPath:self.source success:^
+    {
+        if ([weakSelf.audioQueue audioQueueSetupFormat:weakSelf.audioFile.audioReaderFormat])
+        {
+            [weakSelf.audioQueue audioQueueVolume:weakSelf.volume];
+            [weakSelf.audioQueue audioQueuePan:weakSelf.pan];
+            if ([weakSelf.audioQueue audioQueuePlay])
+            {
+                weakSelf.status = ABAudioPlayerStatusPlaying;
+            }
+            else
+            {
+                [weakSelf playerFailWithError:[NSError errorAudioQueuePlay]];
+            }
+        }
+        else
+        {
+            [weakSelf playerFailWithError:[NSError errorAudioQueueSetup]];
+        }
+    }                           failure:^(NSError *error)
+    {
+        [weakSelf playerFailWithError:error];
+    }                  metadataReceived:^(ABAudioMetadata *metadata)
+    {
+        [weakSelf.delegate audioPlayer:weakSelf didRecieveMetadata:metadata];
+    }];
+}
 
 - (void)playerFailWithError:(NSError *)error
 {

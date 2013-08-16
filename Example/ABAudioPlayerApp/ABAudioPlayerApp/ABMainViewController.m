@@ -27,6 +27,7 @@
     if (self)
     {
         player = [[ABAudioPlayer alloc] initWithAudioPlayerDelegate:self];
+        [player playerPlaySource:@"/Users/alex/Music/01.mp3"];
         __weak ABMainViewController *weakSelf = self;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.f target:weakSelf
                                                     selector:@selector(updatePlayedTime:)
