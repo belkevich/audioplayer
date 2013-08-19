@@ -191,7 +191,7 @@
         [weakSelf playerFailWithError:error];
     }                  metadataReceived:^(ABAudioMetadata *metadata)
     {
-        if ([weakSelf respondsToSelector:@selector(audioPlayer:didReceiveMetadata:)])
+        if ([weakSelf.delegate respondsToSelector:@selector(audioPlayer:didReceiveMetadata:)])
         {
             [weakSelf.delegate audioPlayer:weakSelf didReceiveMetadata:metadata];
         }
