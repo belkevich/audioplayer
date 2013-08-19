@@ -2,12 +2,11 @@ ABAudioPlayer
 =======
 
 ## About
-ABAudioPlayer is lightweight and extensible wrapper on `AudioToolbox.framework` for iOS and OS X. Project is still in develop.
+ABAudioPlayer is lightweight and extensible wrapper on `AudioToolbox.framework` for iOS and OS X. **Project is still in develop** but you can use master branch. It's stable.
 
 ---
 
 ## Using
-
 #### Player actions
 ###### Create player
 ```objective-c
@@ -46,7 +45,7 @@ ABAudioPlayer *player = [[ABAudioPlayer alloc] initWithAudioPlayerDelegate:self]
 
 #### Track player events
 Player delegate should implement required methods of `ABAudioPlayerDelegate` protocol
-###### Receive player status change
+###### Receive player status changes
 ```objective-c
 - (void)audioPlayer:(ABAudioPlayer *)audioPlayer didChangeStatus:(ABAudioPlayerStatus)status
 {
