@@ -3,6 +3,7 @@ ABAudioPlayer
 
 ## About
 ABAudioPlayer is lightweight and extensible wrapper on `AudioToolbox.framework` for iOS and OS X.
+
 **Project is still in develop** but you can use master branch. It's stable.
 
 ---
