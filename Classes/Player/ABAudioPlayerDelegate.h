@@ -24,6 +24,8 @@ typedef enum
 
 - (void)audioPlayer:(ABAudioPlayer *)audioPlayer didChangeStatus:(ABAudioPlayerStatus)status;
 - (void)audioPlayer:(ABAudioPlayer *)audioPlayer didFail:(NSError *)error;
-- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didRecieveMetadata:(ABAudioMetadata *)metadata;
+
+@optional
+- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didReceiveMetadata:(ABAudioMetadata *)metadata;
 
 @end

@@ -191,7 +191,10 @@
         [weakSelf playerFailWithError:error];
     }                  metadataReceived:^(ABAudioMetadata *metadata)
     {
-        [weakSelf.delegate audioPlayer:weakSelf didRecieveMetadata:metadata];
+        if ([weakSelf respondsToSelector:@selector(audioPlayer:didReceiveMetadata:)])
+        {
+            [weakSelf.delegate audioPlayer:weakSelf didReceiveMetadata:metadata];
+        }
     }];
 }
 

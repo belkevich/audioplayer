@@ -100,7 +100,7 @@
     
 }
 
-- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didRecieveMetadata:(ABAudioMetadata *)metadata
+- (void)audioPlayer:(ABAudioPlayer *)audioPlayer didReceiveMetadata:(ABAudioMetadata *)metadata
 {
     self.metadataText.string = [NSString stringWithFormat:@"%@\n%@\n(%@ / %@ - %@)\nGenre: %@\n"
                                                         "(%@)", metadata.title, metadata.artist,
