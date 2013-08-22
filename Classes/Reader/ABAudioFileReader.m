@@ -213,8 +213,11 @@ UInt32 const minBufferSize = 0x4000;
         status = AudioFileGetProperty(audioFile, kAudioFilePropertyID3Tag, &size, bytes);
         if (status == noErr)
         {
-            NSData *data = [NSData dataWithBytesNoCopy:bytes length:size freeWhenDone:YES];
-            return data;
+            return [NSData dataWithBytesNoCopy:bytes length:size freeWhenDone:YES];
+        }
+        else
+        {
+            free(bytes);
         }
     }
     return nil;
