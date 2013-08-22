@@ -25,7 +25,7 @@
 #endif
 
 - (id)initWithAudioFileMetadataDictionary:(NSDictionary *)dictionary;
-
 - (void)artworkWithData:(NSData *)data;
+- (void)id3TagsWithData:(NSData *)data;
 
 @end

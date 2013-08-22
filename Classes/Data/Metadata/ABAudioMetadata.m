@@ -25,6 +25,7 @@
 #else
 @property (nonatomic, strong) NSImage *artwork;
 #endif
+@property (nonatomic, strong) NSData *id3TagsData;
 
 @end
 
@@ -52,6 +53,11 @@
     NSImage *image = [[NSImage alloc] initWithData:data];
 #endif
     self.artwork = image;
+}
+
+- (void)id3TagsWithData:(NSData *)data
+{
+    self.id3TagsData = data;
 }
 
 #pragma mark - private

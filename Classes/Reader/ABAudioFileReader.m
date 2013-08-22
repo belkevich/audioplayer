@@ -197,16 +197,34 @@ UInt32 const minBufferSize = 0x4000;
             [metadata artworkWithData:(__bridge NSData *)artworkData];
             CFRelease(artworkData);
         }
+        [metadata id3TagsWithData:[self audioFileID3Data]];
         return metadata;
     }
     return metadata;
+}
+
+- (NSData *)audioFileID3Data
+{
+    UInt32 size = 0;
+    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyID3Tag, &size, NULL);
+    if (status == noErr && size > 0)
+    {
+        char *bytes = (char *)malloc(size);
+        status = AudioFileGetProperty(audioFile, kAudioFilePropertyID3Tag, &size, bytes);
+        if (status == noErr)
+        {
+            NSData *data = [NSData dataWithBytesNoCopy:bytes length:size freeWhenDone:YES];
+            return data;
+        }
+    }
+    return nil;
 }
 
 - (void *)audioFileProperty:(AudioFilePropertyID)property
 {
     if (audioFile)
     {
-        UInt32 size, writable;
+        UInt32 size = 0, writable = 0;
         OSStatus status = AudioFileGetPropertyInfo(audioFile, property, &size, &writable);
         if (status == noErr)
         {
