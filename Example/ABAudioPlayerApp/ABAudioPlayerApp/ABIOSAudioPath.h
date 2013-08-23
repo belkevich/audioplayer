@@ -6,5 +6,7 @@
 //  Copyright (c) 2013 okolodev. All rights reserved.
 //
 
+#if DEBUG
 #error set bundle path for audio file (just add file to project)
+#endif
 static NSString *const kIOSAudioPath = @"";
