@@ -27,6 +27,8 @@ typedef void (^ABAudioReaderMetadataReceivedBlock)(ABAudioMetadata *metadata);
 
 @protocol ABAudioReaderProtocol <NSObject>
 
++ (BOOL)audioReaderCanOpenPath:(NSString *)path;
+
 @property (nonatomic, readonly) ABAudioReaderStatus audioReaderStatus;
 @property (nonatomic, readonly) ABAudioFormat *audioReaderFormat;
 @property (nonatomic, readonly) NSTimeInterval audioReaderDuration;

@@ -10,7 +10,12 @@
 #import "ABAudioPlayerDelegate.h"
 #import "ABAudioQueueDataSource.h"
 
+@class ABAudioReaderBuilder;
+
 @interface ABAudioPlayer : NSObject <ABAudioQueueDataSource>
+{
+    ABAudioReaderBuilder *audioReaderBuilder;
+}
 
 @property (nonatomic, weak) NSObject <ABAudioPlayerDelegate> *delegate;
 @property (nonatomic, readonly) ABAudioPlayerStatus status;
@@ -20,7 +25,8 @@
 @property (nonatomic, readonly) NSTimeInterval time;
 @property (nonatomic, readonly) NSTimeInterval duration;
 
-- (id)initWithAudioPlayerDelegate:(NSObject <ABAudioPlayerDelegate> *)delegate;
+- (id)initAudioReaderClass:(Class)readerClass;
+- (id)initWithAudioReaderClassNames:(NSArray *)classNames;
 - (void)playerPlaySource:(NSString *)path;
 - (void)playerStart;
 - (void)playerStop;

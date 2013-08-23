@@ -10,9 +10,11 @@
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
 #import "ABAudioMetadata.h"
-#import "SafeBlock.h"
-#import "Trim.h"
+#import "ABExtensionsHelper.h"
+#import "ABSafeBlock.h"
+#import "ABTrim.h"
 #import "NSError+ABAudioFileReader.h"
+#import "NSString+URL.h"
 
 UInt32 const maxBufferSize = 0x50000;
 UInt32 const minBufferSize = 0x4000;
@@ -49,6 +51,17 @@ UInt32 const minBufferSize = 0x4000;
 
 #pragma mark - audio reader protocol implementation
 
++ (BOOL)audioReaderCanOpenPath:(NSString *)path
+{
+    if (path.lastPathComponent)
+    {
+        NSArray *extensions = [ABExtensionsHelper nativeAudioExtensions];
+        NSString *extension = path.pathExtension.lowercaseString;
+        return ([extensions containsObject:extension] && !path.isURLString);
+    }
+    return NO;
+}
+
 - (void)audioReaderOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
                     failure:(ABAudioReaderOpenFailureBlock)failureBlock
            metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock
@@ -60,16 +73,16 @@ UInt32 const minBufferSize = 0x4000;
         [self audioFileGetMagicCookie];
         [self audioFileCalculateBufferSize];
         [self audioFileCalculateDuration];
-        SAFE_BLOCK(successBlock);
+        ABSAFE_BLOCK(successBlock);
         ABAudioMetadata *metadata = [self audioFileMetadata];
         if (metadata)
         {
-            SAFE_BLOCK(metadataReceivedBlock, metadata);
+            ABSAFE_BLOCK(metadataReceivedBlock, metadata);
         }
     }
     else
     {
-        SAFE_BLOCK(failureBlock, [NSError errorAudioFileOpenPath:path]);
+        ABSAFE_BLOCK(failureBlock, [NSError errorAudioFileOpenPath:path]);
     }
 }
 
@@ -162,7 +175,7 @@ UInt32 const minBufferSize = 0x4000;
     {
         Float64 packetsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
         UInt32 bufferSize = (UInt32)(packetsForTime * maxPacketSize);
-        self.audioReaderFormat.bufferSize = TRIM(bufferSize, minBufferSize, maxBufferSize);
+        self.audioReaderFormat.bufferSize = ABTRIM(bufferSize, minBufferSize, maxBufferSize);
     }
     else
     {

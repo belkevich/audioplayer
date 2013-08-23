@@ -9,12 +9,21 @@
 #import "NSError+ABAudioPlayer.h"
 #import "NSError+Reason.h"
 
+NSString * const kABAudioPlayerErrorDomain = @"ABAudioPlayer";
+
 @implementation NSError (ABAudioPlayer)
 
 + (NSError *)errorAudioPlayerSourceEmpty
 {
-    return [NSError errorWithDomain:@"ABAudioPlayer" code:1300
+    return [NSError errorWithDomain:kABAudioPlayerErrorDomain code:1300
                              reason:@"Audio player source is empty"];
+}
+
++ (NSError *)errorAudioPlayerNoAudioReaderForPath:(NSString *)path
+{
+    NSString *reason = [NSString stringWithFormat:@"Audio player doesn't have audio reader for "
+    "path:\n%@", path];
+    return [NSError errorWithDomain:kABAudioPlayerErrorDomain code:1301 reason:reason];
 }
 
 @end

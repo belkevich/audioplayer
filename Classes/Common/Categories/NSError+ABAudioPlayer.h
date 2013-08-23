@@ -11,5 +11,6 @@
 @interface NSError (ABAudioPlayer)
 
 + (NSError *)errorAudioPlayerSourceEmpty;
++ (NSError *)errorAudioPlayerNoAudioReaderForPath:(NSString *)path;
 
 @end

@@ -8,19 +8,20 @@
 
 #import "ABAudioPlayer.h"
 #import "ABAudioQueue.h"
+#import "ABAudioReaderBuilder.h"
 #import "ABAudioFileReader.h"
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
 #import "ABAudioMetadata.h"
-#import "Trim.h"
+#import "ABTrim.h"
 #import "NSError+ABAudioReader.h"
 #import "NSError+ABAudioQueue.h"
 #import "NSError+ABAudioPlayer.h"
 
 @interface ABAudioPlayer ()
 
+@property (nonatomic, strong) NSObject <ABAudioReaderProtocol> *audioReader;
 @property (nonatomic, strong) ABAudioQueue *audioQueue;
-@property (nonatomic, strong) ABAudioFileReader *audioFile;
 @property (nonatomic, assign) ABAudioPlayerStatus status;
 @property (nonatomic, strong) NSString *source;
 
@@ -30,22 +31,25 @@
 
 #pragma mark - life cycle
 
-- (id)initWithAudioPlayerDelegate:(NSObject <ABAudioPlayerDelegate> *)delegate
+- (id)init
 {
-    self = [self init];
-    self.delegate = delegate;
-    return self;
+    return [self initAudioReaderClass:[ABAudioFileReader class]];
 }
 
-- (id)init
+- (id)initAudioReaderClass:(Class)readerClass
+{
+    return [self initWithAudioReaderClassNames:@[NSStringFromClass(readerClass)]];
+}
+
+- (id)initWithAudioReaderClassNames:(NSArray *)classNames
 {
     self = [super init];
     if (self)
     {
         _volume = 0.5f;
         _pan = 0.f;
+        audioReaderBuilder = [[ABAudioReaderBuilder alloc] initWithReaderClassNames:classNames];
         self.audioQueue = [[ABAudioQueue alloc] initWithAudioQueueDataSource:self];
-        self.audioFile = [[ABAudioFileReader alloc] init];
     }
     return self;
 }
@@ -69,8 +73,23 @@
 {
     if (self.status == ABAudioPlayerStatusStopped || self.status == ABAudioPlayerStatusError)
     {
-        !self.source ? [self playerFailWithError:[NSError errorAudioPlayerSourceEmpty]] :
-        [self playerOpenAudioSource];
+        if (!self.source)
+        {
+            [self playerFailWithError:[NSError errorAudioPlayerSourceEmpty]];
+        }
+        else
+        {
+            self.audioReader = [audioReaderBuilder audioReaderForSourcePath:self.source];
+            if (!self.audioReader)
+            {
+                NSError *error = [NSError errorAudioPlayerNoAudioReaderForPath:self.source];
+                [self playerFailWithError:error];
+            }
+            else
+            {
+                [self playerOpenAudioSource];
+            }
+        }
     }
     else if (self.status == ABAudioPlayerStatusPaused)
     {
@@ -82,7 +101,7 @@
 - (void)playerStop
 {
     [self.audioQueue audioQueueStop];
-    [self.audioFile audioReaderClose];
+    [self.audioReader audioReaderClose];
     self.status = ABAudioPlayerStatusStopped;
 }
 
@@ -108,13 +127,13 @@
 
 - (void)setVolume:(float)volume
 {
-    _volume = TRIM(volume, 0.f, 1.f);
+    _volume = ABTRIM(volume, 0.f, 1.f);
     [self.audioQueue audioQueueVolume:_volume];
 }
 
 - (void)setPan:(float)pan
 {
-    _pan = TRIM(pan, -1.f, 1.f);
+    _pan = ABTRIM(pan, -1.f, 1.f);
     [self.audioQueue audioQueuePan:_pan];
 }
 
@@ -125,20 +144,20 @@
 
 - (NSTimeInterval)duration
 {
-    return [self.audioFile audioReaderDuration];
+    return [self.audioReader audioReaderDuration];
 }
 
 #pragma mark - audio queue data source implementation
 
 - (ABAudioBuffer *)audioQueueCurrentBufferThreadSafely
 {
-    ABAudioBuffer *buffer = [self.audioFile audioReaderCurrentBufferThreadSafely];
+    ABAudioBuffer *buffer = [self.audioReader audioReaderCurrentBufferThreadSafely];
     if (!buffer)
     {
         __weak ABAudioPlayer *weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^
         {
-            switch (weakSelf.audioFile.audioReaderStatus)
+            switch (weakSelf.audioReader.audioReaderStatus)
             {
                 case ABAudioReaderStatusEmpty:
                     weakSelf.status = ABAudioPlayerStatusBuffering;
@@ -167,9 +186,9 @@
 {
     __weak ABAudioPlayer *weakSelf = self;
     self.status = ABAudioPlayerStatusBuffering;
-    [self.audioFile audioReaderOpenPath:self.source success:^
+    [self.audioReader audioReaderOpenPath:self.source success:^
     {
-        if ([weakSelf.audioQueue audioQueueSetupFormat:weakSelf.audioFile.audioReaderFormat])
+        if ([weakSelf.audioQueue audioQueueSetupFormat:weakSelf.audioReader.audioReaderFormat])
         {
             [weakSelf.audioQueue audioQueueVolume:weakSelf.volume];
             [weakSelf.audioQueue audioQueuePan:weakSelf.pan];
