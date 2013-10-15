@@ -22,9 +22,9 @@
 
 #pragma mark - main routine
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithCoder:aDecoder];
     if (self)
     {
         player = [[ABAudioPlayer alloc] init];
@@ -48,7 +48,7 @@
 {
     if (!player.source)
     {
-        NSString *path = kIOSAudioPath;//[[NSBundle mainBundle] pathForResource:kIOSAudioPath ofType:nil];
+        NSString *path = [[NSBundle mainBundle] pathForResource:kIOSAudioPath ofType:nil];
         NSLog(@"Audio file bundle path:\n%@", path);
         [player playerPlaySource:kIOSAudioPath];
     }
