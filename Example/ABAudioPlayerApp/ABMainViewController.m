@@ -48,9 +48,9 @@
 {
     if (!player.source)
     {
-        NSString *path = [[NSBundle mainBundle] pathForResource:kIOSAudioPath ofType:nil];
+        NSString *path = kIOSAudioPath;//[[NSBundle mainBundle] pathForResource:kIOSAudioPath ofType:nil];
         NSLog(@"Audio file bundle path:\n%@", path);
-        [player playerPlaySource:path];
+        [player playerPlaySource:kIOSAudioPath];
     }
     else
     {

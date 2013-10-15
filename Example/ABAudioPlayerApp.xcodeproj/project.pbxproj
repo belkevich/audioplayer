@@ -17,7 +17,6 @@
 		FA05995C178F040100374DD5 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA05995B178F040100374DD5 /* Default@2x.png */; };
 		FA05995E178F040100374DD5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA05995D178F040100374DD5 /* Default-568h@2x.png */; };
 		FA059969178F04C500374DD5 /* ABMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA059967178F04C500374DD5 /* ABMainViewController.m */; };
-		FA05996A178F04C500374DD5 /* ABMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA059968178F04C500374DD5 /* ABMainViewController.xib */; };
 		FA417DF117C7819B0083F737 /* NSDictionary+UTF8Key.m in Sources */ = {isa = PBXBuildFile; fileRef = FA417DBF17C7819B0083F737 /* NSDictionary+UTF8Key.m */; };
 		FA417DF217C7819B0083F737 /* NSDictionary+UTF8Key.m in Sources */ = {isa = PBXBuildFile; fileRef = FA417DBF17C7819B0083F737 /* NSDictionary+UTF8Key.m */; };
 		FA417DF317C7819B0083F737 /* NSError+ABAudioFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FA417DC117C7819B0083F737 /* NSError+ABAudioFileReader.m */; };
@@ -58,6 +57,8 @@
 		FA6194C217BE32F3007923D4 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6194C117BE32F3007923D4 /* AudioToolbox.framework */; };
 		FAA58D9D179EC10E0087A4CE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */; };
 		FAA58D9F179EC1480087A4CE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA58D9E179EC1480087A4CE /* AVFoundation.framework */; };
+		FAF50D89180D359400DAE962 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAF50D88180D359400DAE962 /* Images.xcassets */; };
+		FAF50D8B180D35B400DAE962 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAF50D8A180D35B400DAE962 /* Storyboard.storyboard */; };
 		FAFAE1E1178FF7A5009B48E3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */; };
 		FAFAE1EB178FF7A5009B48E3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAFAE1E9178FF7A5009B48E3 /* InfoPlist.strings */; };
 		FAFAE1ED178FF7A5009B48E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAE1EC178FF7A5009B48E3 /* main.m */; };
@@ -88,7 +89,6 @@
 		FA05995D178F040100374DD5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		FA059966178F04C500374DD5 /* ABMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABMainViewController.h; sourceTree = "<group>"; };
 		FA059967178F04C500374DD5 /* ABMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABMainViewController.m; sourceTree = "<group>"; };
-		FA059968178F04C500374DD5 /* ABMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ABMainViewController.xib; sourceTree = "<group>"; };
 		FA417DBB17C7819B0083F737 /* ABSafeBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABSafeBlock.h; sourceTree = "<group>"; };
 		FA417DBC17C7819B0083F737 /* ABTrim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABTrim.h; sourceTree = "<group>"; };
 		FA417DBE17C7819B0083F737 /* NSDictionary+UTF8Key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+UTF8Key.h"; sourceTree = "<group>"; };
@@ -136,6 +136,8 @@
 		FAA0237517BE67E400C33346 /* ABIOSAudioPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABIOSAudioPath.h; sourceTree = "<group>"; };
 		FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FAA58D9E179EC1480087A4CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FAF50D88180D359400DAE962 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		FAF50D8A180D35B400DAE962 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		FAFAE1DF178FF7A5009B48E3 /* ABAudioPlayerMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABAudioPlayerMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		FAFAE1E3178FF7A5009B48E3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -229,6 +231,7 @@
 				FAA0237617BE67EF00C33346 /* iOS Audio Path */,
 				FA059965178F048200374DD5 /* Controllers */,
 				FA059964178F046700374DD5 /* App Delegate */,
+				FAF50D88180D359400DAE962 /* Images.xcassets */,
 				FA05994E178F040100374DD5 /* Supporting Files */,
 			);
 			path = ABAudioPlayerApp;
@@ -260,9 +263,9 @@
 		FA059965178F048200374DD5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				FAF50D8A180D35B400DAE962 /* Storyboard.storyboard */,
 				FA059966178F04C500374DD5 /* ABMainViewController.h */,
 				FA059967178F04C500374DD5 /* ABMainViewController.m */,
-				FA059968178F04C500374DD5 /* ABMainViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -625,8 +628,9 @@
 				FA059952178F040100374DD5 /* InfoPlist.strings in Resources */,
 				FA05995A178F040100374DD5 /* Default.png in Resources */,
 				FA05995C178F040100374DD5 /* Default@2x.png in Resources */,
+				FAF50D89180D359400DAE962 /* Images.xcassets in Resources */,
 				FA05995E178F040100374DD5 /* Default-568h@2x.png in Resources */,
-				FA05996A178F04C500374DD5 /* ABMainViewController.xib in Resources */,
+				FAF50D8B180D35B400DAE962 /* Storyboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -801,10 +805,12 @@
 		FA059962178F040100374DD5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ABAudioPlayerApp/ABAudioPlayerApp-Prefix.pch";
 				INFOPLIST_FILE = "ABAudioPlayerApp/ABAudioPlayerApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -813,10 +819,12 @@
 		FA059963178F040100374DD5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ABAudioPlayerApp/ABAudioPlayerApp-Prefix.pch";
 				INFOPLIST_FILE = "ABAudioPlayerApp/ABAudioPlayerApp-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
