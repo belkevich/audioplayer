@@ -10,15 +10,18 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 @interface ABAudioBuffer : NSObject
+{
+    UInt32 expectedDataSize;
+    UInt32 expectedPacketsDescriptionCount;
+}
 
 @property (nonatomic, readonly) void *audioData;
 @property (nonatomic, readonly) AudioStreamPacketDescription *packetsDescription;
-@property (nonatomic, readonly) UInt32 actualDataSize;
-@property (nonatomic, readonly) UInt32 actualPacketCount;
-@property (nonatomic, readonly) UInt32 actualPacketsSize;
+@property (nonatomic, assign) UInt32 actualDataSize;
+@property (nonatomic, assign) UInt32 actualPacketsDescriptionCount;
 
-- (void)setExpectedDataSize:(UInt32)size packetCount:(UInt32)count;
-- (void)setActualDataSize:(UInt32)size packetCount:(UInt32)count;
+- (void)setExpectedDataSize:(UInt32)size;
+- (void)setExpectedPacketsDescriptionCount:(UInt32)count;
 - (void)copyAudioDataToBuffer:(AudioQueueBufferRef)buffer;
 
 @end

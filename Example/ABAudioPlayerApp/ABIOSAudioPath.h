@@ -7,6 +7,6 @@
 //
 
 #if DEBUG
-#error set bundle path for audio file (just add file to project)
+//#error set bundle path for audio file (just add file to project)
 #endif
-static NSString *const kIOSAudioPath = @"";
+static NSString *const kIOSAudioPath = @"/Users/alex/Projects/iOS/audioplayer/01.mp3";

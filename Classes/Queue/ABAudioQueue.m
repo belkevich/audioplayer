@@ -136,7 +136,7 @@
     if (currentBuffer && buffer->mAudioDataByteSize > 0)
     {
         OSStatus status = AudioQueueEnqueueBuffer(queue, buffer,
-                                                  currentBuffer.actualPacketCount,
+                                                  currentBuffer.actualPacketsDescriptionCount,
                                                   currentBuffer.packetsDescription);
         switch (status)
         {

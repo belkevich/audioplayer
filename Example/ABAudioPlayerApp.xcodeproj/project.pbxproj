@@ -59,6 +59,8 @@
 		FAA58D9F179EC1480087A4CE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA58D9E179EC1480087A4CE /* AVFoundation.framework */; };
 		FAF50D89180D359400DAE962 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAF50D88180D359400DAE962 /* Images.xcassets */; };
 		FAF50D8B180D35B400DAE962 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAF50D8A180D35B400DAE962 /* Storyboard.storyboard */; };
+		FAF50D91180D519600DAE962 /* ABSeekableFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF50D90180D519600DAE962 /* ABSeekableFileReader.m */; };
+		FAF50D92180D519600DAE962 /* ABSeekableFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF50D90180D519600DAE962 /* ABSeekableFileReader.m */; };
 		FAFAE1E1178FF7A5009B48E3 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */; };
 		FAFAE1EB178FF7A5009B48E3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAFAE1E9178FF7A5009B48E3 /* InfoPlist.strings */; };
 		FAFAE1ED178FF7A5009B48E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FAFAE1EC178FF7A5009B48E3 /* main.m */; };
@@ -132,12 +134,15 @@
 		FA417E1517C782160083F737 /* ABAudioQueueDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABAudioQueueDataSource.h; sourceTree = "<group>"; };
 		FA6194BF17BE32EB007923D4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		FA6194C117BE32F3007923D4 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
+		FA8D715F180DDD2300CFB487 /* ABSafeMalloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABSafeMalloc.h; sourceTree = "<group>"; };
 		FAA0237317BE673900C33346 /* ABMacAudioPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABMacAudioPath.h; sourceTree = "<group>"; };
 		FAA0237517BE67E400C33346 /* ABIOSAudioPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABIOSAudioPath.h; sourceTree = "<group>"; };
 		FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FAA58D9E179EC1480087A4CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FAF50D88180D359400DAE962 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		FAF50D8A180D35B400DAE962 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
+		FAF50D8F180D519600DAE962 /* ABSeekableFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABSeekableFileReader.h; sourceTree = "<group>"; };
+		FAF50D90180D519600DAE962 /* ABSeekableFileReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABSeekableFileReader.m; sourceTree = "<group>"; };
 		FAFAE1DF178FF7A5009B48E3 /* ABAudioPlayerMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABAudioPlayerMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		FAFAE1E3178FF7A5009B48E3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -288,6 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				FA417DBB17C7819B0083F737 /* ABSafeBlock.h */,
+				FA8D715F180DDD2300CFB487 /* ABSafeMalloc.h */,
 				FA417DBC17C7819B0083F737 /* ABTrim.h */,
 				FA417DBD17C7819B0083F737 /* Categories */,
 				FA417DCE17C7819B0083F737 /* Helpers */,
@@ -435,6 +441,8 @@
 			children = (
 				FA417DEF17C7819B0083F737 /* ABAudioFileReader.h */,
 				FA417DF017C7819B0083F737 /* ABAudioFileReader.m */,
+				FAF50D8F180D519600DAE962 /* ABSeekableFileReader.h */,
+				FAF50D90180D519600DAE962 /* ABSeekableFileReader.m */,
 			);
 			path = File;
 			sourceTree = "<group>";
@@ -654,6 +662,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA059954178F040100374DD5 /* main.m in Sources */,
+				FAF50D91180D519600DAE962 /* ABSeekableFileReader.m in Sources */,
 				FA059958178F040100374DD5 /* ABAppDelegate.m in Sources */,
 				FA059969178F04C500374DD5 /* ABMainViewController.m in Sources */,
 				FA417DF117C7819B0083F737 /* NSDictionary+UTF8Key.m in Sources */,
@@ -701,6 +710,7 @@
 				FA417E0817C7819B0083F737 /* ABAudioMetadata.m in Sources */,
 				FA417E0A17C7819B0083F737 /* ABAudioPlayer.m in Sources */,
 				FA417E0C17C7819B0083F737 /* ABAudioQueue.m in Sources */,
+				FAF50D92180D519600DAE962 /* ABSeekableFileReader.m in Sources */,
 				FA417E0E17C7819B0083F737 /* ABAudioQueueBuilder.m in Sources */,
 				FA417E1017C7819B0083F737 /* ABAudioTimeHelper.m in Sources */,
 				FA417E1217C7819B0083F737 /* ABAudioReaderBuilder.m in Sources */,

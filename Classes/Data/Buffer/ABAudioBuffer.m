@@ -13,10 +13,6 @@
 
 @property (nonatomic, assign) void *audioData;
 @property (nonatomic, assign) AudioStreamPacketDescription *packetsDescription;
-@property (nonatomic, assign) UInt32 actualDataSize;
-@property (nonatomic, assign) UInt32 actualPacketCount;
-@property (nonatomic, assign) UInt32 expectedDataSize;
-@property (nonatomic, assign) UInt32 expectedPacketCount;
 
 @end
 
@@ -31,8 +27,6 @@
     {
         self.audioData = NULL;
         self.packetsDescription = NULL;
-        self.expectedDataSize = 0;
-        self.expectedPacketCount = 0;
     }
     return self;
 }
@@ -45,26 +39,24 @@
 
 #pragma mark - public
 
-- (void)setExpectedDataSize:(UInt32)size packetCount:(UInt32)count
+- (void)setExpectedDataSize:(UInt32)size
 {
-    if (self.expectedDataSize != size)
+    if (expectedDataSize != size)
     {
         [self cleanAudioData];
         self.audioData = ABSAFE_MALLOC(size);
-        self.expectedDataSize = size;
-    }
-    if (self.expectedPacketCount != count)
-    {
-        [self cleanAudioPacketsDescription];
-        self.packetsDescription = ABSAFE_MALLOC(count * sizeof(AudioStreamPacketDescription));
-        self.expectedPacketCount = count;
+        expectedDataSize = size;
     }
 }
 
-- (void)setActualDataSize:(UInt32)size packetCount:(UInt32)count
+- (void)setExpectedPacketsDescriptionCount:(UInt32)count
 {
-    self.actualDataSize = size;
-    self.actualPacketCount = count;
+    if (expectedPacketsDescriptionCount != count)
+    {
+        [self cleanAudioPacketsDescription];
+        self.packetsDescription = ABSAFE_MALLOC(count * sizeof(AudioStreamPacketDescription));
+        expectedPacketsDescriptionCount = count;
+    }
 }
 
 - (void)copyAudioDataToBuffer:(AudioQueueBufferRef)buffer
@@ -76,13 +68,6 @@
     }
 }
 
-#pragma mark - properties
-
-- (UInt32)actualPacketsSize
-{
-    return self.actualPacketCount * sizeof(AudioStreamPacketDescription);
-}
-
 #pragma mark - private
 
 - (void)cleanAudioData
@@ -92,7 +77,7 @@
         free(self.audioData);
         self.audioData = NULL;
     }
-    self.expectedDataSize = 0;
+    expectedDataSize = 0;
     self.actualDataSize = 0;
 }
 
@@ -103,8 +88,8 @@
         free(self.packetsDescription);
         self.packetsDescription = NULL;
     }
-    self.expectedPacketCount = 0;
-    self.actualPacketCount = 0;
+    expectedPacketsDescriptionCount = 0;
+    self.actualPacketsDescriptionCount = 0;
 }
 
 @end
