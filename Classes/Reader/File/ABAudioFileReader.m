@@ -16,8 +16,8 @@
 #import "NSError+ABAudioFileReader.h"
 #import "NSString+URL.h"
 
-UInt32 const maxBufferSize = 0x50000;
-UInt32 const minBufferSize = 0x4000;
+UInt32 const audioFileMaxBuffer = 0x50000;
+UInt32 const audioFileMinBuffer = 0x4000;
 
 @interface ABAudioFileReader ()
 
@@ -175,11 +175,11 @@ UInt32 const minBufferSize = 0x4000;
     {
         Float64 packetsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
         UInt32 bufferSize = (UInt32)(packetsForTime * maxPacketSize);
-        self.audioReaderFormat.bufferSize = ABTRIM(bufferSize, minBufferSize, maxBufferSize);
+        self.audioReaderFormat.bufferSize = ABTRIM(bufferSize, audioFileMinBuffer, audioFileMaxBuffer);
     }
     else
     {
-        self.audioReaderFormat.bufferSize = MAX(maxBufferSize, maxPacketSize);
+        self.audioReaderFormat.bufferSize = MAX(audioFileMaxBuffer, maxPacketSize);
     }
     self.audioReaderFormat.packetsToRead = self.audioReaderFormat.bufferSize / maxPacketSize;
 }

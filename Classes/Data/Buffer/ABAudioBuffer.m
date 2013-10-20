@@ -7,6 +7,7 @@
 //
 
 #import "ABAudioBuffer.h"
+#import "ABSafeMalloc.h"
 
 @interface ABAudioBuffer ()
 
@@ -49,13 +50,13 @@
     if (self.expectedDataSize != size)
     {
         [self cleanAudioData];
-        self.audioData = malloc(size);
+        self.audioData = ABSAFE_MALLOC(size);
         self.expectedDataSize = size;
     }
     if (self.expectedPacketCount != count)
     {
         [self cleanAudioPacketsDescription];
-        self.packetsDescription = malloc(count * sizeof(AudioStreamPacketDescription));
+        self.packetsDescription = ABSAFE_MALLOC(count * sizeof(AudioStreamPacketDescription));
         self.expectedPacketCount = count;
     }
 }

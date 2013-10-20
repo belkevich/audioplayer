@@ -17,6 +17,7 @@
 #import "NSError+ABAudioReader.h"
 #import "NSError+ABAudioQueue.h"
 #import "NSError+ABAudioPlayer.h"
+#import "ABSeekableFileReader.h"
 
 @interface ABAudioPlayer ()
 
@@ -33,10 +34,10 @@
 
 - (id)init
 {
-    return [self initAudioReaderClass:[ABAudioFileReader class]];
+    return [self initWithAudioReaderClass:[ABSeekableFileReader class]];
 }
 
-- (id)initAudioReaderClass:(Class)readerClass
+- (id)initWithAudioReaderClass:(Class)readerClass
 {
     return [self initWithAudioReaderClassNames:@[NSStringFromClass(readerClass)]];
 }
