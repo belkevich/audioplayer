@@ -13,10 +13,8 @@
 #import "ABAudioTimeHelper.h"
 
 @interface ABAudioQueue ()
-
 @property (nonatomic, strong) ABAudioFormat *audioFormat;
 @property (nonatomic, strong) ABAudioTimeHelper *audioTime;
-
 @end
 
 
@@ -50,7 +48,7 @@
                                                 owner:self];
     if (queue && [self audioQueueAllocateBuffer])
     {
-        AudioStreamBasicDescription *format = self.audioFormat.dataFormat;
+        AudioStreamBasicDescription *format = self.audioFormat.format;
         self.audioTime = [[ABAudioTimeHelper alloc] initWithAudioQueue:queue format:format];
         return YES;
     }

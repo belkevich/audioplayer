@@ -15,7 +15,7 @@
     UInt32 expectedPacketsDescriptionCount;
 }
 
-@property (nonatomic, readonly) void *audioData;
+@property (nonatomic, readonly) void *data;
 @property (nonatomic, readonly) AudioStreamPacketDescription *packetsDescription;
 @property (nonatomic, assign) UInt32 actualDataSize;
 @property (nonatomic, assign) UInt32 actualPacketsDescriptionCount;

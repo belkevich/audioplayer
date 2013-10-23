@@ -13,5 +13,4 @@
 #define ABSAFE_MALLOC(size) size > 0 ? malloc(size) : NULL;
 #endif
 
-
 #endif

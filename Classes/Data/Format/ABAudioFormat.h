@@ -9,15 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
+@class ABAudioMagicCookie;
+
 @interface ABAudioFormat : NSObject
 
-@property (nonatomic, readonly) AudioStreamBasicDescription *dataFormat;
+@property (nonatomic, readonly) AudioStreamBasicDescription *format;
 @property (nonatomic, assign) UInt32 bufferSize;
 @property (nonatomic, assign) UInt32 packetsToRead;
-
-@property (nonatomic, readonly) void *magicCookie;
-@property (nonatomic, readonly) UInt32 magicCookieSize;
-
-- (void)createMagicCookieWithSize:(UInt32)size;
+@property (nonatomic, readonly) ABAudioMagicCookie *magicCookie;
 
 @end

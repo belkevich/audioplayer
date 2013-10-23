@@ -9,14 +9,12 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "ABAudioQueueBuilder.h"
 #import "ABAudioFormat.h"
+#import "ABAudioMagicCookie.h"
 
 @interface ABAudioQueueBuilder ()
-
 @property (nonatomic, strong) ABAudioFormat *format;
 @property (nonatomic, assign) AudioQueueRef queue;
-
 @end
-
 
 @implementation ABAudioQueueBuilder
 
@@ -54,7 +52,7 @@
     if (self.format)
     {
         AudioQueueRef queue = NULL;
-        OSStatus status = AudioQueueNewOutput(self.format.dataFormat, callback,
+        OSStatus status = AudioQueueNewOutput(self.format.format, callback,
                                               (__bridge void *)(owner), NULL, NULL, 0, &queue);
         if (status == noErr)
         {
@@ -67,10 +65,10 @@
 
 - (void)audioQueueSetupMagicCookies
 {
-    if (self.format.magicCookie)
+    if (self.format.magicCookie.isValid)
     {
-        AudioQueueSetProperty(self.queue, kAudioQueueProperty_MagicCookie, self.format.magicCookie,
-                              self.format.magicCookieSize);
+        AudioQueueSetProperty(self.queue, kAudioQueueProperty_MagicCookie,
+                              self.format.magicCookie.data, self.format.magicCookie.size);
     }
 }
 

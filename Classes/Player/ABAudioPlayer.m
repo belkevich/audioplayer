@@ -7,9 +7,11 @@
 //
 
 #import "ABAudioPlayer.h"
+#import "ABAudioQueueDataSource.h"
 #import "ABAudioQueue.h"
 #import "ABAudioReaderBuilder.h"
 #import "ABAudioFileReader.h"
+#import "ABSeekableFileReader.h"
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
 #import "ABAudioMetadata.h"
@@ -17,18 +19,18 @@
 #import "NSError+ABAudioReader.h"
 #import "NSError+ABAudioQueue.h"
 #import "NSError+ABAudioPlayer.h"
-#import "ABSeekableFileReader.h"
 
-@interface ABAudioPlayer ()
-
+@interface ABAudioPlayer () <ABAudioQueueDataSource>
 @property (nonatomic, strong) NSObject <ABAudioReaderProtocol> *audioReader;
 @property (nonatomic, strong) ABAudioQueue *audioQueue;
 @property (nonatomic, assign) ABAudioPlayerStatus status;
 @property (nonatomic, strong) NSString *source;
-
 @end
 
 @implementation ABAudioPlayer
+{
+    ABAudioReaderBuilder *audioReaderBuilder;
+}
 
 #pragma mark - life cycle
 

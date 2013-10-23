@@ -16,13 +16,6 @@
 #import "NSString+URL.h"
 #import "ABTrim.h"
 
-@interface ABSeekableFileReader ()
-
-@property (nonatomic, assign) ABAudioReaderStatus audioReaderStatus;
-
-@end
-
-
 @implementation ABSeekableFileReader
 
 @synthesize audioReaderStatus = _status, audioReaderFormat = _dataFormat;
@@ -36,7 +29,7 @@
     {
         audioFile = NULL;
         _dataFormat = [[ABAudioFormat alloc] init];
-        self.audioReaderStatus = ABAudioReaderStatusEmpty;
+        _status = ABAudioReaderStatusEmpty;
     }
     return self;
 }
@@ -90,7 +83,7 @@
         audioFile = NULL;
     }
     duration = 0.f;
-    self.audioReaderStatus = ABAudioReaderStatusEmpty;
+    _status = ABAudioReaderStatusEmpty;
     if (extAudioFile)
     {
         ExtAudioFileDispose(extAudioFile);
@@ -101,31 +94,31 @@
 - (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely
 {
     UInt32 readPackets = self.audioReaderFormat.packetsToRead;
-    UInt32 readFrames = self.audioReaderFormat.dataFormat->mFramesPerPacket * readPackets;
+    UInt32 readFrames = self.audioReaderFormat.format->mFramesPerPacket * readPackets;
     ABAudioBuffer *buffer = [[ABAudioBuffer alloc] init];
     [buffer setExpectedDataSize:self.audioReaderFormat.bufferSize];
     AudioBufferList bufferList;
     bufferList.mNumberBuffers = 1;
-    bufferList.mBuffers[0].mNumberChannels = self.audioReaderFormat.dataFormat->mChannelsPerFrame;
+    bufferList.mBuffers[0].mNumberChannels = self.audioReaderFormat.format->mChannelsPerFrame;
     bufferList.mBuffers[0].mDataByteSize = self.audioReaderFormat.bufferSize;
-    bufferList.mBuffers[0].mData = buffer.audioData;
+    bufferList.mBuffers[0].mData = buffer.data;
     OSStatus status = ExtAudioFileRead(extAudioFile, &readFrames, &bufferList);
     if (status == noErr)
     {
         if (readFrames > 0)
         {
             buffer.actualDataSize = bufferList.mBuffers[0].mDataByteSize;
-            self.audioReaderStatus = ABAudioReaderStatusOK;
+            _status = ABAudioReaderStatusOK;
             return buffer;
         }
         else
         {
-            self.audioReaderStatus = ABAudioReaderStatusEnd;
+            _status = ABAudioReaderStatusEnd;
         }
     }
     else
     {
-        self.audioReaderStatus = ABAudioReaderStatusError;
+        _status = ABAudioReaderStatusError;
     }
     return nil;
 }
@@ -155,7 +148,7 @@
 
 - (void)audioFileSetupDataFormat
 {
-    AudioStreamBasicDescription *audioFormat = self.audioReaderFormat.dataFormat;
+    AudioStreamBasicDescription *audioFormat = self.audioReaderFormat.format;
     UInt32 dataFormatSize = sizeof(AudioStreamBasicDescription);
     AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize, audioFormat);
     audioFormat->mFormatID = kAudioFormatLinearPCM;
@@ -175,7 +168,7 @@
     UInt32 propertySize = sizeof(maxPacketSize);
     ExtAudioFileGetProperty(extAudioFile, kExtAudioFileProperty_ClientMaxPacketSize,
                             &propertySize, &maxPacketSize);
-    AudioStreamBasicDescription *dataFormat = self.audioReaderFormat.dataFormat;
+    AudioStreamBasicDescription *dataFormat = self.audioReaderFormat.format;
     if (dataFormat->mFramesPerPacket != 0)
     {
         Float64 packetsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;

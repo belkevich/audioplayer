@@ -8,14 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "ABAudioPlayerDelegate.h"
-#import "ABAudioQueueDataSource.h"
 
-@class ABAudioReaderBuilder;
-
-@interface ABAudioPlayer : NSObject <ABAudioQueueDataSource>
-{
-    ABAudioReaderBuilder *audioReaderBuilder;
-}
+@interface ABAudioPlayer : NSObject
 
 @property (nonatomic, weak) NSObject <ABAudioPlayerDelegate> *delegate;
 @property (nonatomic, readonly) ABAudioPlayerStatus status;

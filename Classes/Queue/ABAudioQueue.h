@@ -22,7 +22,6 @@ static const UInt32 kAudioQueueBufferCount = 3;
 }
 
 - (id)initWithAudioQueueDataSource:(NSObject <ABAudioQueueDataSource> *)aDataSource;
-
 - (BOOL)audioQueueSetupFormat:(ABAudioFormat *)audioFormat;
 - (BOOL)audioQueuePlay;
 - (void)audioQueuePause;

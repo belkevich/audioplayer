@@ -9,13 +9,6 @@
 #import "ABAudioBuffer.h"
 #import "ABSafeMalloc.h"
 
-@interface ABAudioBuffer ()
-
-@property (nonatomic, assign) void *audioData;
-@property (nonatomic, assign) AudioStreamPacketDescription *packetsDescription;
-
-@end
-
 @implementation ABAudioBuffer
 
 #pragma mark - life cycle
@@ -25,8 +18,8 @@
     self = [super init];
     if (self)
     {
-        self.audioData = NULL;
-        self.packetsDescription = NULL;
+        _data = NULL;
+        _packetsDescription = NULL;
     }
     return self;
 }
@@ -44,7 +37,7 @@
     if (expectedDataSize != size)
     {
         [self cleanAudioData];
-        self.audioData = ABSAFE_MALLOC(size);
+        _data = ABSAFE_MALLOC(size);
         expectedDataSize = size;
     }
 }
@@ -54,16 +47,16 @@
     if (expectedPacketsDescriptionCount != count)
     {
         [self cleanAudioPacketsDescription];
-        self.packetsDescription = ABSAFE_MALLOC(count * sizeof(AudioStreamPacketDescription));
+        _packetsDescription = ABSAFE_MALLOC(count * sizeof(AudioStreamPacketDescription));
         expectedPacketsDescriptionCount = count;
     }
 }
 
 - (void)copyAudioDataToBuffer:(AudioQueueBufferRef)buffer
 {
-    if (self.audioData)
+    if (self.data && self.actualDataSize > 0)
     {
-        memcpy(buffer->mAudioData, self.audioData, self.actualDataSize);
+        memcpy(buffer->mAudioData, self.data, self.actualDataSize);
         buffer->mAudioDataByteSize = self.actualDataSize;
     }
 }
@@ -72,10 +65,10 @@
 
 - (void)cleanAudioData
 {
-    if (self.audioData)
+    if (_data)
     {
-        free(self.audioData);
-        self.audioData = NULL;
+        free(_data);
+        _data = NULL;
     }
     expectedDataSize = 0;
     self.actualDataSize = 0;
@@ -83,10 +76,10 @@
 
 - (void)cleanAudioPacketsDescription
 {
-    if (self.packetsDescription)
+    if (_packetsDescription)
     {
-        free(self.packetsDescription);
-        self.packetsDescription = NULL;
+        free(_packetsDescription);
+        _packetsDescription = NULL;
     }
     expectedPacketsDescriptionCount = 0;
     self.actualPacketsDescriptionCount = 0;

@@ -7,15 +7,7 @@
 //
 
 #import "ABAudioFormat.h"
-
-@interface ABAudioFormat ()
-
-@property (nonatomic, assign) AudioStreamBasicDescription *dataFormat;
-@property (nonatomic, assign) void *magicCookie;
-@property (nonatomic, assign) UInt32 magicCookieSize;
-
-@end
-
+#import "ABAudioMagicCookie.h"
 
 @implementation ABAudioFormat
 
@@ -26,39 +18,15 @@
     self = [super init];
     if (self)
     {
-        self.dataFormat = malloc(sizeof(AudioStreamBasicDescription));
-        self.magicCookie = NULL;
+        _format = malloc(sizeof(AudioStreamBasicDescription));
+        _magicCookie = [[ABAudioMagicCookie alloc] init];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    free(self.dataFormat);
-    [self cleanMagicCookie];
-}
-
-#pragma mark - public
-
-- (void)createMagicCookieWithSize:(UInt32)size
-{
-    [self cleanMagicCookie];
-    if (size > 0)
-    {
-        self.magicCookie = malloc(size);
-        self.magicCookieSize = size;
-    }
-}
-
-#pragma mark - private
-
-- (void)cleanMagicCookie
-{
-    if (self.magicCookie)
-    {
-        free(self.magicCookie);
-    }
-    self.magicCookieSize = 0;
+    free(_format);
 }
 
 @end
