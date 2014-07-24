@@ -7,7 +7,7 @@
 //
 
 #import "ABAudioMagicCookie.h"
-#import "ABSafeMalloc.h"
+#import "macros_extra.h"
 
 @implementation ABAudioMagicCookie
 
@@ -26,7 +26,7 @@
     {
         [self cleanMagicCookie];
         _size = size;
-        _data = ABSAFE_MALLOC(size);
+        _data = safe_malloc(size);
     }
 }
 

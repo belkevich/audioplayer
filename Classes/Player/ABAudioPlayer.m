@@ -15,10 +15,10 @@
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
 #import "ABAudioMetadata.h"
-#import "ABTrim.h"
 #import "NSError+ABAudioReader.h"
 #import "NSError+ABAudioQueue.h"
 #import "NSError+ABAudioPlayer.h"
+#import "macros_extra.h"
 
 @interface ABAudioPlayer () <ABAudioQueueDataSource>
 @property (nonatomic, strong) NSObject <ABAudioReaderProtocol> *audioReader;
@@ -130,13 +130,13 @@
 
 - (void)setVolume:(float)volume
 {
-    _volume = ABTRIM(volume, 0.f, 1.f);
+    _volume = range_value(volume, 0.f, 1.f);
     [self.audioQueue audioQueueVolume:_volume];
 }
 
 - (void)setPan:(float)pan
 {
-    _pan = ABTRIM(pan, -1.f, 1.f);
+    _pan = range_value(pan, -1.f, 1.f);
     [self.audioQueue audioQueuePan:_pan];
 }
 

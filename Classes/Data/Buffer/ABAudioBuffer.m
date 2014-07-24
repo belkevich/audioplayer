@@ -7,7 +7,7 @@
 //
 
 #import "ABAudioBuffer.h"
-#import "ABSafeMalloc.h"
+#import "macros_extra.h"
 
 @implementation ABAudioBuffer
 
@@ -37,7 +37,7 @@
     if (expectedDataSize != size)
     {
         [self cleanAudioData];
-        _data = ABSAFE_MALLOC(size);
+        _data = safe_malloc(size);
         expectedDataSize = size;
     }
 }
@@ -47,7 +47,7 @@
     if (expectedPacketsDescriptionCount != count)
     {
         [self cleanAudioPacketsDescription];
-        _packetsDescription = ABSAFE_MALLOC(count * sizeof(AudioStreamPacketDescription));
+        _packetsDescription = safe_malloc(count * sizeof(AudioStreamPacketDescription));
         expectedPacketsDescriptionCount = count;
     }
 }

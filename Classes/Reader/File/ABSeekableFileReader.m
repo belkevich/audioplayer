@@ -11,10 +11,9 @@
 #import "ABAudioFormat.h"
 #import "ABAudioMetadata.h"
 #import "ABExtensionsHelper.h"
-#import "ABSafeBlock.h"
 #import "NSError+ABAudioFileReader.h"
 #import "NSString+URL.h"
-#import "ABTrim.h"
+#import "macros_all.h"
 
 @implementation ABSeekableFileReader
 
@@ -62,16 +61,16 @@
         [self audioFileSetupDataFormat];
         [self audioFileCalculateBufferSize];
         [self audioFileCalculateDuration];
-        ABSAFE_BLOCK(successBlock);
+        safe_block(successBlock);
         ABAudioMetadata *metadata = [self audioFileMetadata];
         if (metadata)
         {
-            ABSAFE_BLOCK(metadataReceivedBlock, metadata);
+            safe_block(metadataReceivedBlock, metadata);
         }
     }
     else
     {
-        ABSAFE_BLOCK(failureBlock, [NSError errorAudioFileOpenPath:path]);
+        safe_block(failureBlock, [NSError errorAudioFileOpenPath:path]);
     }
 }
 
@@ -173,7 +172,7 @@
     {
         Float64 packetsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
         UInt32 bufferSize = (UInt32)(packetsForTime * maxPacketSize);
-        self.audioReaderFormat.bufferSize = ABTRIM(bufferSize, 0x4000, 0x50000);
+        self.audioReaderFormat.bufferSize = range_value(bufferSize, 0x4000, 0x50000);
     }
     else
     {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56C54E11F8B641089D1F9F3A /* libPods-ABAudioPlayerApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9860179816D54FF6AD5ACD5F /* libPods-ABAudioPlayerApp.a */; };
+		8A3B9BEA4C514597ACBB5192 /* libPods-ABAudioPlayerMac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C941DF259B6A417B8B6D4052 /* libPods-ABAudioPlayerMac.a */; };
 		FA059948178F040100374DD5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA059947178F040100374DD5 /* UIKit.framework */; };
 		FA05994A178F040100374DD5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA059949178F040100374DD5 /* Foundation.framework */; };
 		FA05994C178F040100374DD5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA05994B178F040100374DD5 /* CoreGraphics.framework */; };
@@ -78,6 +80,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A25045D40324D7EA40FFF16 /* Pods-ABAudioPlayerApp.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABAudioPlayerApp.xcconfig"; path = "Pods/Pods-ABAudioPlayerApp.xcconfig"; sourceTree = "<group>"; };
+		6E397F3BCA1E465689883FC9 /* Pods-ABAudioPlayerMac.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABAudioPlayerMac.xcconfig"; path = "Pods/Pods-ABAudioPlayerMac.xcconfig"; sourceTree = "<group>"; };
+		9860179816D54FF6AD5ACD5F /* libPods-ABAudioPlayerApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ABAudioPlayerApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C941DF259B6A417B8B6D4052 /* libPods-ABAudioPlayerMac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ABAudioPlayerMac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA059944178F040100374DD5 /* ABAudioPlayerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABAudioPlayerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA059947178F040100374DD5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FA059949178F040100374DD5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -95,8 +101,6 @@
 		FA059967178F04C500374DD5 /* ABMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABMainViewController.m; sourceTree = "<group>"; };
 		FA0DC7A91818577200048C0A /* ABAudioMagicCookie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ABAudioMagicCookie.h; path = MagicCookie/ABAudioMagicCookie.h; sourceTree = "<group>"; };
 		FA0DC7AA1818577200048C0A /* ABAudioMagicCookie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ABAudioMagicCookie.m; path = MagicCookie/ABAudioMagicCookie.m; sourceTree = "<group>"; };
-		FA417DBB17C7819B0083F737 /* ABSafeBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABSafeBlock.h; sourceTree = "<group>"; };
-		FA417DBC17C7819B0083F737 /* ABTrim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABTrim.h; sourceTree = "<group>"; };
 		FA417DBE17C7819B0083F737 /* NSDictionary+UTF8Key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+UTF8Key.h"; sourceTree = "<group>"; };
 		FA417DBF17C7819B0083F737 /* NSDictionary+UTF8Key.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+UTF8Key.m"; sourceTree = "<group>"; };
 		FA417DC017C7819B0083F737 /* NSError+ABAudioFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+ABAudioFileReader.h"; sourceTree = "<group>"; };
@@ -138,11 +142,12 @@
 		FA417E1517C782160083F737 /* ABAudioQueueDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABAudioQueueDataSource.h; sourceTree = "<group>"; };
 		FA6194BF17BE32EB007923D4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		FA6194C117BE32F3007923D4 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
-		FA8D715F180DDD2300CFB487 /* ABSafeMalloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABSafeMalloc.h; sourceTree = "<group>"; };
 		FAA0237317BE673900C33346 /* ABMacAudioPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABMacAudioPath.h; sourceTree = "<group>"; };
 		FAA0237517BE67E400C33346 /* ABIOSAudioPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABIOSAudioPath.h; sourceTree = "<group>"; };
 		FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FAA58D9E179EC1480087A4CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FAED2550197EDABF00F1C4E3 /* macros_extra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = macros_extra.h; path = ../../../blocks/macros_extra.h; sourceTree = "<group>"; };
+		FAED2551197EDB8300F1C4E3 /* macros_all.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = macros_all.h; path = ../../../blocks/macros_all.h; sourceTree = "<group>"; };
 		FAF50D88180D359400DAE962 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		FAF50D8A180D35B400DAE962 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		FAF50D8F180D519600DAE962 /* ABSeekableFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABSeekableFileReader.h; sourceTree = "<group>"; };
@@ -182,6 +187,7 @@
 				FA059948178F040100374DD5 /* UIKit.framework in Frameworks */,
 				FA05994A178F040100374DD5 /* Foundation.framework in Frameworks */,
 				FA05994C178F040100374DD5 /* CoreGraphics.framework in Frameworks */,
+				56C54E11F8B641089D1F9F3A /* libPods-ABAudioPlayerApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,6 +198,7 @@
 				FA6194C217BE32F3007923D4 /* AudioToolbox.framework in Frameworks */,
 				FA6194C017BE32EB007923D4 /* AVFoundation.framework in Frameworks */,
 				FAFAE1E1178FF7A5009B48E3 /* Cocoa.framework in Frameworks */,
+				8A3B9BEA4C514597ACBB5192 /* libPods-ABAudioPlayerMac.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +213,8 @@
 				FAFAE1E6178FF7A5009B48E3 /* ABAudioPlayerMac */,
 				FA059946178F040100374DD5 /* Frameworks */,
 				FA059945178F040100374DD5 /* Products */,
+				6A25045D40324D7EA40FFF16 /* Pods-ABAudioPlayerApp.xcconfig */,
+				6E397F3BCA1E465689883FC9 /* Pods-ABAudioPlayerMac.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -230,6 +239,8 @@
 				FA05994B178F040100374DD5 /* CoreGraphics.framework */,
 				FAFAE1E0178FF7A5009B48E3 /* Cocoa.framework */,
 				FAFAE1E2178FF7A5009B48E3 /* Other Frameworks */,
+				9860179816D54FF6AD5ACD5F /* libPods-ABAudioPlayerApp.a */,
+				C941DF259B6A417B8B6D4052 /* libPods-ABAudioPlayerMac.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -305,11 +316,10 @@
 		FA417DBA17C7819B0083F737 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				FA417DBB17C7819B0083F737 /* ABSafeBlock.h */,
-				FA8D715F180DDD2300CFB487 /* ABSafeMalloc.h */,
-				FA417DBC17C7819B0083F737 /* ABTrim.h */,
+				FAED2550197EDABF00F1C4E3 /* macros_extra.h */,
 				FA417DBD17C7819B0083F737 /* Categories */,
 				FA417DCE17C7819B0083F737 /* Helpers */,
+				FAED2551197EDB8300F1C4E3 /* macros_all.h */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -584,9 +594,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA059961178F040100374DD5 /* Build configuration list for PBXNativeTarget "ABAudioPlayerApp" */;
 			buildPhases = (
+				AA18738A2E034405A8F64F0E /* Check Pods Manifest.lock */,
 				FA059940178F040100374DD5 /* Sources */,
 				FA059941178F040100374DD5 /* Frameworks */,
 				FA059942178F040100374DD5 /* Resources */,
+				5FBD385AE2A347ABB20C8544 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -601,9 +613,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FAFAE1FA178FF7A5009B48E3 /* Build configuration list for PBXNativeTarget "ABAudioPlayerMac" */;
 			buildPhases = (
+				C61B963C8DEA4E1EB308E447 /* Check Pods Manifest.lock */,
 				FAFAE1DB178FF7A5009B48E3 /* Sources */,
 				FAFAE1DC178FF7A5009B48E3 /* Frameworks */,
 				FAFAE1DD178FF7A5009B48E3 /* Resources */,
+				9873DE6BAAB643DABE13F5D0 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -621,7 +635,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = AB;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = okolodev;
 			};
 			buildConfigurationList = FA05993F178F040100374DD5 /* Build configuration list for PBXProject "ABAudioPlayerApp" */;
@@ -634,6 +648,8 @@
 			mainGroup = FA05993B178F040100374DD5;
 			productRefGroup = FA059945178F040100374DD5 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+			);
 			projectRoot = "";
 			targets = (
 				FA059943178F040100374DD5 /* ABAudioPlayerApp */,
@@ -669,6 +685,69 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5FBD385AE2A347ABB20C8544 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-ABAudioPlayerApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9873DE6BAAB643DABE13F5D0 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-ABAudioPlayerMac-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AA18738A2E034405A8F64F0E /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C61B963C8DEA4E1EB308E447 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FA059940178F040100374DD5 /* Sources */ = {
@@ -830,6 +909,7 @@
 		};
 		FA059962178F040100374DD5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6A25045D40324D7EA40FFF16 /* Pods-ABAudioPlayerApp.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -844,6 +924,7 @@
 		};
 		FA059963178F040100374DD5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6A25045D40324D7EA40FFF16 /* Pods-ABAudioPlayerApp.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -858,8 +939,8 @@
 		};
 		FAFAE1F8178FF7A5009B48E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6E397F3BCA1E465689883FC9 /* Pods-ABAudioPlayerMac.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -879,8 +960,8 @@
 		};
 		FAFAE1F9178FF7A5009B48E3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6E397F3BCA1E465689883FC9 /* Pods-ABAudioPlayerMac.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (

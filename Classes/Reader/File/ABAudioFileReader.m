@@ -12,10 +12,9 @@
 #import "ABAudioMetadata.h"
 #import "ABAudioMagicCookie.h"
 #import "ABExtensionsHelper.h"
-#import "ABSafeBlock.h"
-#import "ABTrim.h"
 #import "NSError+ABAudioFileReader.h"
 #import "NSString+URL.h"
+#import "macros_extra.h"
 
 UInt32 const audioFileMaxBuffer = 0x50000;
 UInt32 const audioFileMinBuffer = 0x4000;
@@ -67,16 +66,16 @@ UInt32 const audioFileMinBuffer = 0x4000;
         [self audioFileGetMagicCookie];
         [self audioFileCalculateBufferSize];
         [self audioFileCalculateDuration];
-        ABSAFE_BLOCK(successBlock);
+        safe_block(successBlock);
         ABAudioMetadata *metadata = [self audioFileMetadata];
         if (metadata)
         {
-            ABSAFE_BLOCK(metadataReceivedBlock, metadata);
+            safe_block(metadataReceivedBlock, metadata);
         }
     }
     else
     {
-        ABSAFE_BLOCK(failureBlock, [NSError errorAudioFileOpenPath:path]);
+        safe_block(failureBlock, [NSError errorAudioFileOpenPath:path]);
     }
 }
 
@@ -171,7 +170,7 @@ UInt32 const audioFileMinBuffer = 0x4000;
     {
         Float64 packetsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
         UInt32 bufferSize = (UInt32)(packetsForTime * maxPacketSize);
-        self.audioReaderFormat.bufferSize = ABTRIM(bufferSize, audioFileMinBuffer, audioFileMaxBuffer);
+        self.audioReaderFormat.bufferSize = range_value(bufferSize, audioFileMinBuffer, audioFileMaxBuffer);
     }
     else
     {
