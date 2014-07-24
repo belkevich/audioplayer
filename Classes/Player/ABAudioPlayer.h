@@ -19,8 +19,6 @@
 @property (nonatomic, readonly) NSTimeInterval time;
 @property (nonatomic, readonly) NSTimeInterval duration;
 
-- (id)initWithAudioReaderClass:(Class)readerClass;
-- (id)initWithAudioReaderClassNames:(NSArray *)classNames;
 - (void)playerPlaySource:(NSString *)path;
 - (void)playerStart;
 - (void)playerStop;

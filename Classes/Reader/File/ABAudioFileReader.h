@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ABAudioReaderProtocol.h"
+#import "ABAudioUnitProtocol.h"
 
-@interface ABAudioFileReader : NSObject <ABAudioReaderProtocol>
+@interface ABAudioFileReader : NSObject <ABAudioUnitProtocol>
 {
     AudioFileID audioFile;
     NSTimeInterval duration;

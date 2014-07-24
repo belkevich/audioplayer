@@ -14,7 +14,7 @@
 #import "ABExtensionsHelper.h"
 #import "NSError+ABAudioFileReader.h"
 #import "NSString+URL.h"
-#import "macros_extra.h"
+#import "macros_all.h"
 
 UInt32 const audioFileMaxBuffer = 0x50000;
 UInt32 const audioFileMinBuffer = 0x4000;

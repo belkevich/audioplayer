@@ -1,5 +1,5 @@
 //
-//  ABAudioReaderProtocol.h
+//  ABAudioUnitProtocol.h
 //  ABAudioPlayer
 //
 //  Created by Alexey Belkevich on 7/30/13.
@@ -25,7 +25,7 @@ typedef void (^ABAudioReaderOpenSuccessBlock)();
 typedef void (^ABAudioReaderOpenFailureBlock)(NSError *error);
 typedef void (^ABAudioReaderMetadataReceivedBlock)(ABAudioMetadata *metadata);
 
-@protocol ABAudioReaderProtocol <NSObject>
+@protocol ABAudioUnitProtocol <NSObject>
 
 + (BOOL)audioReaderCanOpenPath:(NSString *)path;
 

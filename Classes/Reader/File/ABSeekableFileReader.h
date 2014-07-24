@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ABAudioReaderProtocol.h"
+#import "ABAudioUnitProtocol.h"
 
-@interface ABSeekableFileReader : NSObject <ABAudioReaderProtocol>
+@interface ABSeekableFileReader : NSObject <ABAudioUnitProtocol>
 {
     ExtAudioFileRef extAudioFile;
     AudioFileID audioFile;
