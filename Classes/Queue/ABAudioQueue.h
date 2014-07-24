@@ -10,24 +10,18 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "ABAudioQueueDataSource.h"
 
-static const UInt32 kAudioQueueBufferCount = 3;
-
 @class ABAudioFormat;
 
 @interface ABAudioQueue : NSObject
-{
-    AudioQueueRef queue;
-    AudioQueueBufferRef buffers[kAudioQueueBufferCount];
-    __weak NSObject <ABAudioQueueDataSource> *dataSource;
-}
+
+@property (nonatomic, assign) float volume;
+@property (nonatomic, assign) float pan;
+@property (nonatomic, readonly) NSTimeInterval currentTime;
 
 - (id)initWithAudioQueueDataSource:(NSObject <ABAudioQueueDataSource> *)aDataSource;
 - (BOOL)audioQueueSetupFormat:(ABAudioFormat *)audioFormat;
 - (BOOL)audioQueuePlay;
 - (void)audioQueuePause;
 - (void)audioQueueStop;
-- (void)audioQueueVolume:(float)volume;
-- (void)audioQueuePan:(float)pan;
-- (NSTimeInterval)currentTime;
 
 @end

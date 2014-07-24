@@ -1,5 +1,5 @@
 //
-//  ABAudioTimeHelper.h
+//  ABAudioQueueTime.h
 //  ABAudioPlayer
 //
 //  Created by Alexey Belkevich on 8/12/13.
@@ -9,15 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
-@interface ABAudioTimeHelper : NSObject
-{
-    AudioQueueTimelineRef timeLine;
-    AudioQueueRef queue;
-    Float64 sampleRate;
-}
+@interface ABAudioQueueTime : NSObject
 
 @property (nonatomic, readonly) NSTimeInterval currentTime;
 
-- (id)initWithAudioQueue:(AudioQueueRef)queueRef format:(AudioStreamBasicDescription *)format;
+- (void)setAudioQueueRef:(AudioQueueRef)queueRef sampleRate:(Float64)sampleRate;
+- (void)cleanAudioQueueTime;
 
 @end

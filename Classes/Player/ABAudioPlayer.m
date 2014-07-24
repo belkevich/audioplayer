@@ -36,8 +36,6 @@
     self = [super init];
     if (self)
     {
-        _volume = 0.5f;
-        _pan = 0.f;
         _audioQueue = [[ABAudioQueue alloc] initWithAudioQueueDataSource:self];
         _audioUnitBuilder = [[ABAudioUnitBuilder alloc] init];
         [self.audioUnitBuilder addAudioUnitClass:ABAudioFileReader.class];
@@ -70,7 +68,7 @@
         }
         else
         {
-            _audioUnit = [_audioUnitBuilder audioUnitForSource:self.source];
+            _audioUnit = [self.audioUnitBuilder audioUnitForSource:self.source];
             if (!self.audioUnit)
             {
                 NSError *error = [NSError errorAudioPlayerNoAudioReaderForPath:self.source];
@@ -116,16 +114,24 @@
     }
 }
 
+- (float)volume
+{
+    return self.audioQueue.volume;
+}
+
 - (void)setVolume:(float)volume
 {
-    _volume = range_value(volume, 0.f, 1.f);
-    [self.audioQueue audioQueueVolume:_volume];
+    self.audioQueue.volume = volume;
+}
+
+- (float)pan
+{
+    return self.audioQueue.pan;
 }
 
 - (void)setPan:(float)pan
 {
-    _pan = range_value(pan, -1.f, 1.f);
-    [self.audioQueue audioQueuePan:_pan];
+    self.audioQueue.pan = pan;
 }
 
 - (NSTimeInterval)time
@@ -181,8 +187,6 @@
     {
         if ([weakSelf.audioQueue audioQueueSetupFormat:weakSelf.audioUnit.audioReaderFormat])
         {
-            [weakSelf.audioQueue audioQueueVolume:weakSelf.volume];
-            [weakSelf.audioQueue audioQueuePan:weakSelf.pan];
             if ([weakSelf.audioQueue audioQueuePlay])
             {
                 weakSelf.status = ABAudioPlayerStatusPlaying;

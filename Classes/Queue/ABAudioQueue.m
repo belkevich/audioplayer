@@ -10,11 +10,17 @@
 #import "ABAudioQueueBuilder.h"
 #import "ABAudioFormat.h"
 #import "ABAudioBuffer.h"
-#import "ABAudioTimeHelper.h"
+#import "ABAudioQueueHelper.h"
+
+const UInt32 kAudioQueueBufferCount = 3;
 
 @interface ABAudioQueue ()
-@property (nonatomic, strong) ABAudioFormat *audioFormat;
-@property (nonatomic, strong) ABAudioTimeHelper *audioTime;
+{
+    AudioQueueRef _queue;
+    AudioQueueBufferRef _buffers[kAudioQueueBufferCount];
+    __weak NSObject <ABAudioQueueDataSource> *_dataSource;
+    ABAudioQueueHelper *_helper;
+}
 @end
 
 
@@ -27,8 +33,9 @@
     self = [super init];
     if (self)
     {
-        queue = NULL;
-        dataSource = aDataSource;
+        _queue = NULL;
+        _dataSource = aDataSource;
+        _helper = [[ABAudioQueueHelper alloc] init];
     }
     return self;
 }
@@ -43,13 +50,12 @@
 - (BOOL)audioQueueSetupFormat:(ABAudioFormat *)audioFormat
 {
     [self audioQueueStop];
-    self.audioFormat = audioFormat;
-    queue = [ABAudioQueueBuilder audioQueueWithFormat:self.audioFormat callback:handleBufferCallback
+    _queue = [ABAudioQueueBuilder audioQueueWithFormat:audioFormat
+                                              callback:handleBufferCallback
                                                 owner:self];
-    if (queue && [self audioQueueAllocateBuffer])
+    if (_queue && [self audioQueueAllocateBufferWithSize:audioFormat.bufferSize])
     {
-        AudioStreamBasicDescription *format = self.audioFormat.format;
-        self.audioTime = [[ABAudioTimeHelper alloc] initWithAudioQueue:queue format:format];
+        [_helper setAudioQueueRef:_queue sampleRate:audioFormat.format->mSampleRate];
         return YES;
     }
     else
@@ -61,9 +67,9 @@
 
 - (BOOL)audioQueuePlay
 {
-    if (queue)
+    if (_queue)
     {
-        OSStatus status = AudioQueueStart(queue, NULL);
+        OSStatus status = AudioQueueStart(_queue, NULL);
         if (status == noErr)
         {
             return YES;
@@ -78,48 +84,60 @@
 
 - (void)audioQueuePause
 {
-    if (queue)
+    if (_queue)
     {
-        AudioQueuePause(queue);
+        AudioQueuePause(_queue);
     }
 }
 
 - (void)audioQueueStop
 {
-    if (queue)
+    if (_queue)
     {
-        AudioQueueStop(queue, false);
-        AudioQueueDispose(queue, true);
-        queue = NULL;
+        AudioQueueStop(_queue, false);
+        AudioQueueDispose(_queue, true);
+        _queue = NULL;
     }
-    self.audioFormat = nil;
-    self.audioTime = nil;
+    [_helper cleanAudioQueueHelper];
 }
 
-- (void)audioQueueVolume:(float)volume
+#pragma mark - properties
+
+- (float)volume
 {
-    [self audioQueueSetParam:kAudioQueueParam_Volume value:volume];
+    return _helper.volume;
 }
 
-- (void)audioQueuePan:(float)pan
+- (void)setVolume:(float)volume
 {
-    [self audioQueueSetParam:kAudioQueueParam_Pan value:pan];
+    _helper.volume = volume;
 }
+
+- (float)pan
+{
+    return _helper.pan;
+}
+
+- (void)setPan:(float)pan
+{
+    _helper.pan = pan;
+}
+
+@dynamic currentTime;
 
 - (NSTimeInterval)currentTime
 {
-    return [self.audioTime currentTime];
+    return [_helper currentTime];
 }
 
 #pragma mark - private
 
-- (BOOL)audioQueueAllocateBuffer
+- (BOOL)audioQueueAllocateBufferWithSize:(UInt32)bufferSize
 {
-    UInt32 bufferSize = self.audioFormat.bufferSize;
     for (int i = 0; i < kAudioQueueBufferCount; i++)
     {
-        OSStatus status = AudioQueueAllocateBuffer(queue, bufferSize, &buffers[i]);
-        if (status != noErr || ![self audioQueueEnqueueBuffer:buffers[i]])
+        OSStatus status = AudioQueueAllocateBuffer(_queue, bufferSize, &_buffers[i]);
+        if (status != noErr || ![self audioQueueEnqueueBuffer:_buffers[i]])
         {
             return NO;
         }
@@ -129,11 +147,11 @@
 
 - (BOOL)audioQueueEnqueueBuffer:(AudioQueueBufferRef)buffer
 {
-    ABAudioBuffer *currentBuffer = [dataSource audioQueueCurrentBufferThreadSafely];
+    ABAudioBuffer *currentBuffer = [_dataSource audioQueueCurrentBufferThreadSafely];
     [currentBuffer copyAudioDataToBuffer:buffer];
     if (currentBuffer && buffer->mAudioDataByteSize > 0)
     {
-        OSStatus status = AudioQueueEnqueueBuffer(queue, buffer,
+        OSStatus status = AudioQueueEnqueueBuffer(_queue, buffer,
                                                   currentBuffer.actualPacketsDescriptionCount,
                                                   currentBuffer.packetsDescription);
         switch (status)
@@ -157,14 +175,6 @@
         }
     }
     return NO;
-}
-
-- (void)audioQueueSetParam:(AudioQueueParameterID)param value:(AudioQueueParameterValue)value
-{
-    if (queue)
-    {
-        AudioQueueSetParameter(queue, param, value);
-    }
 }
 
 #pragma mark - callback
