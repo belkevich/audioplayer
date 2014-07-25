@@ -20,8 +20,8 @@
 @property (nonatomic, readonly) NSTimeInterval duration;
 
 - (void)playerPlaySource:(NSString *)path;
-- (void)playerStart;
 - (void)playerStop;
 - (void)playerPause;
+- (void)playerResume;
 
 @end

@@ -35,7 +35,6 @@ const UInt32 kAudioQueueBufferCount = 3;
     {
         _queue = NULL;
         _dataSource = aDataSource;
-        _helper = [[ABAudioQueueHelper alloc] init];
     }
     return self;
 }
@@ -55,7 +54,9 @@ const UInt32 kAudioQueueBufferCount = 3;
                                                 owner:self];
     if (_queue && [self audioQueueAllocateBufferWithSize:audioFormat.bufferSize])
     {
-        [_helper setAudioQueueRef:_queue sampleRate:audioFormat.format->mSampleRate];
+        Float64 sampleRate = audioFormat.format->mSampleRate;
+        _helper = [[ABAudioQueueHelper alloc] initWithAudioQueueRef:_queue
+                                                         sampleRate:sampleRate];
         return YES;
     }
     else
@@ -98,34 +99,19 @@ const UInt32 kAudioQueueBufferCount = 3;
         AudioQueueDispose(_queue, true);
         _queue = NULL;
     }
-    [_helper cleanAudioQueueHelper];
 }
 
-#pragma mark - properties
-
-- (float)volume
+- (void)audioQeueuSetVolume:(float)volume
 {
-    return _helper.volume;
+    [_helper updateVolume:volume];
 }
 
-- (void)setVolume:(float)volume
+- (void)audioQueueSetPan:(float)pan
 {
-    _helper.volume = volume;
+    [_helper updatePan:pan];
 }
 
-- (float)pan
-{
-    return _helper.pan;
-}
-
-- (void)setPan:(float)pan
-{
-    _helper.pan = pan;
-}
-
-@dynamic currentTime;
-
-- (NSTimeInterval)currentTime
+- (NSTimeInterval)audioQueueTime
 {
     return [_helper currentTime];
 }

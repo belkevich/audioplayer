@@ -44,7 +44,8 @@
 
 - (IBAction)playButtonPressed:(id)sender
 {
-    !player.source ? [player playerPlaySource:kMacAudioPath] : [player playerStart];
+    player.status != ABAudioPlayerStatusPaused ? [player playerPlaySource:kMacAudioPath] :
+    [player playerResume];
 }
 
 - (IBAction)pauseButtonPressed:(id)sender

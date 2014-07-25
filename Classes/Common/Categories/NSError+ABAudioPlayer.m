@@ -19,9 +19,9 @@ NSString * const kABAudioPlayerErrorDomain = @"ABAudioPlayer";
                              reason:@"Audio player source is empty"];
 }
 
-+ (NSError *)errorAudioPlayerNoAudioReaderForPath:(NSString *)path
++ (NSError *)errorAudioPlayerNoAudioUnitForPath:(NSString *)path
 {
-    NSString *reason = [NSString stringWithFormat:@"Audio player doesn't have audio reader for "
+    NSString *reason = [NSString stringWithFormat:@"Audio player doesn't have audio unit for "
     "path:\n%@", path];
     return [NSError errorWithDomain:kABAudioPlayerErrorDomain code:1301 reason:reason];
 }

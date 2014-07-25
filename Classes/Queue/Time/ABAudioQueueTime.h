@@ -11,9 +11,7 @@
 
 @interface ABAudioQueueTime : NSObject
 
-@property (nonatomic, readonly) NSTimeInterval currentTime;
-
-- (void)setAudioQueueRef:(AudioQueueRef)queueRef sampleRate:(Float64)sampleRate;
-- (void)cleanAudioQueueTime;
+- (id)initWithAudioQueueRef:(AudioQueueRef)queueRef sampleRate:(Float64)sampleRate;
+- (NSTimeInterval)currentTime;
 
 @end

@@ -20,7 +20,9 @@
 #import "macros_all.h"
 
 @interface ABAudioPlayer () <ABAudioQueueDataSource>
-@property (nonatomic, readonly) ABAudioUnitBuilder *audioUnitBuilder;
+{
+    ABAudioUnitBuilder *_audioUnitBuilder;
+}
 @property (nonatomic, readonly) NSObject <ABAudioUnitProtocol> *audioUnit;
 @property (nonatomic, readonly) ABAudioQueue *audioQueue;
 @property (nonatomic, assign) ABAudioPlayerStatus status;
@@ -36,9 +38,10 @@
     self = [super init];
     if (self)
     {
-        _audioQueue = [[ABAudioQueue alloc] initWithAudioQueueDataSource:self];
+        _volume = 0.5f;
         _audioUnitBuilder = [[ABAudioUnitBuilder alloc] init];
-        [self.audioUnitBuilder addAudioUnitClass:ABAudioFileReader.class];
+#warning replace this workaround with some proper solution
+        [_audioUnitBuilder addAudioUnitClass:ABAudioFileReader.class];
     }
     return self;
 }
@@ -47,43 +50,25 @@
 
 - (void)playerPlaySource:(NSString *)path
 {
-    if (![self.source isEqualToString:path])
+    [self playerStop];
+    self.source = path;
+    if (path)
     {
-        self.source = path;
-        [self playerStop];
-        if (path)
+        _audioQueue = [[ABAudioQueue alloc] initWithAudioQueueDataSource:self];
+        _audioUnit = [_audioUnitBuilder audioUnitForSource:path];
+        if (self.audioUnit)
         {
-            [self playerStart];
-        }
-    }
-}
-
-- (void)playerStart
-{
-    if (self.status == ABAudioPlayerStatusStopped || self.status == ABAudioPlayerStatusError)
-    {
-        if (!self.source)
-        {
-            [self playerFailWithError:[NSError errorAudioPlayerSourceEmpty]];
+            [self playerOpenAudioSource];
         }
         else
         {
-            _audioUnit = [self.audioUnitBuilder audioUnitForSource:self.source];
-            if (!self.audioUnit)
-            {
-                NSError *error = [NSError errorAudioPlayerNoAudioReaderForPath:self.source];
-                [self playerFailWithError:error];
-            }
-            else
-            {
-                [self playerOpenAudioSource];
-            }
+            NSError *error = [NSError errorAudioPlayerNoAudioUnitForPath:self.source];
+            [self playerFailWithError:error];
         }
     }
-    else if (self.status == ABAudioPlayerStatusPaused)
+    else
     {
-        [self.audioQueue audioQueuePlay];
-        self.status = ABAudioPlayerStatusPlaying;
+        [self playerFailWithError:[NSError errorAudioPlayerSourceEmpty]];
     }
 }
 
@@ -100,6 +85,15 @@
     self.status = ABAudioPlayerStatusPaused;
 }
 
+- (void)playerResume
+{
+    if (self.status == ABAudioPlayerStatusPaused)
+    {
+        [self.audioQueue audioQueuePlay];
+        self.status = ABAudioPlayerStatusPlaying;
+    }
+}
+
 #pragma mark - properties
 
 - (void)setStatus:(ABAudioPlayerStatus)status
@@ -114,29 +108,21 @@
     }
 }
 
-- (float)volume
-{
-    return self.audioQueue.volume;
-}
-
 - (void)setVolume:(float)volume
 {
-    self.audioQueue.volume = volume;
-}
-
-- (float)pan
-{
-    return self.audioQueue.pan;
+    _volume = range_value(volume, 0.f, 1.f);
+    [self.audioQueue audioQeueuSetVolume:_volume];
 }
 
 - (void)setPan:(float)pan
 {
-    self.audioQueue.pan = pan;
+    _pan = range_value(pan, -1.f, 1.f);
+    [self.audioQueue audioQueueSetPan:_pan];
 }
 
 - (NSTimeInterval)time
 {
-    return [self.audioQueue currentTime];
+    return [self.audioQueue audioQueueTime];
 }
 
 - (NSTimeInterval)duration
@@ -189,6 +175,8 @@
         {
             if ([weakSelf.audioQueue audioQueuePlay])
             {
+                [weakSelf.audioQueue audioQeueuSetVolume:weakSelf.volume];
+                [weakSelf.audioQueue audioQueueSetPan:weakSelf.pan];
                 weakSelf.status = ABAudioPlayerStatusPlaying;
             }
             else

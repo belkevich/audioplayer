@@ -7,21 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AudioToolbox/AudioToolbox.h>
 #import "ABAudioQueueDataSource.h"
 
 @class ABAudioFormat;
 
 @interface ABAudioQueue : NSObject
 
-@property (nonatomic, assign) float volume;
-@property (nonatomic, assign) float pan;
-@property (nonatomic, readonly) NSTimeInterval currentTime;
-
 - (id)initWithAudioQueueDataSource:(NSObject <ABAudioQueueDataSource> *)aDataSource;
 - (BOOL)audioQueueSetupFormat:(ABAudioFormat *)audioFormat;
 - (BOOL)audioQueuePlay;
 - (void)audioQueuePause;
 - (void)audioQueueStop;
+- (void)audioQeueuSetVolume:(float)volume;
+- (void)audioQueueSetPan:(float)pan;
+- (NSTimeInterval)audioQueueTime;
 
 @end

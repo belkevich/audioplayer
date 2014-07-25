@@ -8,7 +8,6 @@
 
 #import "ABAudioQueueHelper.h"
 #import "ABAudioQueueTime.h"
-#import "macros_extra.h"
 
 @interface ABAudioQueueHelper ()
 {
@@ -21,55 +20,28 @@
 
 #pragma mark - life cycle
 
-- (id)init
+- (id)initWithAudioQueueRef:(AudioQueueRef)queueRef sampleRate:(Float64)sampleRate
 {
     self = [super init];
     if (self)
     {
-        _time = [[ABAudioQueueTime alloc] init];
-        _volume = 0.5f;
-        _pan = 0.f;
+        _queue = queueRef;
+        _time = [[ABAudioQueueTime alloc] initWithAudioQueueRef:queueRef sampleRate:sampleRate];
     }
     return self;
 }
 
-- (void)dealloc
-{
-    [self cleanAudioQueueHelper];
-}
-
 #pragma mark - public
 
-- (void)setAudioQueueRef:(AudioQueueRef)queueRef sampleRate:(Float64)sampleRate
+- (void)updateVolume:(float)volume
 {
-    _queue = queueRef;
-    self.volume = _volume;
-    self.pan = _pan;
-    [_time setAudioQueueRef:queueRef sampleRate:sampleRate];
+    [self audioQueueSetParam:kAudioQueueParam_Volume value:volume];
 }
 
-- (void)cleanAudioQueueHelper
+- (void)updatePan:(float)pan
 {
-    [_time cleanAudioQueueTime];
-    _queue = NULL;
+    [self audioQueueSetParam:kAudioQueueParam_Pan value:pan];
 }
-
-#pragma mark - properties
-
-- (void)setPan:(float)pan
-{
-    _pan = range_value(pan, -1.f, 1.f);
-    [self audioQueueSetParam:kAudioQueueParam_Pan value:_pan];
-
-}
-
-- (void)setVolume:(float)volume
-{
-    _volume = range_value(volume, 0.f, 1.f);
-    [self audioQueueSetParam:kAudioQueueParam_Volume value:_volume];
-}
-
-@dynamic currentTime;
 
 - (NSTimeInterval)currentTime
 {

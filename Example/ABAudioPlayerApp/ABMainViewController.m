@@ -46,7 +46,7 @@
 
 - (IBAction)playButtonPressed:(id)sender
 {
-    if (!player.source)
+    if (player.status != ABAudioPlayerStatusPaused)
     {
         NSString *path = kIOSAudioPath;//[[NSBundle mainBundle] pathForResource:kIOSAudioPath
         // ofType:nil];
@@ -55,7 +55,7 @@
     }
     else
     {
-        [player playerStart];
+        [player playerResume];
     }
 }
 

@@ -62,6 +62,7 @@
 		FA701BCC1981558700D3EB2D /* ABAudioQueueHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA701BCB1981558700D3EB2D /* ABAudioQueueHelper.m */; };
 		FAA58D9D179EC10E0087A4CE /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */; };
 		FAA58D9F179EC1480087A4CE /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA58D9E179EC1480087A4CE /* AVFoundation.framework */; };
+		FAF092D819825D4500B70489 /* ABAudioQueueHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA701BCB1981558700D3EB2D /* ABAudioQueueHelper.m */; };
 		FAF50D89180D359400DAE962 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAF50D88180D359400DAE962 /* Images.xcassets */; };
 		FAF50D8B180D35B400DAE962 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAF50D8A180D35B400DAE962 /* Storyboard.storyboard */; };
 		FAF50D91180D519600DAE962 /* ABSeekableFileReader.m in Sources */ = {isa = PBXBuildFile; fileRef = FAF50D90180D519600DAE962 /* ABSeekableFileReader.m */; };
@@ -815,6 +816,7 @@
 				FA417E0617C7819B0083F737 /* ABAudioFormat.m in Sources */,
 				FA417E0817C7819B0083F737 /* ABAudioMetadata.m in Sources */,
 				FA417E0A17C7819B0083F737 /* ABAudioPlayer.m in Sources */,
+				FAF092D819825D4500B70489 /* ABAudioQueueHelper.m in Sources */,
 				FA0DC7AC1818577200048C0A /* ABAudioMagicCookie.m in Sources */,
 				FA417E0C17C7819B0083F737 /* ABAudioQueue.m in Sources */,
 				FAF50D92180D519600DAE962 /* ABSeekableFileReader.m in Sources */,

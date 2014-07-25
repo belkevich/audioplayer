@@ -20,33 +20,16 @@
 
 #pragma mark - life cycle
 
-- (void)dealloc
+- (id)initWithAudioQueueRef:(AudioQueueRef)queueRef sampleRate:(Float64)sampleRate
 {
-    [self cleanAudioQueueTime];
-}
-
-#pragma mark - public
-
-- (void)setAudioQueueRef:(AudioQueueRef)queueRef sampleRate:(Float64)sampleRate
-{
-    [self cleanAudioQueueTime];
-    if (queueRef && sampleRate > 0)
+    self = [super init];
+    if (self)
     {
         _queue = queueRef;
         _sampleRate = sampleRate;
-        [self createTimeLineForAudioQueue];
+        AudioQueueCreateTimeline(_queue, &_timeLine);
     }
-}
-
-- (void)cleanAudioQueueTime
-{
-    if (_timeLine)
-    {
-        AudioQueueDisposeTimeline(_queue, _timeLine);
-        _timeLine = NULL;
-    }
-    _queue = NULL;
-    _sampleRate = 0.f;
+    return self;
 }
 
 #pragma mark - properties
@@ -60,17 +43,6 @@
         return (NSTimeInterval)timeStamp.mSampleTime / (NSTimeInterval)_sampleRate;
     }
     return 0;
-}
-
-#pragma mark - private
-
-- (void)createTimeLineForAudioQueue
-{
-    OSStatus status = AudioQueueCreateTimeline(_queue, &_timeLine);
-    if (status != noErr)
-    {
-        [self cleanAudioQueueTime];
-    }
 }
 
 @end

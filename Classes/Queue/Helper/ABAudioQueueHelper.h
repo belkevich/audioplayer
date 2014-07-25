@@ -11,11 +11,9 @@
 
 @interface ABAudioQueueHelper : NSObject
 
-@property (nonatomic, assign) float volume;
-@property (nonatomic, assign) float pan;
-@property (nonatomic, readonly) NSTimeInterval currentTime;
-
-- (void)setAudioQueueRef:(AudioQueueRef)queueRef sampleRate:(Float64)sampleRate;
-- (void)cleanAudioQueueHelper;
+- (id)initWithAudioQueueRef:(AudioQueueRef)queueRef sampleRate:(Float64)sampleRate;
+- (void)updateVolume:(float)volume;
+- (void)updatePan:(float)pan;
+- (NSTimeInterval)currentTime;
 
 @end
