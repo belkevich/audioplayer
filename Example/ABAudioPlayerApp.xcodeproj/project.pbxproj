@@ -150,8 +150,6 @@
 		FAA0237517BE67E400C33346 /* ABIOSAudioPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ABIOSAudioPath.h; sourceTree = "<group>"; };
 		FAA58D9C179EC10E0087A4CE /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FAA58D9E179EC1480087A4CE /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		FAED2550197EDABF00F1C4E3 /* macros_extra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = macros_extra.h; path = ../../../blocks/macros_extra.h; sourceTree = "<group>"; };
-		FAED2551197EDB8300F1C4E3 /* macros_all.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = macros_all.h; path = ../../../blocks/macros_all.h; sourceTree = "<group>"; };
 		FAF50D88180D359400DAE962 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		FAF50D8A180D35B400DAE962 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
 		FAF50D8F180D519600DAE962 /* ABSeekableFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABSeekableFileReader.h; sourceTree = "<group>"; };
@@ -320,10 +318,8 @@
 		FA417DBA17C7819B0083F737 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				FAED2550197EDABF00F1C4E3 /* macros_extra.h */,
 				FA417DBD17C7819B0083F737 /* Categories */,
 				FA417DCE17C7819B0083F737 /* Helpers */,
-				FAED2551197EDB8300F1C4E3 /* macros_all.h */,
 			);
 			path = Common;
 			sourceTree = "<group>";
