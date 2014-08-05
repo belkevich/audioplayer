@@ -4,6 +4,6 @@ before_install:
         - sudo gem update --system
         - sudo gem install ios_ci
         - brew install ios-sim
-        - cd Example 
+        - cd Example
 
-script: ios_ci build --source-root $TRAVIS_BUILD_DIR/Example --target ABAudioPlayerApp
+script: ios_ci cedar --source-root $TRAVIS_BUILD_DIR/Example --workspace ABAudioPlayerApp.xcworkspace --scheme ABAudioPlayerApp --build-path Build/Products
