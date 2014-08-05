@@ -6,4 +6,4 @@ before_install:
         - brew install ios-sim
         - cd Example
 
-script: ios_ci cedar --source-root $TRAVIS_BUILD_DIR/Example --workspace ABAudioPlayerApp.xcworkspace --scheme ABAudioPlayerApp --build-path Build/Products
+script: ios_ci build --source-root $TRAVIS_BUILD_DIR/Example --workspace ABAudioPlayerApp.xcworkspace --scheme ABAudioPlayerApp --build-path Build/Products
