@@ -73,7 +73,7 @@
     __block Class unitClass = nil;
     [_availableUnits enumerateObjectsUsingBlock:^(NSString *name, BOOL *stop) {
         Class <ABAudioUnitProtocol> currentClass = NSClassFromString(name);
-        if ([currentClass audioReaderCanOpenPath:source])
+        if ([currentClass audioUnitCanOpenPath:source])
         {
             unitClass = currentClass;
             *stop = YES;

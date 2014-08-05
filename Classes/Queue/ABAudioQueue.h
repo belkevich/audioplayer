@@ -18,7 +18,7 @@
 - (BOOL)audioQueuePlay;
 - (void)audioQueuePause;
 - (void)audioQueueStop;
-- (void)audioQeueuSetVolume:(float)volume;
+- (void)audioQueueSetVolume:(float)volume;
 - (void)audioQueueSetPan:(float)pan;
 - (NSTimeInterval)audioQueueTime;
 

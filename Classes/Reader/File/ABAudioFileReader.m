@@ -21,7 +21,7 @@ UInt32 const audioFileMinBuffer = 0x4000;
 
 @implementation ABAudioFileReader
 
-@synthesize audioReaderStatus = _status, audioReaderFormat = _dataFormat;
+@synthesize audioUnitStatus = _status, audioUnitFormat = _dataFormat;
 
 #pragma mark - life cycle
 
@@ -32,19 +32,19 @@ UInt32 const audioFileMinBuffer = 0x4000;
     {
         audioFile = NULL;
         _dataFormat = [[ABAudioFormat alloc] init];
-        _status = ABAudioReaderStatusEmpty;
+        _status = ABAudioUnitStatusEmpty;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self audioReaderClose];
+    [self audioUnitClose];
 }
 
 #pragma mark - audio reader protocol implementation
 
-+ (BOOL)audioReaderCanOpenPath:(NSString *)path
++ (BOOL)audioUnitCanOpenPath:(NSString *)path
 {
     if (path.lastPathComponent)
     {
@@ -55,11 +55,11 @@ UInt32 const audioFileMinBuffer = 0x4000;
     return NO;
 }
 
-- (void)audioReaderOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
-                    failure:(ABAudioReaderOpenFailureBlock)failureBlock
-           metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock
+- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
+                  failure:(ABAudioReaderOpenFailureBlock)failureBlock
+         metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock
 {
-    [self audioReaderClose];
+    [self audioUnitClose];
     if ([self audioFileOpen:path])
     {
         [self audioFileGetDataFormat];
@@ -79,7 +79,7 @@ UInt32 const audioFileMinBuffer = 0x4000;
     }
 }
 
-- (void)audioReaderClose
+- (void)audioUnitClose
 {
     if (audioFile)
     {
@@ -88,15 +88,15 @@ UInt32 const audioFileMinBuffer = 0x4000;
     }
     currentPacket = 0;
     duration = 0.f;
-    _status = ABAudioReaderStatusEmpty;
+    _status = ABAudioUnitStatusEmpty;
 }
 
-- (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely
+- (ABAudioBuffer *)audioUnitCurrentBufferThreadSafely
 {
     UInt32 readBytes = 0;
-    UInt32 readPackets = self.audioReaderFormat.packetsToRead;
+    UInt32 readPackets = self.audioUnitFormat.packetsToRead;
     ABAudioBuffer *buffer = [[ABAudioBuffer alloc] init];
-    [buffer setExpectedDataSize:self.audioReaderFormat.bufferSize];
+    [buffer setExpectedDataSize:self.audioUnitFormat.bufferSize];
     [buffer setExpectedPacketsDescriptionCount:readPackets];
     OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, buffer.packetsDescription,
                                            currentPacket, &readPackets, buffer.data);
@@ -106,21 +106,21 @@ UInt32 const audioFileMinBuffer = 0x4000;
             currentPacket += readPackets;
             buffer.actualDataSize = readBytes;
             buffer.actualPacketsDescriptionCount = readPackets;
-            _status = ABAudioReaderStatusOK;
+            _status = ABAudioUnitStatusOK;
             return buffer;
 
         case kAudioFileEndOfFileError:
-            _status = ABAudioReaderStatusEnd;
+            _status = ABAudioUnitStatusEnd;
             break;
 
         default:
-            _status = ABAudioReaderStatusError;
+            _status = ABAudioUnitStatusError;
             break;
     }
     return nil;
 }
 
-- (NSTimeInterval)audioReaderDuration
+- (NSTimeInterval)audioUnitDuration
 {
     return duration;
 }
@@ -143,7 +143,7 @@ UInt32 const audioFileMinBuffer = 0x4000;
 {
     UInt32 dataFormatSize = sizeof(AudioStreamBasicDescription);
     AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize,
-                         self.audioReaderFormat.format);
+                         self.audioUnitFormat.format);
 }
 
 - (void)audioFileGetMagicCookie
@@ -153,9 +153,9 @@ UInt32 const audioFileMinBuffer = 0x4000;
                                                &cookieSize, NULL);
     if (status == noErr && cookieSize > 0)
     {
-        [self.audioReaderFormat.magicCookie createMagicCookieWithSize:cookieSize];
+        [self.audioUnitFormat.magicCookie createMagicCookieWithSize:cookieSize];
         AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize,
-                             self.audioReaderFormat.magicCookie.data);
+                             self.audioUnitFormat.magicCookie.data);
     }
 }
 
@@ -165,18 +165,18 @@ UInt32 const audioFileMinBuffer = 0x4000;
     UInt32 propertySize = sizeof(maxPacketSize);
     AudioFileGetProperty(audioFile, kAudioFilePropertyPacketSizeUpperBound, &propertySize,
                          &maxPacketSize);
-    AudioStreamBasicDescription *dataFormat = self.audioReaderFormat.format;
+    AudioStreamBasicDescription *dataFormat = self.audioUnitFormat.format;
     if (dataFormat->mFramesPerPacket != 0)
     {
         Float64 packetsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
         UInt32 bufferSize = (UInt32)(packetsForTime * maxPacketSize);
-        self.audioReaderFormat.bufferSize = range_value(bufferSize, audioFileMinBuffer, audioFileMaxBuffer);
+        self.audioUnitFormat.bufferSize = range_value(bufferSize, audioFileMinBuffer, audioFileMaxBuffer);
     }
     else
     {
-        self.audioReaderFormat.bufferSize = MAX(audioFileMaxBuffer, maxPacketSize);
+        self.audioUnitFormat.bufferSize = MAX(audioFileMaxBuffer, maxPacketSize);
     }
-    self.audioReaderFormat.packetsToRead = self.audioReaderFormat.bufferSize / maxPacketSize;
+    self.audioUnitFormat.packetsToRead = self.audioUnitFormat.bufferSize / maxPacketSize;
 }
 
 - (void)audioFileCalculateDuration

@@ -101,7 +101,7 @@ const UInt32 kAudioQueueBufferCount = 3;
     }
 }
 
-- (void)audioQeueuSetVolume:(float)volume
+- (void)audioQueueSetVolume:(float)volume
 {
     [_helper updateVolume:volume];
 }

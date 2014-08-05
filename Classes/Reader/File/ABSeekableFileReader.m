@@ -17,7 +17,7 @@
 
 @implementation ABSeekableFileReader
 
-@synthesize audioReaderStatus = _status, audioReaderFormat = _dataFormat;
+@synthesize audioUnitStatus = _status, audioUnitFormat = _dataFormat;
 
 #pragma mark - life cycle
 
@@ -28,19 +28,19 @@
     {
         audioFile = NULL;
         _dataFormat = [[ABAudioFormat alloc] init];
-        _status = ABAudioReaderStatusEmpty;
+        _status = ABAudioUnitStatusEmpty;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self audioReaderClose];
+    [self audioUnitClose];
 }
 
 #pragma mark - audio reader protocol implementation
 
-+ (BOOL)audioReaderCanOpenPath:(NSString *)path
++ (BOOL)audioUnitCanOpenPath:(NSString *)path
 {
     if (path.lastPathComponent)
     {
@@ -51,11 +51,11 @@
     return NO;
 }
 
-- (void)audioReaderOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
-                    failure:(ABAudioReaderOpenFailureBlock)failureBlock
-           metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock
+- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
+                  failure:(ABAudioReaderOpenFailureBlock)failureBlock
+         metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock
 {
-    [self audioReaderClose];
+    [self audioUnitClose];
     if ([self audioFileOpen:path])
     {
         [self audioFileSetupDataFormat];
@@ -74,7 +74,7 @@
     }
 }
 
-- (void)audioReaderClose
+- (void)audioUnitClose
 {
     if (audioFile)
     {
@@ -82,7 +82,7 @@
         audioFile = NULL;
     }
     duration = 0.f;
-    _status = ABAudioReaderStatusEmpty;
+    _status = ABAudioUnitStatusEmpty;
     if (extAudioFile)
     {
         ExtAudioFileDispose(extAudioFile);
@@ -90,16 +90,16 @@
     }
 }
 
-- (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely
+- (ABAudioBuffer *)audioUnitCurrentBufferThreadSafely
 {
-    UInt32 readPackets = self.audioReaderFormat.packetsToRead;
-    UInt32 readFrames = self.audioReaderFormat.format->mFramesPerPacket * readPackets;
+    UInt32 readPackets = self.audioUnitFormat.packetsToRead;
+    UInt32 readFrames = self.audioUnitFormat.format->mFramesPerPacket * readPackets;
     ABAudioBuffer *buffer = [[ABAudioBuffer alloc] init];
-    [buffer setExpectedDataSize:self.audioReaderFormat.bufferSize];
+    [buffer setExpectedDataSize:self.audioUnitFormat.bufferSize];
     AudioBufferList bufferList;
     bufferList.mNumberBuffers = 1;
-    bufferList.mBuffers[0].mNumberChannels = self.audioReaderFormat.format->mChannelsPerFrame;
-    bufferList.mBuffers[0].mDataByteSize = self.audioReaderFormat.bufferSize;
+    bufferList.mBuffers[0].mNumberChannels = self.audioUnitFormat.format->mChannelsPerFrame;
+    bufferList.mBuffers[0].mDataByteSize = self.audioUnitFormat.bufferSize;
     bufferList.mBuffers[0].mData = buffer.data;
     OSStatus status = ExtAudioFileRead(extAudioFile, &readFrames, &bufferList);
     if (status == noErr)
@@ -107,22 +107,22 @@
         if (readFrames > 0)
         {
             buffer.actualDataSize = bufferList.mBuffers[0].mDataByteSize;
-            _status = ABAudioReaderStatusOK;
+            _status = ABAudioUnitStatusOK;
             return buffer;
         }
         else
         {
-            _status = ABAudioReaderStatusEnd;
+            _status = ABAudioUnitStatusEnd;
         }
     }
     else
     {
-        _status = ABAudioReaderStatusError;
+        _status = ABAudioUnitStatusError;
     }
     return nil;
 }
 
-- (NSTimeInterval)audioReaderDuration
+- (NSTimeInterval)audioUnitDuration
 {
     return duration;
 }
@@ -147,7 +147,7 @@
 
 - (void)audioFileSetupDataFormat
 {
-    AudioStreamBasicDescription *audioFormat = self.audioReaderFormat.format;
+    AudioStreamBasicDescription *audioFormat = self.audioUnitFormat.format;
     UInt32 dataFormatSize = sizeof(AudioStreamBasicDescription);
     AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize, audioFormat);
     audioFormat->mFormatID = kAudioFormatLinearPCM;
@@ -167,18 +167,18 @@
     UInt32 propertySize = sizeof(maxPacketSize);
     ExtAudioFileGetProperty(extAudioFile, kExtAudioFileProperty_ClientMaxPacketSize,
                             &propertySize, &maxPacketSize);
-    AudioStreamBasicDescription *dataFormat = self.audioReaderFormat.format;
+    AudioStreamBasicDescription *dataFormat = self.audioUnitFormat.format;
     if (dataFormat->mFramesPerPacket != 0)
     {
         Float64 packetsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
         UInt32 bufferSize = (UInt32)(packetsForTime * maxPacketSize);
-        self.audioReaderFormat.bufferSize = range_value(bufferSize, 0x4000, 0x50000);
+        self.audioUnitFormat.bufferSize = range_value(bufferSize, 0x4000, 0x50000);
     }
     else
     {
-        self.audioReaderFormat.bufferSize = MAX(0x50000, maxPacketSize);
+        self.audioUnitFormat.bufferSize = MAX(0x50000, maxPacketSize);
     }
-    self.audioReaderFormat.packetsToRead = self.audioReaderFormat.bufferSize / maxPacketSize;
+    self.audioUnitFormat.packetsToRead = self.audioUnitFormat.bufferSize / maxPacketSize;
 }
 
 - (void)audioFileCalculateDuration

@@ -15,11 +15,11 @@
 
 typedef enum
 {
-    ABAudioReaderStatusOK = 0,
-    ABAudioReaderStatusEmpty = 1,
-    ABAudioReaderStatusEnd = 2,
-    ABAudioReaderStatusError = 3
-} ABAudioReaderStatus;
+    ABAudioUnitStatusOK = 0,
+    ABAudioUnitStatusEmpty = 1,
+    ABAudioUnitStatusEnd = 2,
+    ABAudioUnitStatusError = 3
+} ABAudioUnitStatus;
 
 typedef void (^ABAudioReaderOpenSuccessBlock)();
 typedef void (^ABAudioReaderOpenFailureBlock)(NSError *error);
@@ -27,16 +27,16 @@ typedef void (^ABAudioReaderMetadataReceivedBlock)(ABAudioMetadata *metadata);
 
 @protocol ABAudioUnitProtocol <NSObject>
 
-+ (BOOL)audioReaderCanOpenPath:(NSString *)path;
++ (BOOL)audioUnitCanOpenPath:(NSString *)path;
 
-@property (nonatomic, readonly) ABAudioReaderStatus audioReaderStatus;
-@property (nonatomic, readonly) ABAudioFormat *audioReaderFormat;
-@property (nonatomic, readonly) NSTimeInterval audioReaderDuration;
+@property (nonatomic, readonly) ABAudioUnitStatus audioUnitStatus;
+@property (nonatomic, readonly) ABAudioFormat *audioUnitFormat;
+@property (nonatomic, readonly) NSTimeInterval audioUnitDuration;
 
-- (void)audioReaderOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
-                    failure:(ABAudioReaderOpenFailureBlock)failureBlock
-           metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock;
-- (void)audioReaderClose;
-- (ABAudioBuffer *)audioReaderCurrentBufferThreadSafely;
+- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
+                  failure:(ABAudioReaderOpenFailureBlock)failureBlock
+         metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock;
+- (void)audioUnitClose;
+- (ABAudioBuffer *)audioUnitCurrentBufferThreadSafely;
 
 @end
