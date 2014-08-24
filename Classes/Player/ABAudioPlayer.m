@@ -10,11 +10,11 @@
 #import "ABAudioQueueDataSource.h"
 #import "ABAudioQueue.h"
 #import "ABAudioUnitBuilder.h"
-#import "ABAudioFileReader.h"
+#import "ABAudioFileUnit.h"
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
 #import "ABAudioMetadata.h"
-#import "NSError+ABAudioReader.h"
+#import "NSError+ABAudioUnit.h"
 #import "NSError+ABAudioQueue.h"
 #import "NSError+ABAudioPlayer.h"
 #import "macros_all.h"
@@ -41,7 +41,7 @@
         _volume = 0.5f;
         _audioUnitBuilder = [[ABAudioUnitBuilder alloc] init];
 #warning replace this workaround with some proper solution
-        [_audioUnitBuilder addAudioUnitClass:ABAudioFileReader.class];
+        [_audioUnitBuilder addAudioUnitClass:ABAudioFileUnit.class];
     }
     return self;
 }
@@ -152,7 +152,7 @@
                     break;
 
                 case ABAudioUnitStatusError:
-                    [weakSelf playerFailWithError:[NSError errorAudioReaderReadPackets]];
+                    [weakSelf playerFailWithError:[NSError errorAudioUnitReadPackets]];
                     break;
 
                 default:

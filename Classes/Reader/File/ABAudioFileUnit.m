@@ -1,21 +1,25 @@
 //
-//  ABSeekableFileReader.m
-//  ABAudioPlayerApp
+//  ABAudioFileUnit.m
+//  ABAudioPlayer
 //
-//  Created by Alexey Belkevich on 10/15/13.
+//  Created by Alexey Belkevich on 7/17/13.
 //  Copyright (c) 2013 okolodev. All rights reserved.
 //
 
-#import "ABSeekableFileReader.h"
+#import "ABAudioFileUnit.h"
 #import "ABAudioBuffer.h"
 #import "ABAudioFormat.h"
 #import "ABAudioMetadata.h"
+#import "ABAudioMagicCookie.h"
 #import "ABExtensionsHelper.h"
-#import "NSError+ABAudioFileReader.h"
+#import "NSError+ABAudioFileUnit.h"
 #import "NSString+URL.h"
 #import "macros_all.h"
 
-@implementation ABSeekableFileReader
+UInt32 const audioFileMaxBuffer = 0x50000;
+UInt32 const audioFileMinBuffer = 0x4000;
+
+@implementation ABAudioFileUnit
 
 @synthesize audioUnitStatus = _status, audioUnitFormat = _dataFormat;
 
@@ -38,7 +42,7 @@
     [self audioUnitClose];
 }
 
-#pragma mark - audio reader protocol implementation
+#pragma mark - audio unit protocol implementation
 
 + (BOOL)audioUnitCanOpenPath:(NSString *)path
 {
@@ -51,14 +55,15 @@
     return NO;
 }
 
-- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
-                  failure:(ABAudioReaderOpenFailureBlock)failureBlock
-         metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock
+- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioUnitOpenSuccessBlock)successBlock
+                  failure:(ABAudioUnitOpenFailureBlock)failureBlock
+         metadataReceived:(ABAudioUnitMetadataReceivedBlock)metadataReceivedBlock
 {
     [self audioUnitClose];
     if ([self audioFileOpen:path])
     {
-        [self audioFileSetupDataFormat];
+        [self audioFileGetDataFormat];
+        [self audioFileGetMagicCookie];
         [self audioFileCalculateBufferSize];
         [self audioFileCalculateDuration];
         safe_block(successBlock);
@@ -81,43 +86,36 @@
         AudioFileClose(audioFile);
         audioFile = NULL;
     }
+    currentPacket = 0;
     duration = 0.f;
     _status = ABAudioUnitStatusEmpty;
-    if (extAudioFile)
-    {
-        ExtAudioFileDispose(extAudioFile);
-        extAudioFile = NULL;
-    }
 }
 
 - (ABAudioBuffer *)audioUnitCurrentBufferThreadSafely
 {
+    UInt32 readBytes = 0;
     UInt32 readPackets = self.audioUnitFormat.packetsToRead;
-    UInt32 readFrames = self.audioUnitFormat.format->mFramesPerPacket * readPackets;
     ABAudioBuffer *buffer = [[ABAudioBuffer alloc] init];
     [buffer setExpectedDataSize:self.audioUnitFormat.bufferSize];
-    AudioBufferList bufferList;
-    bufferList.mNumberBuffers = 1;
-    bufferList.mBuffers[0].mNumberChannels = self.audioUnitFormat.format->mChannelsPerFrame;
-    bufferList.mBuffers[0].mDataByteSize = self.audioUnitFormat.bufferSize;
-    bufferList.mBuffers[0].mData = buffer.data;
-    OSStatus status = ExtAudioFileRead(extAudioFile, &readFrames, &bufferList);
-    if (status == noErr)
+    [buffer setExpectedPacketsDescriptionCount:readPackets];
+    OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, buffer.packetsDescription,
+                                           currentPacket, &readPackets, buffer.data);
+    switch (status)
     {
-        if (readFrames > 0)
-        {
-            buffer.actualDataSize = bufferList.mBuffers[0].mDataByteSize;
+        case noErr:
+            currentPacket += readPackets;
+            buffer.actualDataSize = readBytes;
+            buffer.actualPacketsDescriptionCount = readPackets;
             _status = ABAudioUnitStatusOK;
             return buffer;
-        }
-        else
-        {
+
+        case kAudioFileEndOfFileError:
             _status = ABAudioUnitStatusEnd;
-        }
-    }
-    else
-    {
-        _status = ABAudioUnitStatusError;
+            break;
+
+        default:
+            _status = ABAudioUnitStatusError;
+            break;
     }
     return nil;
 }
@@ -136,47 +134,47 @@
     {
         OSStatus status = AudioFileOpenURL((__bridge CFURLRef)fileURL, kAudioFileReadPermission, 0,
                                            &audioFile);
-        if (status == noErr)
-        {
-            ExtAudioFileWrapAudioFileID(audioFile, false, &extAudioFile);
-        }
         return (status == noErr);
     }
     return NO;
 }
 
-- (void)audioFileSetupDataFormat
+- (void)audioFileGetDataFormat
 {
-    AudioStreamBasicDescription *audioFormat = self.audioUnitFormat.format;
     UInt32 dataFormatSize = sizeof(AudioStreamBasicDescription);
-    AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize, audioFormat);
-    audioFormat->mFormatID = kAudioFormatLinearPCM;
-    audioFormat->mFormatFlags = kAudioFormatFlagIsSignedInteger;
-    audioFormat->mBitsPerChannel = 16;// sizeof(SInt16) * 8;
-    audioFormat->mFramesPerPacket = 1;
-    audioFormat->mBytesPerFrame = (audioFormat->mChannelsPerFrame * audioFormat->mBitsPerChannel)
-                                  / 8;
-    audioFormat->mBytesPerPacket = audioFormat->mFramesPerPacket * audioFormat->mBytesPerFrame;
-    ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ClientDataFormat,
-                            sizeof(AudioStreamBasicDescription), audioFormat);
+    AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize,
+                         self.audioUnitFormat.format);
+}
+
+- (void)audioFileGetMagicCookie
+{
+    UInt32 cookieSize = 0;
+    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData,
+                                               &cookieSize, NULL);
+    if (status == noErr && cookieSize > 0)
+    {
+        [self.audioUnitFormat.magicCookie createMagicCookieWithSize:cookieSize];
+        AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize,
+                             self.audioUnitFormat.magicCookie.data);
+    }
 }
 
 - (void)audioFileCalculateBufferSize
 {
     UInt32 maxPacketSize = 0;
     UInt32 propertySize = sizeof(maxPacketSize);
-    ExtAudioFileGetProperty(extAudioFile, kExtAudioFileProperty_ClientMaxPacketSize,
-                            &propertySize, &maxPacketSize);
+    AudioFileGetProperty(audioFile, kAudioFilePropertyPacketSizeUpperBound, &propertySize,
+                         &maxPacketSize);
     AudioStreamBasicDescription *dataFormat = self.audioUnitFormat.format;
     if (dataFormat->mFramesPerPacket != 0)
     {
         Float64 packetsForTime = dataFormat->mSampleRate / dataFormat->mFramesPerPacket * 0.5;
         UInt32 bufferSize = (UInt32)(packetsForTime * maxPacketSize);
-        self.audioUnitFormat.bufferSize = range_value(bufferSize, 0x4000, 0x50000);
+        self.audioUnitFormat.bufferSize = range_value(bufferSize, audioFileMinBuffer, audioFileMaxBuffer);
     }
     else
     {
-        self.audioUnitFormat.bufferSize = MAX(0x50000, maxPacketSize);
+        self.audioUnitFormat.bufferSize = MAX(audioFileMaxBuffer, maxPacketSize);
     }
     self.audioUnitFormat.packetsToRead = self.audioUnitFormat.bufferSize / maxPacketSize;
 }
@@ -208,6 +206,7 @@
             CFRelease(artworkData);
         }
         [metadata id3TagsWithData:[self audioFileID3Data]];
+        return metadata;
     }
     return metadata;
 }

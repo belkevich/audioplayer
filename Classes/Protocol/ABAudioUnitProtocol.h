@@ -21,9 +21,9 @@ typedef enum
     ABAudioUnitStatusError = 3
 } ABAudioUnitStatus;
 
-typedef void (^ABAudioReaderOpenSuccessBlock)();
-typedef void (^ABAudioReaderOpenFailureBlock)(NSError *error);
-typedef void (^ABAudioReaderMetadataReceivedBlock)(ABAudioMetadata *metadata);
+typedef void (^ABAudioUnitOpenSuccessBlock)();
+typedef void (^ABAudioUnitOpenFailureBlock)(NSError *error);
+typedef void (^ABAudioUnitMetadataReceivedBlock)(ABAudioMetadata *metadata);
 
 @protocol ABAudioUnitProtocol <NSObject>
 
@@ -33,9 +33,9 @@ typedef void (^ABAudioReaderMetadataReceivedBlock)(ABAudioMetadata *metadata);
 @property (nonatomic, readonly) ABAudioFormat *audioUnitFormat;
 @property (nonatomic, readonly) NSTimeInterval audioUnitDuration;
 
-- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioReaderOpenSuccessBlock)successBlock
-                  failure:(ABAudioReaderOpenFailureBlock)failureBlock
-         metadataReceived:(ABAudioReaderMetadataReceivedBlock)metadataReceivedBlock;
+- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioUnitOpenSuccessBlock)successBlock
+                  failure:(ABAudioUnitOpenFailureBlock)failureBlock
+         metadataReceived:(ABAudioUnitMetadataReceivedBlock)metadataReceivedBlock;
 - (void)audioUnitClose;
 - (ABAudioBuffer *)audioUnitCurrentBufferThreadSafely;
 

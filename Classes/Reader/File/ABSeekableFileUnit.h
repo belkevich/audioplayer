@@ -1,5 +1,5 @@
 //
-//  ABSeekableFileReader.h
+//  ABSeekableFileUnit.h
 //  ABAudioPlayerApp
 //
 //  Created by Alexey Belkevich on 10/15/13.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "ABAudioUnitProtocol.h"
 
-@interface ABSeekableFileReader : NSObject <ABAudioUnitProtocol>
+@interface ABSeekableFileUnit : NSObject <ABAudioUnitProtocol>
 {
     ExtAudioFileRef extAudioFile;
     AudioFileID audioFile;
