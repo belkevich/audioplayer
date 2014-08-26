@@ -10,10 +10,5 @@
 #import "ABAudioUnitProtocol.h"
 
 @interface ABAudioFileUnit : NSObject <ABAudioUnitProtocol>
-{
-    AudioFileID audioFile;
-    NSTimeInterval duration;
-    SInt64 currentPacket;
-}
 
 @end

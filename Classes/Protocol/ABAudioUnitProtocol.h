@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
+#import "ABAudioUnitDelegate.h"
 
 @class ABAudioFormat;
 @class ABAudioBuffer;
@@ -21,22 +22,18 @@ typedef enum
     ABAudioUnitStatusError = 3
 } ABAudioUnitStatus;
 
-typedef void (^ABAudioUnitOpenSuccessBlock)();
-typedef void (^ABAudioUnitOpenFailureBlock)(NSError *error);
-typedef void (^ABAudioUnitMetadataReceivedBlock)(ABAudioMetadata *metadata);
-
 @protocol ABAudioUnitProtocol <NSObject>
 
+- (id)initWithAudioUnitDelegate:(NSObject <ABAudioUnitDelegate> *)delegate;
 + (BOOL)audioUnitCanOpenPath:(NSString *)path;
 
-@property (nonatomic, readonly) ABAudioUnitStatus audioUnitStatus;
-@property (nonatomic, readonly) ABAudioFormat *audioUnitFormat;
-@property (nonatomic, readonly) NSTimeInterval audioUnitDuration;
+@property (nonatomic, weak, readonly) NSObject <ABAudioUnitDelegate> *audioUnitDelegate;
+@property (nonatomic, strong, readonly) ABAudioFormat *audioUnitFormat;
+@property (nonatomic, assign, readonly) ABAudioUnitStatus audioUnitStatus;
+@property (nonatomic, assign, readonly) NSTimeInterval audioUnitDuration;
 
-- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioUnitOpenSuccessBlock)successBlock
-                  failure:(ABAudioUnitOpenFailureBlock)failureBlock
-         metadataReceived:(ABAudioUnitMetadataReceivedBlock)metadataReceivedBlock;
+- (void)audioUnitOpenPath:(NSString *)path;
 - (void)audioUnitClose;
-- (ABAudioBuffer *)audioUnitCurrentBufferThreadSafely;
+- (ABAudioBuffer *)audioUnitCurrentBuffer;
 
 @end

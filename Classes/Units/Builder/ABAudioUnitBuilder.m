@@ -12,6 +12,7 @@
 {
     NSMutableSet *_availableUnits;
     NSObject <ABAudioUnitProtocol> *_currentUnit;
+    NSObject <ABAudioUnitDelegate> *_delegate;
 }
 @end
 
@@ -19,12 +20,13 @@
 
 #pragma mark - life cycle
 
-- (id)init
+- (id)initWithAudioUnitDelegate:(NSObject <ABAudioUnitDelegate> *)delegate
 {
     self = [super init];
     if (self)
     {
         _availableUnits = [[NSMutableSet alloc] init];
+        _delegate = delegate;
     }
     return self;
 }
@@ -61,7 +63,7 @@
     Class unitClass = [self findAudioUnitClassForSource:source];
     if (![_currentUnit isMemberOfClass:unitClass])
     {
-        _currentUnit = [[unitClass alloc] init];
+        _currentUnit = [[unitClass alloc] initWithAudioUnitDelegate:_delegate];
     }
     return _currentUnit;
 }

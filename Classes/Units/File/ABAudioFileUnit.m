@@ -19,20 +19,30 @@
 UInt32 const audioFileMaxBuffer = 0x50000;
 UInt32 const audioFileMinBuffer = 0x4000;
 
+@interface ABAudioFileUnit ()
+{
+    AudioFileID _audioFile;
+    NSTimeInterval _duration;
+    SInt64 _currentPacket;
+}
+@end
+
+
 @implementation ABAudioFileUnit
 
-@synthesize audioUnitStatus = _status, audioUnitFormat = _dataFormat;
+@synthesize audioUnitDelegate = _delegate, audioUnitStatus = _status, audioUnitFormat = _dataFormat;
 
 #pragma mark - life cycle
 
-- (id)init
+- (id)initWithAudioUnitDelegate:(NSObject <ABAudioUnitDelegate> *)delegate
 {
     self = [super init];
     if (self)
     {
-        audioFile = NULL;
+        _audioFile = NULL;
         _dataFormat = [[ABAudioFormat alloc] init];
         _status = ABAudioUnitStatusEmpty;
+        _delegate = delegate;
     }
     return self;
 }
@@ -55,9 +65,7 @@ UInt32 const audioFileMinBuffer = 0x4000;
     return NO;
 }
 
-- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioUnitOpenSuccessBlock)successBlock
-                  failure:(ABAudioUnitOpenFailureBlock)failureBlock
-         metadataReceived:(ABAudioUnitMetadataReceivedBlock)metadataReceivedBlock
+- (void)audioUnitOpenPath:(NSString *)path
 {
     [self audioUnitClose];
     if ([self audioFileOpen:path])
@@ -66,44 +74,44 @@ UInt32 const audioFileMinBuffer = 0x4000;
         [self audioFileGetMagicCookie];
         [self audioFileCalculateBufferSize];
         [self audioFileCalculateDuration];
-        safe_block(successBlock);
+        [self.audioUnitDelegate audioUnitDidOpen:self];
         ABAudioMetadata *metadata = [self audioFileMetadata];
         if (metadata)
         {
-            safe_block(metadataReceivedBlock, metadata);
+            [self.audioUnitDelegate audioUnit:self didReceiveMetadata:metadata];
         }
     }
     else
     {
-        safe_block(failureBlock, [NSError errorAudioFileOpenPath:path]);
+        [self.audioUnitDelegate audioUnit:self didFail:[NSError errorAudioFileOpenPath:path]];
     }
 }
 
 - (void)audioUnitClose
 {
-    if (audioFile)
+    if (_audioFile)
     {
-        AudioFileClose(audioFile);
-        audioFile = NULL;
+        AudioFileClose(_audioFile);
+        _audioFile = NULL;
     }
-    currentPacket = 0;
-    duration = 0.f;
+    _currentPacket = 0;
+    _duration = 0.f;
     _status = ABAudioUnitStatusEmpty;
 }
 
-- (ABAudioBuffer *)audioUnitCurrentBufferThreadSafely
+- (ABAudioBuffer *)audioUnitCurrentBuffer
 {
     UInt32 readBytes = 0;
     UInt32 readPackets = self.audioUnitFormat.packetsToRead;
     ABAudioBuffer *buffer = [[ABAudioBuffer alloc] init];
     [buffer setExpectedDataSize:self.audioUnitFormat.bufferSize];
     [buffer setExpectedPacketsDescriptionCount:readPackets];
-    OSStatus status = AudioFileReadPackets(audioFile, false, &readBytes, buffer.packetsDescription,
-                                           currentPacket, &readPackets, buffer.data);
+    OSStatus status = AudioFileReadPackets(_audioFile, false, &readBytes, buffer.packetsDescription,
+                                           _currentPacket, &readPackets, buffer.data);
     switch (status)
     {
         case noErr:
-            currentPacket += readPackets;
+            _currentPacket += readPackets;
             buffer.actualDataSize = readBytes;
             buffer.actualPacketsDescriptionCount = readPackets;
             _status = ABAudioUnitStatusOK;
@@ -122,7 +130,7 @@ UInt32 const audioFileMinBuffer = 0x4000;
 
 - (NSTimeInterval)audioUnitDuration
 {
-    return duration;
+    return _duration;
 }
 
 #pragma mark - private
@@ -133,7 +141,7 @@ UInt32 const audioFileMinBuffer = 0x4000;
     if (fileURL)
     {
         OSStatus status = AudioFileOpenURL((__bridge CFURLRef)fileURL, kAudioFileReadPermission, 0,
-                                           &audioFile);
+                                           &_audioFile);
         return (status == noErr);
     }
     return NO;
@@ -142,19 +150,19 @@ UInt32 const audioFileMinBuffer = 0x4000;
 - (void)audioFileGetDataFormat
 {
     UInt32 dataFormatSize = sizeof(AudioStreamBasicDescription);
-    AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize,
+    AudioFileGetProperty(_audioFile, kAudioFilePropertyDataFormat, &dataFormatSize,
                          self.audioUnitFormat.format);
 }
 
 - (void)audioFileGetMagicCookie
 {
     UInt32 cookieSize = 0;
-    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyMagicCookieData,
+    OSStatus status = AudioFileGetPropertyInfo(_audioFile, kAudioFilePropertyMagicCookieData,
                                                &cookieSize, NULL);
     if (status == noErr && cookieSize > 0)
     {
         [self.audioUnitFormat.magicCookie createMagicCookieWithSize:cookieSize];
-        AudioFileGetProperty(audioFile, kAudioFilePropertyMagicCookieData, &cookieSize,
+        AudioFileGetProperty(_audioFile, kAudioFilePropertyMagicCookieData, &cookieSize,
                              self.audioUnitFormat.magicCookie.data);
     }
 }
@@ -163,7 +171,7 @@ UInt32 const audioFileMinBuffer = 0x4000;
 {
     UInt32 maxPacketSize = 0;
     UInt32 propertySize = sizeof(maxPacketSize);
-    AudioFileGetProperty(audioFile, kAudioFilePropertyPacketSizeUpperBound, &propertySize,
+    AudioFileGetProperty(_audioFile, kAudioFilePropertyPacketSizeUpperBound, &propertySize,
                          &maxPacketSize);
     AudioStreamBasicDescription *dataFormat = self.audioUnitFormat.format;
     if (dataFormat->mFramesPerPacket != 0)
@@ -182,11 +190,11 @@ UInt32 const audioFileMinBuffer = 0x4000;
 - (void)audioFileCalculateDuration
 {
     UInt32 size = sizeof(NSTimeInterval);
-    OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyEstimatedDuration, &size,
-                                           &duration);
+    OSStatus status = AudioFileGetProperty(_audioFile, kAudioFilePropertyEstimatedDuration, &size,
+                                           &_duration);
     if (status != noErr)
     {
-        duration = 0.f;
+        _duration = 0.f;
     }
 }
 
@@ -214,11 +222,11 @@ UInt32 const audioFileMinBuffer = 0x4000;
 - (NSData *)audioFileID3Data
 {
     UInt32 size = 0;
-    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyID3Tag, &size, NULL);
+    OSStatus status = AudioFileGetPropertyInfo(_audioFile, kAudioFilePropertyID3Tag, &size, NULL);
     if (status == noErr && size > 0)
     {
         char *bytes = (char *)malloc(size);
-        status = AudioFileGetProperty(audioFile, kAudioFilePropertyID3Tag, &size, bytes);
+        status = AudioFileGetProperty(_audioFile, kAudioFilePropertyID3Tag, &size, bytes);
         if (status == noErr)
         {
             return [NSData dataWithBytesNoCopy:bytes length:size freeWhenDone:YES];
@@ -233,14 +241,14 @@ UInt32 const audioFileMinBuffer = 0x4000;
 
 - (void *)audioFileProperty:(AudioFilePropertyID)property
 {
-    if (audioFile)
+    if (_audioFile)
     {
         UInt32 size = 0, writable = 0;
-        OSStatus status = AudioFileGetPropertyInfo(audioFile, property, &size, &writable);
+        OSStatus status = AudioFileGetPropertyInfo(_audioFile, property, &size, &writable);
         if (status == noErr)
         {
             void *value = NULL;
-            status = AudioFileGetProperty(audioFile, property, &size, &value);
+            status = AudioFileGetProperty(_audioFile, property, &size, &value);
             return status == noErr ? value : NULL;
         }
     }

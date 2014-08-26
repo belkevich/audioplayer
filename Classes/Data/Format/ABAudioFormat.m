@@ -8,6 +8,7 @@
 
 #import "ABAudioFormat.h"
 #import "ABAudioMagicCookie.h"
+#import "ABAudioUnitDelegate.h"
 
 @implementation ABAudioFormat
 

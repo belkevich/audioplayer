@@ -8,6 +8,7 @@
 
 #import "ABAudioPlayer.h"
 #import "ABAudioQueueDataSource.h"
+#import "ABAudioUnitDelegate.h"
 #import "ABAudioQueue.h"
 #import "ABAudioUnitBuilder.h"
 #import "ABAudioFileUnit.h"
@@ -18,8 +19,9 @@
 #import "NSError+ABAudioQueue.h"
 #import "NSError+ABAudioPlayer.h"
 #import "macros_all.h"
+#import "ABSeekableFileUnit.h"
 
-@interface ABAudioPlayer () <ABAudioQueueDataSource>
+@interface ABAudioPlayer () <ABAudioQueueDataSource, ABAudioUnitDelegate>
 {
     ABAudioUnitBuilder *_audioUnitBuilder;
 }
@@ -39,7 +41,7 @@
     if (self)
     {
         _volume = 0.5f;
-        _audioUnitBuilder = [[ABAudioUnitBuilder alloc] init];
+        _audioUnitBuilder = [[ABAudioUnitBuilder alloc] initWithAudioUnitDelegate:self];
 #warning replace this workaround with some proper solution
         [_audioUnitBuilder addAudioUnitClass:ABAudioFileUnit.class];
     }
@@ -134,7 +136,7 @@
 
 - (ABAudioBuffer *)audioQueueCurrentBufferThreadSafely
 {
-    ABAudioBuffer *buffer = [self.audioUnit audioUnitCurrentBufferThreadSafely];
+    ABAudioBuffer *buffer = [self.audioUnit audioUnitCurrentBuffer];
     if (!buffer)
     {
         __weak ABAudioPlayer *weakSelf = self;
@@ -163,41 +165,49 @@
     return buffer;
 }
 
+#pragma mark - audio unit delegate implementation
+
+- (void)audioUnitDidOpen:(NSObject <ABAudioUnitProtocol> *)audioUnit
+{
+    if ([self.audioQueue audioQueueSetupFormat:audioUnit.audioUnitFormat])
+    {
+        if ([self.audioQueue audioQueuePlay])
+        {
+            [self.audioQueue audioQueueSetVolume:self.volume];
+            [self.audioQueue audioQueueSetPan:self.pan];
+            self.status = ABAudioPlayerStatusPlaying;
+        }
+        else
+        {
+            [self playerFailWithError:[NSError errorAudioQueuePlay]];
+        }
+    }
+    else
+    {
+        [self playerFailWithError:[NSError errorAudioQueueSetup]];
+    }
+}
+
+- (void)audioUnit:(NSObject <ABAudioUnitProtocol> *)audioUnit didFail:(NSError *)error
+{
+    [self playerFailWithError:error];
+}
+
+- (void) audioUnit:(NSObject <ABAudioUnitProtocol> *)audioUnit
+didReceiveMetadata:(ABAudioMetadata *)metadata
+{
+    if ([self.delegate respondsToSelector:@selector(audioPlayer:didReceiveMetadata:)])
+    {
+        [self.delegate audioPlayer:self didReceiveMetadata:metadata];
+    }
+}
+
 #pragma mark - private
 
 - (void)playerOpenAudioSource
 {
-    __weak ABAudioPlayer *weakSelf = self;
     self.status = ABAudioPlayerStatusBuffering;
-    [self.audioUnit audioUnitOpenPath:self.source success:^
-    {
-        if ([weakSelf.audioQueue audioQueueSetupFormat:weakSelf.audioUnit.audioUnitFormat])
-        {
-            if ([weakSelf.audioQueue audioQueuePlay])
-            {
-                [weakSelf.audioQueue audioQueueSetVolume:weakSelf.volume];
-                [weakSelf.audioQueue audioQueueSetPan:weakSelf.pan];
-                weakSelf.status = ABAudioPlayerStatusPlaying;
-            }
-            else
-            {
-                [weakSelf playerFailWithError:[NSError errorAudioQueuePlay]];
-            }
-        }
-        else
-        {
-            [weakSelf playerFailWithError:[NSError errorAudioQueueSetup]];
-        }
-    }                         failure:^(NSError *error)
-    {
-        [weakSelf playerFailWithError:error];
-    }                metadataReceived:^(ABAudioMetadata *metadata)
-    {
-        if ([weakSelf.delegate respondsToSelector:@selector(audioPlayer:didReceiveMetadata:)])
-        {
-            [weakSelf.delegate audioPlayer:weakSelf didReceiveMetadata:metadata];
-        }
-    }];
+    [self.audioUnit audioUnitOpenPath:self.source];
 }
 
 - (void)playerFailWithError:(NSError *)error

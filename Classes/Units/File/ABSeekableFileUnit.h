@@ -10,10 +10,5 @@
 #import "ABAudioUnitProtocol.h"
 
 @interface ABSeekableFileUnit : NSObject <ABAudioUnitProtocol>
-{
-    ExtAudioFileRef extAudioFile;
-    AudioFileID audioFile;
-    NSTimeInterval duration;
-}
 
 @end

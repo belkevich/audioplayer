@@ -11,6 +11,7 @@
 
 @interface ABAudioUnitBuilder : NSObject
 
+- (id)initWithAudioUnitDelegate:(NSObject <ABAudioUnitDelegate> *)delegate;
 - (void)addAudioUnitClass:(Class)theClass;
 - (void)removeAudioUnitClass:(Class)theClass;
 - (NSObject <ABAudioUnitProtocol> *)audioUnitForSource:(NSString *)source;

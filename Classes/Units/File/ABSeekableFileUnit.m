@@ -15,20 +15,29 @@
 #import "NSString+URL.h"
 #import "macros_all.h"
 
+@interface ABSeekableFileUnit ()
+{
+    ExtAudioFileRef _extAudioFile;
+    AudioFileID _audioFile;
+    NSTimeInterval _duration;
+}
+@end
+
 @implementation ABSeekableFileUnit
 
-@synthesize audioUnitStatus = _status, audioUnitFormat = _dataFormat;
+@synthesize audioUnitDelegate = _delegate, audioUnitStatus = _status, audioUnitFormat = _dataFormat;
 
 #pragma mark - life cycle
 
-- (id)init
+- (id)initWithAudioUnitDelegate:(NSObject <ABAudioUnitDelegate> *)delegate
 {
     self = [super init];
     if (self)
     {
-        audioFile = NULL;
+        _audioFile = NULL;
         _dataFormat = [[ABAudioFormat alloc] init];
         _status = ABAudioUnitStatusEmpty;
+        _delegate = delegate;
     }
     return self;
 }
@@ -51,9 +60,7 @@
     return NO;
 }
 
-- (void)audioUnitOpenPath:(NSString *)path success:(ABAudioUnitOpenSuccessBlock)successBlock
-                  failure:(ABAudioUnitOpenFailureBlock)failureBlock
-         metadataReceived:(ABAudioUnitMetadataReceivedBlock)metadataReceivedBlock
+- (void)audioUnitOpenPath:(NSString *)path
 {
     [self audioUnitClose];
     if ([self audioFileOpen:path])
@@ -61,36 +68,36 @@
         [self audioFileSetupDataFormat];
         [self audioFileCalculateBufferSize];
         [self audioFileCalculateDuration];
-        safe_block(successBlock);
+        [self.audioUnitDelegate audioUnitDidOpen:self];
         ABAudioMetadata *metadata = [self audioFileMetadata];
         if (metadata)
         {
-            safe_block(metadataReceivedBlock, metadata);
+            [self.audioUnitDelegate audioUnit:self didReceiveMetadata:metadata];
         }
     }
     else
     {
-        safe_block(failureBlock, [NSError errorAudioFileOpenPath:path]);
+        [self.audioUnitDelegate audioUnit:self didFail:[NSError errorAudioFileOpenPath:path]];
     }
 }
 
 - (void)audioUnitClose
 {
-    if (audioFile)
+    if (_audioFile)
     {
-        AudioFileClose(audioFile);
-        audioFile = NULL;
+        AudioFileClose(_audioFile);
+        _audioFile = NULL;
     }
-    duration = 0.f;
+    _duration = 0.f;
     _status = ABAudioUnitStatusEmpty;
-    if (extAudioFile)
+    if (_extAudioFile)
     {
-        ExtAudioFileDispose(extAudioFile);
-        extAudioFile = NULL;
+        ExtAudioFileDispose(_extAudioFile);
+        _extAudioFile = NULL;
     }
 }
 
-- (ABAudioBuffer *)audioUnitCurrentBufferThreadSafely
+- (ABAudioBuffer *)audioUnitCurrentBuffer
 {
     UInt32 readPackets = self.audioUnitFormat.packetsToRead;
     UInt32 readFrames = self.audioUnitFormat.format->mFramesPerPacket * readPackets;
@@ -101,7 +108,7 @@
     bufferList.mBuffers[0].mNumberChannels = self.audioUnitFormat.format->mChannelsPerFrame;
     bufferList.mBuffers[0].mDataByteSize = self.audioUnitFormat.bufferSize;
     bufferList.mBuffers[0].mData = buffer.data;
-    OSStatus status = ExtAudioFileRead(extAudioFile, &readFrames, &bufferList);
+    OSStatus status = ExtAudioFileRead(_extAudioFile, &readFrames, &bufferList);
     if (status == noErr)
     {
         if (readFrames > 0)
@@ -124,7 +131,7 @@
 
 - (NSTimeInterval)audioUnitDuration
 {
-    return duration;
+    return _duration;
 }
 
 #pragma mark - private
@@ -135,10 +142,10 @@
     if (fileURL)
     {
         OSStatus status = AudioFileOpenURL((__bridge CFURLRef)fileURL, kAudioFileReadPermission, 0,
-                                           &audioFile);
+                                           &_audioFile);
         if (status == noErr)
         {
-            ExtAudioFileWrapAudioFileID(audioFile, false, &extAudioFile);
+            ExtAudioFileWrapAudioFileID(_audioFile, false, &_extAudioFile);
         }
         return (status == noErr);
     }
@@ -149,7 +156,7 @@
 {
     AudioStreamBasicDescription *audioFormat = self.audioUnitFormat.format;
     UInt32 dataFormatSize = sizeof(AudioStreamBasicDescription);
-    AudioFileGetProperty(audioFile, kAudioFilePropertyDataFormat, &dataFormatSize, audioFormat);
+    AudioFileGetProperty(_audioFile, kAudioFilePropertyDataFormat, &dataFormatSize, audioFormat);
     audioFormat->mFormatID = kAudioFormatLinearPCM;
     audioFormat->mFormatFlags = kAudioFormatFlagIsSignedInteger;
     audioFormat->mBitsPerChannel = 16;// sizeof(SInt16) * 8;
@@ -157,7 +164,7 @@
     audioFormat->mBytesPerFrame = (audioFormat->mChannelsPerFrame * audioFormat->mBitsPerChannel)
                                   / 8;
     audioFormat->mBytesPerPacket = audioFormat->mFramesPerPacket * audioFormat->mBytesPerFrame;
-    ExtAudioFileSetProperty(extAudioFile, kExtAudioFileProperty_ClientDataFormat,
+    ExtAudioFileSetProperty(_extAudioFile, kExtAudioFileProperty_ClientDataFormat,
                             sizeof(AudioStreamBasicDescription), audioFormat);
 }
 
@@ -165,7 +172,7 @@
 {
     UInt32 maxPacketSize = 0;
     UInt32 propertySize = sizeof(maxPacketSize);
-    ExtAudioFileGetProperty(extAudioFile, kExtAudioFileProperty_ClientMaxPacketSize,
+    ExtAudioFileGetProperty(_extAudioFile, kExtAudioFileProperty_ClientMaxPacketSize,
                             &propertySize, &maxPacketSize);
     AudioStreamBasicDescription *dataFormat = self.audioUnitFormat.format;
     if (dataFormat->mFramesPerPacket != 0)
@@ -184,11 +191,11 @@
 - (void)audioFileCalculateDuration
 {
     UInt32 size = sizeof(NSTimeInterval);
-    OSStatus status = AudioFileGetProperty(audioFile, kAudioFilePropertyEstimatedDuration, &size,
-                                           &duration);
+    OSStatus status = AudioFileGetProperty(_audioFile, kAudioFilePropertyEstimatedDuration, &size,
+                                           &_duration);
     if (status != noErr)
     {
-        duration = 0.f;
+        _duration = 0.f;
     }
 }
 
@@ -215,11 +222,11 @@
 - (NSData *)audioFileID3Data
 {
     UInt32 size = 0;
-    OSStatus status = AudioFileGetPropertyInfo(audioFile, kAudioFilePropertyID3Tag, &size, NULL);
+    OSStatus status = AudioFileGetPropertyInfo(_audioFile, kAudioFilePropertyID3Tag, &size, NULL);
     if (status == noErr && size > 0)
     {
         char *bytes = (char *)malloc(size);
-        status = AudioFileGetProperty(audioFile, kAudioFilePropertyID3Tag, &size, bytes);
+        status = AudioFileGetProperty(_audioFile, kAudioFilePropertyID3Tag, &size, bytes);
         if (status == noErr)
         {
             return [NSData dataWithBytesNoCopy:bytes length:size freeWhenDone:YES];
@@ -234,14 +241,14 @@
 
 - (void *)audioFileProperty:(AudioFilePropertyID)property
 {
-    if (audioFile)
+    if (_audioFile)
     {
         UInt32 size = 0, writable = 0;
-        OSStatus status = AudioFileGetPropertyInfo(audioFile, property, &size, &writable);
+        OSStatus status = AudioFileGetPropertyInfo(_audioFile, property, &size, &writable);
         if (status == noErr)
         {
             void *value = NULL;
-            status = AudioFileGetProperty(audioFile, property, &size, &value);
+            status = AudioFileGetProperty(_audioFile, property, &size, &value);
             return status == noErr ? value : NULL;
         }
     }
